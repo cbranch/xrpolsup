@@ -1,110 +1,120 @@
 <template>
-<div class="container" v-if="submitted">
-  <p class="py-4"><b>Thanks for your report!</b></p>
-  <button class="btn btn-primary" v-on:click="submitted = false">Submit a new report</button>
-</div>
-<div class="container" v-else>
-<form
-  id="submitreport"
-  @submit="checkForm"
-  class="py-4"
->
-  <h1>Arrestee Witness Report</h1>
-  <p>Let us know when you see people arrested, so we may support them upon their release.</p>
-
-  <p v-if="errors.length">
-  <b>Please correct the following error(s):</b>
-    <ul>
-      <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
-    </ul>
-  </p>
-
-  <div class="form-group">
-    <label for="arrestTime">Arrest time</label>
-    <input
-      id="arrestTime"
-      class="form-control"
-      v-model="arrestTime"
-      type="text"
-      name="arrestTime"
-    >
-  </div>
-
-  <div class="form-group">
-    <label for="numberOfArrestees">Number of people arrested</label>
-    <input
-      id="numberOfArrestees"
-      class="form-control"
-      v-model="numberOfArrestees"
-      type="text"
-      name="numberOfArrestees"
-    >
-  </div>
-
-  <div class="form-group">
-    <label for="station">Police Station</label>
-    <input
-      id="station"
-      class="form-control"
-      v-model="station"
-      type="text"
-      name="station"
-    >
-  </div>
-
-  <p>
-    <input
-      type="submit"
-      value="Submit"
-      class="btn btn-primary"
-    >
-  </p>
-
-  </form>
-</div>
+  <b-container>
+    <b-row class="mb-2">
+      <b-col>
+        <h2 class="my-3">Arrestee reporting</h2>
+      </b-col>
+    </b-row>
+    <div v-if="submitted">
+    <b-row class="mb-2">
+      <b-col>
+        <p>Thank you for completing this form.</p>
+      </b-col>
+    </b-row>
+    </div>
+    <div v-else>
+    <b-row class="mb-2">
+      <b-col>
+        <ReportSection
+          index=1
+          title="Station name">
+          <StationName ref="stationName" v-model="stationName" @complete="stationComplete = true" />
+        </ReportSection>
+      </b-col>
+    </b-row>
+    <b-row class="mb-2" v-if="stationComplete">
+      <b-col>
+        <ReportSection
+          index=2
+          title="Arrestee details">
+          <ArresteeCount ref="arresteeCount" v-model="arrestees" @complete="arresteeComplete = true" />
+        </ReportSection>
+      </b-col>
+    </b-row>
+    <b-row class="mb-2" v-if="arresteeComplete">
+      <b-col>
+        <ReportSection
+          index=3
+          title="Witness details">
+          <WitnessDetails ref="witnessDetails" v-model="witnessDetails" :has-concerns="hasConcerns" />
+        </ReportSection>
+      </b-col>
+    </b-row>
+    <b-row class="my-4" v-if="arresteeComplete">
+      <b-col>
+        <b-button block variant="primary" v-on:click="submitReport">Submit arrestee report</b-button>
+      </b-col>
+    </b-row>
+    <b-row class="my-4" v-if="errors.length > 0">
+      <b-col>
+        <p>Your report was not submitted for the following reasons:</p>
+        <ul>
+          <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
+        </ul>
+      </b-col>
+    </b-row>
+    </div>
+  </b-container>
 </template>
 
 <script>
+import ReportSection from './components/ReportSection.vue'
+import StationName from './components/StationName.vue'
+import ArresteeCount from './components/ArresteeCount.vue'
+import WitnessDetails from './components/WitnessDetails.vue'
+
 export default {
   name: 'submitreport',
   components: {
+    ReportSection,
+    StationName,
+    ArresteeCount,
+    WitnessDetails
   },
-  data: function () {
+  data () {
     return {
+      stationName: null,
+      stationComplete: false,
+      arresteeComplete: false,
+      arrestees: null,
+      witnessDetails: null,
+      submitted: false,
       errors: [],
-      station: null,
-      numberOfArrestees: null,
-      arrestTime: null,
-      submitted: true,
     }
   },
-  methods:{
-    checkForm: function (e) {
-      this.errors = [];
-
-      if (!this.station) {
-        this.errors.push('Station name required.');
+  computed: {
+    hasConcerns () {
+      if (this.arrestees != null) {
+        if (this.arrestees.some(x => (x.details.concerns != null && x.details.concerns.length > 0))) {
+          return true
+        }
       }
-      if (!this.numberOfArrestees) {
-        this.errors.push('Number of arrestees required.');
+      return false
+    }
+  },
+  methods: {
+    submitReport () {
+      if (!this.$refs.arresteeCount.validate()) {
+        return
       }
-      if (!this.arrestTime) {
-        this.errors.push('Arrest time required.');
+      let report = {
+        stationName: this.stationName,
+        witnessEmail: this.witnessDetails,
+        arrestees: this.arrestees.map(x => ({
+          time: x.details.time,
+          date: x.details.date,
+          location: x.details.location,
+          arrestingOfficerId: x.details.arrestingOfficerId,
+          concerns: x.details.concerns,
+          medicationName: x.details.medicationName,
+          observations: x.details.observations,
+        })),
       }
-
-      e.preventDefault();
-
-      if (this.errors.length == 0) {
-        this.axios.post('/api/station_report', {
-          station: this.station,
-          numberOfArrestees: this.numberOfArrestees,
-          arrestTime: this.arrestTime,
-        }).then(() => {
-          this.submitted = true
-        }, error => {
-          this.errors = [error.responseText]
-        })
-      }
+      this.axios.post('/api/station_report', report).then(() => {
+        this.submitted = true
+      }, error => {
+        this.errors = [error]
+      })
     }
   }
 }
