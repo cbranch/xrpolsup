@@ -6,6 +6,7 @@ import './plugins/bootstrap-vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import SubmitReport from './SubmitReport.vue'
+import ArresteeReport from './ArresteeReport.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
@@ -35,3 +36,8 @@ new Vue({
   render: h => h(SubmitReport),
   store,
 }).$mount('#app')
+
+new Vue({
+  render: h => h(ArresteeReport),
+  store,
+}).$mount('#arresteeForm')
