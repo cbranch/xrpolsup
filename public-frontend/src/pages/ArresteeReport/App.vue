@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import ArresteeDetails from './components/ArresteeDetails.vue'
+import ArresteeDetails from '../../components/ArresteeDetails.vue'
 
 export default {
   name: 'submitreport',

@@ -58,10 +58,10 @@
 </template>
 
 <script>
-import ReportSection from './components/ReportSection.vue'
-import StationName from './components/StationName.vue'
-import ArresteeCount from './components/ArresteeCount.vue'
-import WitnessDetails from './components/WitnessDetails.vue'
+import ReportSection from '../../components/ReportSection.vue'
+import StationName from '../../components/StationName.vue'
+import ArresteeCount from '../../components/ArresteeCount.vue'
+import WitnessDetails from '../../components/WitnessDetails.vue'
 
 export default {
   name: 'submitreport',
