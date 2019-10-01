@@ -15,6 +15,7 @@
       </b-collapse>
     </b-navbar>
     <b-container fluid>
+      <b-alert :show="isConnected === false" variant="warning">Connection lost with the server. Refresh to re-establish connection.</b-alert>
       <router-view class="mt-4"></router-view>
     </b-container>
     <footer class="mt-3 text-center">
@@ -33,8 +34,37 @@
 export default {
   name: 'app',
   data: () => ({
-    io: null
+    io: null,
+    isConnected: null,
   }),
+  watch: {
+    '$store.state.loggedIn': 'connectState'
+  },
+  created () {
+    this.connectState()
+  },
+  methods: {
+    connectState () {
+      this.$io.socket.get('/report', (resData, jwRes) => {
+        if (jwRes.statusCode == 401) {
+          this.$router.push('login')
+        } else {
+          this.$store.commit('setReports', resData)
+        }
+      })
+      this.$io.socket.on('connect', () => {
+        this.isConnected = true
+      })
+      this.$io.socket.on('report', (e) => {
+          if (e.verb === 'created') {
+              this.$store.commit('addReport', e.data)
+          }
+      })
+      this.$io.socket.on('disconnect', () => {
+        this.isConnected = false
+      })
+    }
+  }
 }
 </script>
 

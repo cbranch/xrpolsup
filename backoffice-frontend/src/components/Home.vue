@@ -1,7 +1,6 @@
 <template>
   <b-container fluid>
     <h2>Report list</h2>
-    <b-alert :show="isConnected === false" variant="warning">Connection lost with the server. Refresh to re-establish connection.</b-alert>
     <b-table striped hover :items="reportList" :fields="reportFields" sort-by="arrestTime">
       <template v-slot:cell(createdAt)="data">
         {{ new Date(data.value).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }) }}
@@ -43,37 +42,6 @@ export default {
     },
     reportList () {
       return this.$store.state.reports
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  watch: {
-    // call the method again if the route changes
-    '$route': 'fetchData'
-  },
-  methods: {
-    fetchData () {
-      this.$io.socket.get('/report', (resData, jwRes) => {
-        if (jwRes.statusCode == 401) {
-          this.$router.push('login')
-        } else {
-          this.$store.commit('setReports', resData)
-        }
-      })
-      if (!this.isConnected) {
-        this.$io.socket.on('connect', () => {
-          this.isConnected = true
-        })
-        this.$io.socket.on('report', (e) => {
-            if (e.verb === 'created') {
-                this.$store.commit('addReport', e.data)
-            }
-        })
-        this.$io.socket.on('disconnect', () => {
-          this.isConnected = false
-        })
-      }
     }
   }
 }
