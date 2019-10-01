@@ -10,6 +10,7 @@
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
           <b-nav-item :to="{ name: 'Home' }">Home</b-nav-item>
+          <b-nav-item :to="{ name: 'Reports' }">Reports</b-nav-item>
           <b-nav-item :to="{ name: 'Login' }">Login</b-nav-item>
         </b-navbar-nav>
       </b-collapse>

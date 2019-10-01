@@ -14,6 +14,13 @@ export default new Router({
           }
         },
         {
+          path: '/reports',
+          name: 'Reports',
+          component: resolve => {
+            require(['./components/Reports.vue'], resolve)
+          }
+        },
+        {
           path: '/login',
           name: 'Login',
           component: resolve => {
