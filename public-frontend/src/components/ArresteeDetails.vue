@@ -131,6 +131,8 @@ export default {
       anyInjuries: null,
       helpNeeded: null,
       specialRequest: null,
+      numberRebels: null,
+      rebelsStillHeld: null,
       beContactedBy: null,
       contactByEmail: null,
       contactByPhone: null,
