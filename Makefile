@@ -1,4 +1,4 @@
-.PHONY: all backoffice-frontend public-frontend
+.PHONY: all backend backoffice-frontend public-frontend
 
 all: backend backoffice-frontend public-frontend
 
