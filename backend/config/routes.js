@@ -24,4 +24,6 @@ module.exports.routes = {
   'POST /login': { action: 'login' },
   'POST /logout': { action: 'logout' },
 
+  'PUT /user/:id/set_password': { action: 'user/set-password' },
+
 };

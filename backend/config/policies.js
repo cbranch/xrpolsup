@@ -18,6 +18,8 @@ module.exports.policies = {
   ***************************************************************************/
 
   '*': 'is-logged-in',
+  // User management is for admins only
+  'user': 'is-admin',
 
   // No login required for the following:
   'ReportController': {
