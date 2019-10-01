@@ -13,5 +13,13 @@ export default new Router({
             require(['./components/Home.vue'], resolve)
           }
         },
-    ]
+        {
+          path: '/login',
+          name: 'Login',
+          component: resolve => {
+            require(['./components/Login.vue'], resolve)
+          }
+        },
+    ],
+    linkExactActiveClass: "active"
 })

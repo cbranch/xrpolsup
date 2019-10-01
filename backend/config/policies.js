@@ -17,9 +17,13 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
+  '*': 'is-logged-in',
+
+  // No login required for the following:
   'ReportController': {
     'post': true,
-  }
-  // '*': true,
+  },
+  'login': true,
+  'logout': true,
 
 };

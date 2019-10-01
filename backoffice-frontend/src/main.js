@@ -3,6 +3,8 @@ import 'mutationobserver-shim'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import './plugins/bootstrap-vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 import sailsIO from 'sails.io.js'
 import socketIO from 'socket.io-client'
 import App from './App.vue'
@@ -11,6 +13,7 @@ import router from './router.js'
 Vue.config.productionTip = false
 
 Vue.use(Vuex)
+Vue.use(VueAxios, axios)
 
 const store = new Vuex.Store({
   state: {

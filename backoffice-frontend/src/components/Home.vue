@@ -17,14 +17,27 @@ export default {
     }
   },
   created () {
-      this.$io.socket.get('/report', (resData) => {
+    this.fetchData()
+  },
+  watch: {
+    // call the method again if the route changes
+    '$route': 'fetchData'
+  },
+  methods: {
+    fetchData () {
+      this.$io.socket.get('/report', (resData, jwRes) => {
+        if (jwRes.statusCode == 401) {
+          this.$router.push('login')
+        } else {
           this.$store.commit('setReports', resData)
+        }
       })
       this.$io.socket.on('report', (e) => {
           if (e.verb === 'created') {
               this.$store.commit('addReport', e.data)
           }
       })
-  },
+    }
+  }
 }
 </script>
