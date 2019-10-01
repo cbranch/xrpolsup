@@ -1,7 +1,31 @@
 <template>
   <b-container fluid>
     <h2>Report list</h2>
-    <b-table striped hover :items="reportList" :fields="reportFields" sort-by="arrestTime">
+    <b-form-group
+      label="Filter"
+      label-cols-sm="1"
+      label-align-sm="right"
+      label-size="sm"
+      label-for="filterInput"
+      class="mb-2"
+    >
+      <b-input-group size="sm">
+        <b-form-input
+          v-model="filter"
+          type="search"
+          id="filterInput"
+          placeholder="Type to Search"
+        ></b-form-input>
+        <b-input-group-append>
+          <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+        </b-input-group-append>
+      </b-input-group>
+    </b-form-group>
+    <b-table striped hover
+      :items="reportList"
+      :fields="reportFields"
+      :filter="filter"
+      sort-by="arrestTime">
       <template v-slot:cell(createdAt)="data">
         {{ new Date(data.value).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }) }}
       </template>
@@ -24,7 +48,7 @@
 export default {
   data () {
     return {
-      isConnected: null,
+      filter: null
     }
   },
   computed: {
