@@ -14,9 +14,9 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <div class="container">
+    <b-container fluid>
       <router-view class="mt-4"></router-view>
-    </div>
+    </b-container>
     <footer class="mt-3 text-center">
       <div class="container">
         <span class="text-muted">

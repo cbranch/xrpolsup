@@ -113,9 +113,9 @@ export default {
     dateList () {
         return [
             { value: null, text: 'Select a date' },
-            { value: '20191007', text: '7 Oct' },
-            { value: '20191008', text: '8 Oct' },
-            { value: '20191009', text: '9 Oct' },
+            { value: '2019-10-07', text: '7 Oct' },
+            { value: '2019-10-08', text: '8 Oct' },
+            { value: '2019-10-09', text: '9 Oct' },
         ]
     },
     hasMedicationNeed () {
