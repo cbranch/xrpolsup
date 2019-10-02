@@ -27,7 +27,7 @@ export default {
     submit () {
       this.axios.post('/api/login', { emailAddress: this.email, password: this.password }).then(() => {
         this.$store.commit('logIn')
-        this.$router.go(-1)
+        this.$router.push('/')
       }).catch(error => {
         if (error.response.status == 401) {
           this.error = "Incorrect email and password combination."
