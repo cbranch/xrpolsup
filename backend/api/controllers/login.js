@@ -88,17 +88,17 @@ and exposed as \`req.me\`.)`
     // response header to be sent as the result of this request -- thus
     // we must be dealing with a traditional HTTP request in order for
     // this to work.)
-    if (inputs.rememberMe) {
-      if (this.req.isSocket) {
-        sails.log.warn(
-          'Received `rememberMe: true` from a virtual request, but it was ignored\n'+
-          'because a browser\'s session cookie cannot be reset over sockets.\n'+
-          'Please use a traditional HTTP request instead.'
-        );
-      } else {
-        this.req.session.cookie.maxAge = sails.config.custom.rememberMeCookieMaxAge;
+    if (this.req.isSocket) {
+      if (inputs.rememberMe) {
+          sails.log.warn(
+            'Received `rememberMe: true` from a virtual request, but it was ignored\n'+
+            'because a browser\'s session cookie cannot be reset over sockets.\n'+
+            'Please use a traditional HTTP request instead.'
+          );
       }
-    }//ﬁ
+    } else {
+      this.req.session.cookie.maxAge = inputs.rememberMe ? sails.config.custom.rememberMeCookieMaxAge : sails.config.custom.defaultLoginCookieMaxAge;
+    }
 
     // Modify the active session instance.
     // (This will be persisted when the response is sent.)
