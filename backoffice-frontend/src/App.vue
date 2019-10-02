@@ -47,23 +47,27 @@ export default {
   },
   methods: {
     connectState () {
+      if (!this.$io.socket.isConnected() && !this.$io.socket.mightBeAboutToAutoConnect()) {
+        this.$io.socket.reconnect()
+      }
       this.$io.socket.get('/report', (resData, jwRes) => {
         if (jwRes.statusCode == 401) {
           this.$router.push('login')
-        } else {
+          this.$io.socket.disconnect()
+        } else if (jwRes.statusCode == 200) {
           this.$store.commit('setReports', resData)
+          this.$io.socket.on('connect', () => {
+            this.isConnected = true
+          })
+          this.$io.socket.on('report', (e) => {
+              if (e.verb === 'created') {
+                  this.$store.commit('addReport', e.data)
+              }
+          })
+          this.$io.socket.on('disconnect', () => {
+            this.isConnected = false
+          })
         }
-      })
-      this.$io.socket.on('connect', () => {
-        this.isConnected = true
-      })
-      this.$io.socket.on('report', (e) => {
-          if (e.verb === 'created') {
-              this.$store.commit('addReport', e.data)
-          }
-      })
-      this.$io.socket.on('disconnect', () => {
-        this.isConnected = false
       })
     }
   }
