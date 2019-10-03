@@ -22,6 +22,22 @@ module.exports.http = {
 
   middleware: {
 
+    /* Route subdomains to different folders.
+     * The main URL should show the public assets.
+     * The backoffice domain should show the back office assets.
+     */
+    staticRoutes: (function (){
+      console.log('Initializing `staticRoutes` (HTTP middleware)...');
+      return function (req,res,next) {
+        if (req.hostname == 'arrestwatch.info') {
+          req.url = '/public' + req.url;
+        } else if (req.hostname == 'backoffice.arrestwatch.info') {
+          req.url = '/backoffice' + req.url;
+        }
+        return next();
+      };
+    })(),
+
     /***************************************************************************
     *                                                                          *
     * The order in which middleware should be run for HTTP requests.           *
@@ -29,16 +45,17 @@ module.exports.http = {
     *                                                                          *
     ***************************************************************************/
 
-    // order: [
-    //   'cookieParser',
-    //   'session',
-    //   'bodyParser',
-    //   'compress',
-    //   'poweredBy',
-    //   'router',
-    //   'www',
-    //   'favicon',
-    // ],
+    order: [
+      'cookieParser',
+      'session',
+      'bodyParser',
+      'compress',
+      'poweredBy',
+      'staticRoutes',
+      'router',
+      'www',
+      'favicon',
+    ],
 
 
     /***************************************************************************
