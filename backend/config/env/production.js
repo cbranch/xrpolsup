@@ -251,10 +251,10 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     onlyAllowOrigins: [
-      'https://example.com',
-      'https://staging.example.com',
-      'http://178.79.136.108',
-      'http://178.79.136.108:8081'
+      'https://arrestwatch.info',
+      'https://backoffice.arrestwatch.info',
+      'http://arrestwatch.info',
+      'http://backoffice.arrestwatch.info',
     ],
 
 
