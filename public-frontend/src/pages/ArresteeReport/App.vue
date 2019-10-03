@@ -54,6 +54,7 @@ export default {
           time: x.details.time,
           date: x.details.date,
           location: x.details.location,
+          name: x.details.name,
           arrestingOfficerId: x.details.arrestingOfficerId,
           concerns: x.details.concerns,
           medicationName: x.details.medicationName,

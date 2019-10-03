@@ -6,7 +6,7 @@
           <b-form-input id="input-time" v-model="time" @input="update" :state="isValidTime.valid" placeholder="24-hour time, e.g. 13:00"></b-form-input>
         </b-form-group>
         <b-form-group :invalid-feedback="isValidDate.reason" :state="isValidDate.valid">
-          <b-form-select id="input-date" v-model="date" @input="update" :state="isValidDate.valid" :options="dateList"></b-form-select>
+          <SimpleDatePicker id="input-date" v-model="date" @input="update" :state="isValidDate.valid" />
         </b-form-group>
         <b-form-group label="Where did this arrest take place?" label-for="input-location" :invalid-feedback="isValidLocation.reason" :state="isValidLocation.valid">
           <b-form-input id="input-location" v-model="location" @input="update" :state="isValidLocation.valid" placeholder="Place name"></b-form-input>
@@ -42,10 +42,12 @@
 
 <script>
 import YesNo from './YesNo.vue'
+import SimpleDatePicker from './SimpleDatePicker.vue'
 
 export default {
   components: {
-    YesNo
+    YesNo,
+    SimpleDatePicker
   },
   props: ['value', 'index', 'initialTime', 'initialPlace'],
   data () {
@@ -110,14 +112,6 @@ export default {
     cardTitle () {
       return 'Arrestee ' + (this.index + 1)
     },
-    dateList () {
-        return [
-            { value: null, text: 'Select a date' },
-            { value: '2019-10-07', text: '7 Oct' },
-            { value: '2019-10-08', text: '8 Oct' },
-            { value: '2019-10-09', text: '9 Oct' },
-        ]
-    },
     hasMedicationNeed () {
       return this.concerns != null && this.concerns.includes('medicationNeed')
     },
@@ -126,7 +120,7 @@ export default {
         return { valid: null }
       } else if (this.time == "") {
         return { valid: false, reason: 'A valid time must be provided' }
-      } else if (!this.time.match(/([01]?\d|2[0-3]):[0-5]\d/)) {
+      } else if (!this.time.match(/^([01]?\d|2[0-3]):[0-5]\d$/)) {
         return { valid: false, reason: 'Please enter the time in 24-hour format with a colon, hh:mm' }
       } else {
         return { valid: true }
