@@ -29,7 +29,7 @@ export default {
         return this.value != null ? this.value.length : 0
       },
       set(value) {
-        let arrestees = this.value.splice(length)
+        let arrestees = this.value.splice(0, value)
         while (value > arrestees.length) {
           arrestees.push({ details: {} })
         }
