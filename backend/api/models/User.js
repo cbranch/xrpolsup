@@ -4,11 +4,10 @@
 
 module.exports = {
   attributes: {
-    emailAddress: {
+    username: {
       type: 'string',
       required: true,
       unique: true,
-      isEmail: true,
       maxLength: 200,
       example: 'rebel@example.com'
     },

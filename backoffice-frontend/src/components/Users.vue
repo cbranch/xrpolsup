@@ -44,7 +44,7 @@ export default {
         { key: 'id', sortable: true },
         { key: 'createdAt', sortable: true },
         { key: 'updatedAt', sortable: true },
-        { key: 'emailAddress', sortable: true },
+        { key: 'username', sortable: true },
         { key: 'nickname', sortable: true },
         { key: 'isAdmin', sortable: true },
         { key: 'actions' },
