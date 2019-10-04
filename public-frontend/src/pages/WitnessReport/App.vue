@@ -15,32 +15,21 @@
     <div v-else>
     <b-row class="mb-2">
       <b-col>
-        <ReportSection
-          index=1
-          title="Station name">
-          <StationName ref="stationName" v-model="stationName" @complete="stationComplete = true" />
-        </ReportSection>
+        <b-card no-body header="Report details">
+          <ReportOverview ref="reportOverview" v-model="reportOverview" @complete="overviewComplete = true" />
+        </b-card>
       </b-col>
     </b-row>
-    <b-row class="mb-2" v-if="stationComplete">
+    <div v-if="overviewComplete" >
+    <b-row class="mb-2" v-for="(arrestee, index) in populatedArrestees" :key="index">
       <b-col>
-        <ReportSection
-          index=2
-          title="Arrestee details">
-          <ArresteeCount ref="arresteeCount" v-model="arrestees" @complete="arresteeComplete = true" />
-        </ReportSection>
+        <b-card no-body :header="'Arrestee ' + (index + 1) + ' details'">
+          <ArrestDetails :index="index" v-model="arrestee.details" ref="arrestDetails" />
+        </b-card>
       </b-col>
     </b-row>
-    <b-row class="mb-2" v-if="arresteeComplete">
-      <b-col>
-        <ReportSection
-          index=3
-          title="Witness details">
-          <WitnessDetails ref="witnessDetails" v-model="witnessDetails" :has-concerns="hasConcerns" />
-        </ReportSection>
-      </b-col>
-    </b-row>
-    <b-row class="my-4" v-if="arresteeComplete">
+    </div>
+    <b-row class="my-4" v-if="overviewComplete">
       <b-col>
         <b-button block variant="primary" v-on:click="submitReport">Submit arrestee report</b-button>
       </b-col>
@@ -58,31 +47,41 @@
 </template>
 
 <script>
-import ReportSection from '../../components/ReportSection.vue'
-import StationName from '../../components/StationName.vue'
-import ArresteeCount from '../../components/ArresteeCount.vue'
-import WitnessDetails from '../../components/WitnessDetails.vue'
+import ReportOverview from '../../components/ReportOverview.vue'
+import ArrestDetails from '../../components/ArrestDetails.vue'
 
 export default {
   name: 'WitnessReport',
   components: {
-    ReportSection,
-    StationName,
-    ArresteeCount,
-    WitnessDetails
+    ReportOverview,
+    ArrestDetails
   },
   data () {
     return {
-      stationName: null,
-      stationComplete: false,
-      arresteeComplete: false,
-      arrestees: null,
-      witnessDetails: null,
+      reportOverview: null,
+      overviewComplete: false,
+      arrestees: [],
       submitted: false,
       errors: [],
     }
   },
+  created () {
+    for (var i = 0; i < 9; i++) {
+      this.arrestees.push({})
+    }
+  },
   computed: {
+    arresteeCount () {
+      if (this.reportOverview != null) {
+        if (this.reportOverview.arrestCount != null) {
+          return Math.max(1, Math.min(9, this.reportOverview.arrestCount))
+        }
+      }
+      return 0
+    },
+    populatedArrestees () {
+      return this.arrestees.slice(0, this.arresteeCount)
+    },
     hasConcerns () {
       if (this.arrestees != null) {
         if (this.arrestees.some(x => (x.details.concerns != null && x.details.concerns.length > 0))) {
@@ -93,23 +92,39 @@ export default {
     }
   },
   methods: {
+    validate () {
+      if (!this.$refs.reportOverview.valid) {
+        return false
+      }
+      if (!this.$refs.arrestDetails.every(x => {
+        return x.validate()
+      })) {
+        return false
+      }
+      return true
+    },
     submitReport () {
-      if (!this.$refs.arresteeCount.validate()) {
+      if (!this.validate()) {
+        this.errors = ["Please correct errors in the form before submitting."]
         return
       }
       let report = {
-        stationName: this.stationName,
-        witnessEmail: this.witnessDetails,
-        arrestees: this.arrestees.map(x => ({
-          time: x.details.time,
-          date: x.details.date,
-          location: x.details.location,
-          name: x.details.name,
-          arrestingOfficerId: x.details.arrestingOfficerId,
-          concerns: x.details.concerns,
-          medicationName: x.details.medicationName,
-          observations: x.details.observations,
-        })),
+        stationName: this.reportOverview.stationName,
+        witnessEmail: this.reportOverview.witnessDetails,
+        arrestees: this.populatedArrestees.map(x => {
+          var arrestee = x.details != null ? x.details : {}
+          return {
+            time: this.reportOverview.time,
+            date: this.reportOverview.date,
+            location: this.reportOverview.location,
+            name: arrestee.name,
+            arrestingOfficerId: arrestee.arrestingOfficerId,
+            concerns: arrestee.concerns,
+            medicationName: arrestee.medicationName,
+            observations: arrestee.observations,
+            comment: arrestee.comment,
+          }
+        }),
       }
       this.axios.post('/api/v1/station_report', report).then(() => {
         this.submitted = true
