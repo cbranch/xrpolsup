@@ -22,6 +22,15 @@ const store = new Vuex.Store({
     reports: []
   },
   mutations: {
+    setReport(state, x) {
+      for (var i in state.reports) {
+        if (state.reports[i].id == x.id) {
+          Object.assign(state.reports[i], x)
+          return
+        }
+      }
+      state.reports.push(x)
+    },
     setReports(state, x) {
       state.reports = x
     },

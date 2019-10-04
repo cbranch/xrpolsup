@@ -3,11 +3,11 @@
     <h2>Report list</h2>
     <b-form-group
       label="Filter"
-      label-cols-sm="1"
+      label-cols-sm="2"
       label-align-sm="right"
       label-size="sm"
       label-for="filterInput"
-      class="mb-2"
+      class="mb-0"
     >
       <b-input-group size="sm">
         <b-form-input
@@ -40,7 +40,59 @@
         <div v-if="data.item.concernPolicePrejudice">Police prejudice</div>
         <div v-if="data.item.concernMedicationNeed">Medication need: {{ data.item.medicationName }}</div>
       </template>
+      <template v-slot:cell(actions)="data">
+        <b-button size="sm" @click="editReport(data.item, $event.target)">Edit</b-button>
+      </template>
     </b-table>
+    <b-modal id="editReportModal" title="Edit report" size="lg" @ok="commitEditReport">
+      <b-container fluid>
+        <b-row>
+          <b-col>
+            <b-form-group label="Station" label-for="input-station" label-cols-md="3">
+              <b-form-input id="input-station" v-model="editReportModal.station"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Arrest Time" label-for="input-arrestTime" label-cols-md="3">
+              <b-form-input id="input-arrestTime" v-model="editReportModal.arrestTime"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Location" label-for="input-location" label-cols-md="3">
+              <b-form-input id="input-location" v-model="editReportModal.location"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Name" label-for="input-name" label-cols-md="3">
+              <b-form-input id="input-name" v-model="editReportModal.name"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Officer ID" label-for="input-arrestingOfficerId" label-cols-md="3">
+              <b-form-input id="input-arrestingOfficerId" v-model="editReportModal.arrestingOfficerId"></b-form-input>
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col md="3">
+            <p>Concerns</p>
+          </b-col>
+          <b-col>
+            <b-form-checkbox v-model="editReportModal.concernMentalDistress">Mental distress?</b-form-checkbox>
+            <b-form-checkbox v-model="editReportModal.concernPhysicalDistress">Physical distress?</b-form-checkbox>
+            <b-form-checkbox v-model="editReportModal.concernMinor">Minor</b-form-checkbox>
+            <b-form-checkbox v-model="editReportModal.concernPoliceBehaviour">Police behaviour?</b-form-checkbox>
+            <b-form-checkbox v-model="editReportModal.concernPolicePrejudice">Police prejudice?</b-form-checkbox>
+            <b-form-checkbox v-model="editReportModal.concernMedicationNeed">Medication need stated by arrestee?</b-form-checkbox>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <b-form-group label="Medication Name" label-for="input-medicationName" label-cols-md="3">
+              <b-form-input id="input-medicationName" v-model="editReportModal.medicationName"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Observations" label-for="input-observations" label-cols-md="3">
+              <b-form-input id="input-observations" v-model="editReportModal.observations"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Witness" label-for="input-witness" label-cols-md="3">
+              <b-form-input id="input-witness" v-model="editReportModal.witness"></b-form-input>
+            </b-form-group>
+          </b-col>
+        </b-row>
+      </b-container>
+    </b-modal>
   </b-container>
 </template>
 
@@ -48,7 +100,24 @@
 export default {
   data () {
     return {
-      filter: null
+      filter: null,
+      editReportModal: {
+        id: null,
+        station: null,
+        arrestTime: null,
+        location: null,
+        name: null,
+        arrestingOfficerId: null,
+        concernMentalDistress: false,
+        concernPhysicalDistress: false,
+        concernMinor: false,
+        concernPoliceBehaviour: false,
+        concernPolicePrejudice: false,
+        concernMedicationNeed: false,
+        medicationName: null,
+        observations: null,
+        witness: null,
+      }
     }
   },
   computed: {
@@ -62,10 +131,35 @@ export default {
         { key: 'arrestingOfficerId', label: 'Officer ID' },
         { key: 'concerns' },
         { key: 'observations' },
+        { key: 'actions', label: '' },
       ]
     },
     reportList () {
       return this.$store.state.reports
+    }
+  },
+  methods: {
+    editReport (item, target) {
+      this.editReportModal = Object.assign({}, item)
+      this.$root.$emit('bv::show::modal', 'editReportModal', target)
+    },
+    commitEditReport () {
+      this.$io.socket.put('/report/' + this.editReportModal.id, this.editReportModal, (resData, jwRes) => {
+        if (jwRes.statusCode == 200) {
+          this.$store.commit('setReport', resData)
+          this.$bvToast.toast('Report updated!', {
+            title: 'Report management',
+            variant: 'primary',
+            solid: true
+          })
+        } else {
+          this.$bvToast.toast('Failed to update report: ' + jwRes, {
+            title: 'Report management',
+            variant: 'warning',
+            solid: true
+          })
+        }
+      })
     }
   }
 }
