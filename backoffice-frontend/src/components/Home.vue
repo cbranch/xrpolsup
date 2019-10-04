@@ -52,7 +52,7 @@
               <b-form-input id="input-station" v-model="editReportModal.station"></b-form-input>
             </b-form-group>
             <b-form-group label="Arrest Time" label-for="input-arrestTime" label-cols-md="3">
-              <b-form-input id="input-arrestTime" v-model="editReportModal.arrestTime"></b-form-input>
+              <datetime type="datetime" id="input-arrestTime" v-model="editReportModal.arrestTime"></datetime>
             </b-form-group>
             <b-form-group label="Location" label-for="input-location" label-cols-md="3">
               <b-form-input id="input-location" v-model="editReportModal.location"></b-form-input>
@@ -141,10 +141,13 @@ export default {
   methods: {
     editReport (item, target) {
       this.editReportModal = Object.assign({}, item)
+      this.editReportModal.arrestTime = new Date(item.arrestTime).toISOString()
       this.$root.$emit('bv::show::modal', 'editReportModal', target)
     },
     commitEditReport () {
-      this.$io.socket.put('/report/' + this.editReportModal.id, this.editReportModal, (resData, jwRes) => {
+      var postData = Object.assign({}, this.editReportModal)
+      postData.arrestTime = Date.parse(this.editReportModal.arrestTime).valueOf()
+      this.$io.socket.put('/report/' + this.editReportModal.id, postData, (resData, jwRes) => {
         if (jwRes.statusCode == 200) {
           this.$store.commit('setReport', resData)
           this.$bvToast.toast('Report updated!', {
