@@ -17,10 +17,13 @@ module.exports = {
         .catch(error => res.serverError(error))
 
       let newRecords = arrestees.map(x => {
-        let {time, date, location, arrestingOfficerId, concerns, medicationName, observations} = x;
+        let {time, date, location, name, arrestingOfficerId, concerns, medicationName, observations} = x;
         const arrestTime = Date.parse(date + "T" + time + ":00")
         if (location == null) {
           location = ""
+        }
+        if (name == null) {
+          name = ""
         }
         if (arrestingOfficerId == null) {
           arrestingOfficerId = ""
@@ -38,6 +41,7 @@ module.exports = {
           station: stationName,
           arrestTime,
           location,
+          name,
           arrestingOfficerId,
           concernMentalDistress: concerns.includes("mentalDistress"),
           concernPhysicalDistress: concerns.includes("physicalDistress"),
