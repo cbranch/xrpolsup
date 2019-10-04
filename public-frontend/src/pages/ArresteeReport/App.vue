@@ -17,7 +17,7 @@
 import ArresteeDetails from '../../components/ArresteeDetails.vue'
 
 export default {
-  name: 'submitreport',
+  name: 'ArresteeReport',
   components: {
     ArresteeDetails
   },

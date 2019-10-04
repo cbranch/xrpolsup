@@ -5,7 +5,7 @@ import Vuex from 'vuex'
 import '../../plugins/bootstrap-vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import SubmitReport from './App.vue'
+import WitnessReport from './App.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
@@ -32,6 +32,6 @@ const store = new Vuex.Store({
 })
 
 new Vue({
-  render: h => h(SubmitReport),
+  render: h => h(WitnessReport),
   store,
 }).$mount('#app')

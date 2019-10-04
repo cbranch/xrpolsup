@@ -1,13 +1,13 @@
 module.exports = {
   pages: {
     'index': {
-      entry: './src/pages/SubmitReport/main.js',
-      template: 'public/index.html',
+      entry: './src/pages/WitnessReport/main.js',
+      template: 'public/witness.html',
       title: 'Witness Report'
     },
     'arrestee': {
       entry: './src/pages/ArresteeReport/main.js',
-      template: 'public/index.html',
+      template: 'public/arrestee.html',
       title: 'Arrestee Report'
     },
   },

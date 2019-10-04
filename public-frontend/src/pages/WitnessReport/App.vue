@@ -64,7 +64,7 @@ import ArresteeCount from '../../components/ArresteeCount.vue'
 import WitnessDetails from '../../components/WitnessDetails.vue'
 
 export default {
-  name: 'submitreport',
+  name: 'WitnessReport',
   components: {
     ReportSection,
     StationName,
