@@ -18,6 +18,7 @@ Vue.use(VueAxios, axios)
 const store = new Vuex.Store({
   state: {
     loggedIn: false,
+    username: null,
     reports: []
   },
   mutations: {
@@ -27,11 +28,13 @@ const store = new Vuex.Store({
     addReport(state, x) {
       state.reports.push(x)
     },
-    logIn(state) {
+    logIn(state, username) {
       state.loggedIn = true
+      state.username = username
     },
     logOut(state) {
       state.loggedIn = false
+      state.username = null
     }
   }
 })

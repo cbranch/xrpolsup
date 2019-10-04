@@ -12,7 +12,8 @@
           <b-nav-item :to="{ name: 'Home' }">Home</b-nav-item>
           <b-nav-item :to="{ name: 'Reports' }">Reports</b-nav-item>
           <b-nav-item :to="{ name: 'Users' }">Users</b-nav-item>
-          <b-nav-item :to="{ name: 'Login' }">Login</b-nav-item>
+          <b-nav-item :to="{ name: 'Login' }" v-if="!$store.state.loggedIn">Login</b-nav-item>
+          <b-nav-item :to="{ name: 'Login' }" v-if="$store.state.loggedIn">Logout</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>

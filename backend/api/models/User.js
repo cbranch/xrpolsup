@@ -20,7 +20,6 @@ module.exports = {
     },
     nickname: {
       type: 'string',
-      required: true,
       description: 'Nickname for this user.',
       maxLength: 120,
       example: 'Rebel'
@@ -34,5 +33,14 @@ module.exports = {
       type: 'boolean',
       description: 'Whether this user is an admin that can change other users.',
     },
+  },
+
+  beforeCreate: function (valuesToSet, proceed) {
+    // Hash password
+    sails.helpers.passwords.hashPassword(valuesToSet.password).exec((err, hashedPassword)=>{
+      if (err) { return proceed(err); }
+      valuesToSet.password = hashedPassword;
+      return proceed();
+    });
   },
 };

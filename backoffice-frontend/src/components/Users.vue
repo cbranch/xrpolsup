@@ -18,10 +18,28 @@
         </b-button>
       </template>
     </b-table>
+    <p>
+      <b-button @click="showAddUserModal($event.target)">
+        Add user
+      </b-button>
+    </p>
     <!-- Set password modal -->
     <b-modal :id="passwordModal.id" title="Set password" @ok="reallySetPassword">
       <p>Change password for {{ passwordModal.userName }}</p>
       <p><b-form-input v-model="passwordModal.newPassword" type="password"></b-form-input></p>
+    </b-modal>
+    <!-- Add user modal -->
+    <b-modal id="addUserModal" title="Add new user" @ok="addUser">
+      <b-form-group label="Username" label-for="input-username">
+        <b-form-input id="input-username" v-model="addUserModal.username"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Password" label-for="input-password">
+        <b-form-input id="input-password" v-model="addUserModal.password"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Nickname" label-for="input-nickname">
+        <b-form-input id="input-nickname" v-model="addUserModal.nickname" placeholder="(optional)"></b-form-input>
+      </b-form-group>
+      <p><b-form-checkbox id="input-admin" v-model="addUserModal.isAdmin">Admin (can manage users)</b-form-checkbox></p>
     </b-modal>
   </b-container>
 </template>
@@ -36,6 +54,12 @@ export default {
       userId: null,
       userName: "",
       newPassword: "",
+    },
+    addUserModal: {
+      username: '',
+      password: '',
+      nickname: '',
+      isAdmin: false,
     }
   }),
   computed: {
@@ -52,13 +76,7 @@ export default {
     }
   },
   created () {
-    this.$io.socket.get('/user', (resData, jwRes) => {
-      if (jwRes.statusCode == 401) {
-        this.isAuthorized = false
-      } else {
-        this.users = resData
-      }
-    })
+    this.getUsers()
   },
   methods: {
     setPassword(user, target) {
@@ -80,6 +98,50 @@ export default {
             variant: 'warning',
             solid: true
           })
+        }
+      })
+    },
+    clearAddUserData() {
+      this.addUserModal.username = ''
+      this.addUserModal.password = ''
+      this.addUserModal.nickname = ''
+      this.addUserModal.isAdmin = false
+    },
+    showAddUserModal(target) {
+      this.clearAddUserData()
+      this.$root.$emit('bv::show::modal', 'addUserModal', target)
+    },
+    addUser() {
+      const postData = {
+        username: this.addUserModal.username,
+        password: this.addUserModal.password,
+        nickname: this.addUserModal.nickname,
+        isAdmin: this.addUserModal.isAdmin,
+      }
+      this.clearAddUserData()
+      this.$io.socket.post('/user', postData, (resData, jwRes) => {
+        if (jwRes.statusCode == 200) {
+          this.$bvToast.toast('New user created!', {
+            title: 'User management',
+            variant: 'primary',
+            solid: true
+          })
+        } else {
+          this.$bvToast.toast('Failed to create user: ' + jwRes, {
+            title: 'User management',
+            variant: 'warning',
+            solid: true
+          })
+        }
+        this.getUsers()
+      })
+    },
+    getUsers() {
+      this.$io.socket.get('/user', (resData, jwRes) => {
+        if (jwRes.statusCode == 403) {
+          this.isAuthorized = false
+        } else {
+          this.users = resData
         }
       })
     }
