@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     submit () {
-      this.axios.post('/api/login', { username: this.username, password: this.password }).then(() => {
+      this.axios.post('/api/v1/login', { username: this.username, password: this.password }).then(() => {
         this.$store.commit('logIn', this.username)
         this.$router.push('/')
       }).catch(error => {
@@ -46,7 +46,7 @@ export default {
       this.password = ''
     },
     logOut () {
-      this.axios.post('/api/logout', { }).then(() => {
+      this.axios.post('/api/v1/logout', { }).then(() => {
         this.$store.commit('logOut')
       }).catch(error => {
         this.error = error

@@ -38,4 +38,7 @@ module.exports.blueprints = {
 
   // shortcuts: true,
 
+  // API prefix
+  prefix: '/api/v1',
+
 };

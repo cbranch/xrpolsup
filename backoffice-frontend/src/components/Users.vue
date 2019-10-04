@@ -85,7 +85,7 @@ export default {
       this.$root.$emit('bv::show::modal', this.passwordModal.id, target)
     },
     reallySetPassword() {
-      this.$io.socket.put('/user/' + this.passwordModal.userId + '/set_password', { password: this.passwordModal.newPassword }, (resData, jwRes) => {
+      this.$io.socket.put('/api/v1/user/' + this.passwordModal.userId + '/set_password', { password: this.passwordModal.newPassword }, (resData, jwRes) => {
         if (jwRes.statusCode == 200) {
           this.$bvToast.toast('Password updated', {
             title: 'User management',
@@ -119,7 +119,7 @@ export default {
         isAdmin: this.addUserModal.isAdmin,
       }
       this.clearAddUserData()
-      this.$io.socket.post('/user', postData, (resData, jwRes) => {
+      this.$io.socket.post('/api/v1/user', postData, (resData, jwRes) => {
         if (jwRes.statusCode == 200) {
           this.$bvToast.toast('New user created!', {
             title: 'User management',
@@ -137,7 +137,7 @@ export default {
       })
     },
     getUsers() {
-      this.$io.socket.get('/user', (resData, jwRes) => {
+      this.$io.socket.get('/api/v1/user', (resData, jwRes) => {
         if (jwRes.statusCode == 403) {
           this.isAuthorized = false
         } else {

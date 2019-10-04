@@ -51,7 +51,7 @@ export default {
       if (!this.$io.socket.isConnected() && !this.$io.socket.mightBeAboutToAutoConnect()) {
         this.$io.socket.reconnect()
       }
-      this.$io.socket.get('/report', (resData, jwRes) => {
+      this.$io.socket.get('/api/v1/report', (resData, jwRes) => {
         if (jwRes.statusCode == 401) {
           this.$router.push('login')
           this.$io.socket.disconnect()

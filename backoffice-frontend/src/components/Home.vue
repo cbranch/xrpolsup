@@ -147,7 +147,7 @@ export default {
     commitEditReport () {
       var postData = Object.assign({}, this.editReportModal)
       postData.arrestTime = Date.parse(this.editReportModal.arrestTime).valueOf()
-      this.$io.socket.put('/report/' + this.editReportModal.id, postData, (resData, jwRes) => {
+      this.$io.socket.put('/api/v1/report/' + this.editReportModal.id, postData, (resData, jwRes) => {
         if (jwRes.statusCode == 200) {
           this.$store.commit('setReport', resData)
           this.$bvToast.toast('Report updated!', {

@@ -19,11 +19,11 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  'post /station_report': 'ReportController.post',
+  'POST /api/v1/station_report': 'ReportController.post',
 
-  'POST /login': { action: 'login' },
-  'POST /logout': { action: 'logout' },
+  'POST /api/v1/login': { action: 'login' },
+  'POST /api/v1/logout': { action: 'logout' },
 
-  'PUT /user/:id/set_password': { action: 'user/set-password' },
+  'PUT /api/v1/user/:id/set_password': { action: 'user/set-password' },
 
 };
