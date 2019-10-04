@@ -111,7 +111,7 @@ export default {
           observations: x.details.observations,
         })),
       }
-      this.axios.post('/api/station_report', report).then(() => {
+      this.axios.post('/api/v1/station_report', report).then(() => {
         this.submitted = true
       }, error => {
         this.errors = [error]
