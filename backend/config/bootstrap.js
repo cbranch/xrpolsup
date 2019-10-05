@@ -21,7 +21,7 @@ module.exports.bootstrap = async function() {
   }
   
   await User.createEach([
-    { username: 'rebel', nickname: 'Rebel', password: 'rebel', isAdmin: true },
+    { username: 'rebel', nickname: 'Rebel', password: 'rebel', isAdmin: true, canViewRelease: true },
     // etc.
   ]);
 

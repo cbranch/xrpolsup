@@ -86,6 +86,25 @@ module.exports = function defineCustomHook(sails) {
             }
             req.me = loggedInUser;
 
+            // If our "lastSeenAt" attribute for this user is at least a few seconds old, then set it
+            // to the current timestamp.
+            //
+            // (Note: As an optimization, this is run behind the scenes to avoid adding needless latency.)
+            var MS_TO_BUFFER = 60*1000;
+            var now = Date.now();
+            if (loggedInUser.lastSeenAt < now - MS_TO_BUFFER) {
+              User.updateOne({id: loggedInUser.id})
+              .set({ lastSeenAt: now })
+              .exec((err)=>{
+                if (err) {
+                  sails.log.error('Background task failed: Could not update user (`'+loggedInUser.id+'`) with a new `lastSeenAt` timestamp.  Error details: '+err.stack);
+                  return;
+                }//•
+                sails.log.verbose('Updated the `lastSeenAt` timestamp for user `'+loggedInUser.id+'`.');
+                // Nothing else to do here.
+              });//_∏_  (Meanwhile...)
+            }
+
             // Prevent the browser from caching logged-in users' pages.
             // (including w/ the Chrome back button)
             // > • https://mixmax.com/blog/chrome-back-button-cache-no-store

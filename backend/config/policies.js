@@ -18,6 +18,8 @@ module.exports.policies = {
   ***************************************************************************/
 
   '*': 'is-logged-in',
+  // Release report view/managerment needs special permission
+  'release/*': 'can-see-release',
   // User management is for admins only
   'user/*': 'is-admin',
 

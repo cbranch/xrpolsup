@@ -9,7 +9,13 @@
       <template v-slot:cell(updatedAt)="data">
         {{ new Date(data.value).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }) }}
       </template>
+      <template v-slot:cell(lastSeenAt)="data">
+        {{ new Date(data.value).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }) }}
+      </template>
       <template v-slot:cell(actions)="row">
+        <b-button size="sm" @click="showEditUserModal(row.item, $event.target)" class="mr-1">
+          Edit
+        </b-button>
         <b-button size="sm" @click="setPassword(row.item, $event.target)" class="mr-1">
           Set password
         </b-button>
@@ -40,6 +46,15 @@
         <b-form-input id="input-nickname" v-model="addUserModal.nickname" placeholder="(optional)"></b-form-input>
       </b-form-group>
       <p><b-form-checkbox id="input-admin" v-model="addUserModal.isAdmin">Admin (can manage users)</b-form-checkbox></p>
+      <p><b-form-checkbox id="input-canviewrelease" v-model="addUserModal.canViewRelease">Can view release form</b-form-checkbox></p>
+    </b-modal>
+    <!-- Edit user modal -->
+    <b-modal id="editUserModal" title="Edit user" @ok="editUser">
+      <p>Username: {{ editUserModal.username }}</p>
+      <b-form-group label="Nickname" label-for="input-nickname">
+        <b-form-input id="input-nickname" v-model="editUserModal.nickname" placeholder="(optional)"></b-form-input>
+      </b-form-group>
+      <p><b-form-checkbox id="input-canviewrelease" v-model="editUserModal.canViewRelease">Can view release form</b-form-checkbox></p>
     </b-modal>
   </b-container>
 </template>
@@ -60,6 +75,13 @@ export default {
       password: '',
       nickname: '',
       isAdmin: false,
+      canViewRelease: false,
+    },
+    editUserModal: {
+      id: null,
+      username: '',
+      nickname: '',
+      canViewRelease: false,
     }
   }),
   computed: {
@@ -71,6 +93,8 @@ export default {
         { key: 'username', sortable: true },
         { key: 'nickname', sortable: true },
         { key: 'isAdmin', sortable: true },
+        { key: 'canViewRelease', label: 'Post-release', sortable: true },
+        { key: 'lastSeenAt', sortable: true },
         { key: 'actions' },
       ]
     }
@@ -106,6 +130,7 @@ export default {
       this.addUserModal.password = ''
       this.addUserModal.nickname = ''
       this.addUserModal.isAdmin = false
+      this.addUserModal.canViewRelease = false
     },
     showAddUserModal(target) {
       this.clearAddUserData()
@@ -117,6 +142,7 @@ export default {
         password: this.addUserModal.password,
         nickname: this.addUserModal.nickname,
         isAdmin: this.addUserModal.isAdmin,
+        canViewRelease: this.addUserModal.canViewRelease,
       }
       this.clearAddUserData()
       this.$io.socket.post('/api/v1/user', postData, (resData, jwRes) => {
@@ -144,7 +170,37 @@ export default {
           this.users = resData
         }
       })
-    }
+    },
+    showEditUserModal(user, target) {
+      this.editUserModal.id = user.id
+      this.editUserModal.username = user.username
+      this.editUserModal.nickname = user.nickname
+      this.editUserModal.canViewRelease = user.canViewRelease
+      this.$root.$emit('bv::show::modal', 'editUserModal', target)
+    },
+    editUser() {
+      const postData = {
+        nickname: this.editUserModal.nickname,
+        canViewRelease: this.editUserModal.canViewRelease,
+      }
+      this.clearAddUserData()
+      this.$io.socket.patch('/api/v1/user/' + this.editUserModal.id, postData, (resData, jwRes) => {
+        if (jwRes.statusCode == 200) {
+          this.$bvToast.toast('User updated!', {
+            title: 'User management',
+            variant: 'primary',
+            solid: true
+          })
+        } else {
+          this.$bvToast.toast('Failed to update user: ' + jwRes, {
+            title: 'User management',
+            variant: 'warning',
+            solid: true
+          })
+        }
+        this.getUsers()
+      })
+    },
   }
 }
 </script>
