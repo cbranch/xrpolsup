@@ -36,10 +36,12 @@
     </b-row>
     <b-row class="my-4" v-if="errors.length > 0">
       <b-col>
-        <p>Your report was not submitted for the following reasons:</p>
-        <ul>
-          <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
-        </ul>
+        <b-alert show variant="danger">
+          <p>Your report was not submitted for the following reasons:</p>
+          <ul>
+            <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
+          </ul>
+        </b-alert>
       </b-col>
     </b-row>
     </div>
