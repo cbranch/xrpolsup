@@ -2,66 +2,265 @@
   <b-container>
     <b-row class="mb-2">
       <b-col>
-        <h2 class="my-3">Please let us know about your arrested and release</h2>
+        <h2 class="my-3">Please let us know about your arrest and release</h2>
       </b-col>
     </b-row>
+    <div v-if="submitted">
     <b-row class="mb-2">
       <b-col>
-        <ArresteeDetails></ArresteeDetails>
+        <p>Thank you for completing this form.</p>
       </b-col>
     </b-row>
+    </div>
+    <div v-else>
+    <b-row class="mb-2">
+      <b-col>
+        <b-form-group label="Full name / Alias" label-for="input-fullname">
+          <b-form-input id="input-fullname" v-model="fullname"></b-form-input>
+        </b-form-group>
+        <b-form-group label="When did this arrest take place?" label-for="input-time" :invalid-feedback="isValidTime.reason" :state="isValidTime.valid">
+          <b-form-input id="input-time" v-model="time" :state="isValidTime.valid" placeholder="24-hour time, e.g. 13:00"></b-form-input>
+        </b-form-group>
+        <b-form-group :invalid-feedback="isValidDate.reason" :state="isValidDate.valid">
+          <SimpleDatePicker id="input-date" v-model="date" :state="isValidDate.valid" />
+        </b-form-group>
+        <b-form-group label="Where did this arrest take place?" label-for="input-location" :invalid-feedback="isValidLocation.reason" :state="isValidLocation.valid">
+          <b-form-input id="input-location" v-model="location" :state="isValidLocation.valid" placeholder="Place name"></b-form-input>
+        </b-form-group>
+        <b-form-group label="E-Mail" label-for="input-email">
+          <b-form-input id="input-email" v-model="email"></b-form-input>
+        </b-form-group>
+        <b-form-group label="Telephone" label-for="input-telephone">
+          <b-form-input id="input-telephone" v-model="telephone"></b-form-input>
+        </b-form-group>
+        <b-form-group label="Named offence at time of arrest" label-for="input-offence">
+          <b-form-input id="input-offence" v-model="offence"></b-form-input>
+        </b-form-group>
+        <b-form-group label="Terms of release">
+          <b-form-radio-group v-model="termRelease" stacked>
+            <b-form-radio value="rui">Released under investigation (RUI)</b-form-radio>
+            <b-form-radio value="charge">Charge</b-form-radio>
+            <b-form-group v-if="hasCharges" label="Name charges:" label-for="input-charges">
+              <b-form-input id="input-charges" v-model="charges"></b-form-input>
+            </b-form-group>
+            <b-form-radio value="noFurtherAction">No further action</b-form-radio>  
+          </b-form-radio-group>
+        </b-form-group>
+        <b-form-group label="Bail conditions" label-for="input-bail-conditions">
+          <b-form-input id="input-bail-conditions" v-model="bailConditions"></b-form-input>
+        </b-form-group>
+        <b-form-group label="Court date" label-for="input-court-date">
+          <b-form-input id="input-court-date" v-model="courtDate"></b-form-input>
+        </b-form-group>
+        <b-form-group label="Court location" label-for="input-court-location">
+          <b-form-input id="input-court-location" v-model="courtLocation"></b-form-input>
+        </b-form-group>
+        <b-form-group label="Police Station" label-for="input-police-station">
+          <b-form-input id="input-police-station" v-model="policeStation"></b-form-input>
+        </b-form-group>
+        <b-form-group label="Local XR group" label-for="input-local-xr-group">
+          <b-form-input id="input-local-xr-group" v-model="localXrGroup"></b-form-input>
+        </b-form-group>
+        <b-form-group label="Nearest City or Region" label-for="input-nearest-city">
+          <b-form-input id="input-nearest-city" v-model="nearestCity"></b-form-input>
+        </b-form-group>
+        <b-form-checkbox-group v-model="others" stacked>
+          <b-form-checkbox value="anyInjuries">Any injuries?</b-form-checkbox>  
+          <b-form-group v-if="hasAnyInjuries" label="Name injuries:" label-for="input-anyInjuries">
+            <b-form-input id="input-anyInjuries" v-model="anyInjuries"></b-form-input>
+          </b-form-group>
+          <b-form-checkbox value="adverseEvents">Adverse events?</b-form-checkbox>  
+          <b-form-group v-if="hasAdverseEvents" label="Name adverse events:" label-for="input-adverseEvents">
+            <b-form-input id="input-adverseEvents" v-model="adverseEvents"></b-form-input>
+          </b-form-group>
+          <b-form-checkbox value="held24hrs">Held more than 24hr?</b-form-checkbox>  
+          <b-form-checkbox value="helpNeeded">Help needed?</b-form-checkbox>  
+          <b-form-group v-if="hasHelpNeeded" label="Describe help needed:" label-for="input-helpNeeded">
+            <b-form-input id="input-helpNeeded" v-model="helpNeeded"></b-form-input>
+          </b-form-group>
+
+          <b-form-checkbox value="specialRequest">Special request?</b-form-checkbox>  
+          <b-form-group v-if="hasSpecialRequest" label="Special request needed:" label-for="input-specialRequest">
+            <b-form-input id="input-specialRequest" v-model="specialRequest"></b-form-input>
+          </b-form-group>
+        </b-form-checkbox-group>
+
+        <b-form-group label="How many rebels were you brought to this station with?" label-for="input-number-rebels">
+          <b-form-input id="input-number-rebels" v-model="numberRebels"></b-form-input>
+        </b-form-group>
+
+        <b-form-group label="Roughly how many rebels are still held in this station?" label-for="input-rebels-still-held">
+          <b-form-input id="input-rebels-still-held" v-model="rebelsStillHeld"></b-form-input>
+        </b-form-group>
+
+        <b-form-group label="By providing this data I consent to be contacted by" label-for="input-rebels-still-held">
+          <b-form-checkbox v-model="wantContactByEmail">Contact by E-Mail</b-form-checkbox>  
+          <b-form-group v-if="wantContactByEmail" label="E-Mail:" label-for="input-by-email">
+            <b-form-input id="input-by-email" v-model="contactByEmail"></b-form-input>
+          </b-form-group>
+
+          <b-form-checkbox value="wantContactByPhone">Contact by Phone</b-form-checkbox>  
+          <b-form-group v-if="wantContactByPhone" label="Phone:" label-for="input-by-phone">
+            <b-form-input id="input-by-phone" v-model="contactByPhone"></b-form-input>
+          </b-form-group>
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row class="my-4">
+      <b-col>
+        <b-button block variant="primary" v-on:click="submitReport">Submit post-arrest report</b-button>
+      </b-col>
+    </b-row>
+    <b-row class="my-4" v-if="errors.length > 0">
+      <b-col>
+        <b-alert show variant="danger">
+          <p>Your report was not submitted for the following reasons:</p>
+          <ul>
+            <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
+          </ul>
+        </b-alert>
+      </b-col>
+    </b-row>
+    </div>
   </b-container>
 </template>
 
 <script>
-import ArresteeDetails from '../../components/ArresteeDetails.vue'
+import SimpleDatePicker from '../../components/SimpleDatePicker.vue'
 
 export default {
   name: 'ArresteeReport',
   components: {
-    ArresteeDetails
+    SimpleDatePicker
   },
   data () {
     return {
-      stationName: null,
-      stationComplete: false,
-      arresteeComplete: false,
-      arrestees: null,
-      witnessDetails: null,
+      fullname: null,
+      time: null,
+      date: null,
+      location: null,
+      email: null,
+      telephone: null,
+      offence: null,
+      termRelease: null,
+      charges: null,
+      bailConditions: null,
+      courtDate: null,
+      courtLocation: null,
+      policeStation: null,
+      localXrGroup: null,
+      nearestCity: null,
+      others: null,
+      adverseEvents: null,
+      anyInjuries: null,
+      helpNeeded: null,
+      specialRequest: null,
+      numberRebels: null,
+      rebelsStillHeld: null,
+      beContactedBy: null,
+      wantContactByEmail: false,
+      contactByEmail: null,
+      wantContactByPhone: false,
+      contactByPhone: null,
       submitted: false,
       errors: [],
     }
   },
   computed: {
-    hasConcerns () {
-      if (this.arrestees != null) {
-        if (this.arrestees.some(x => (x.details.concerns != null && x.details.concerns.length > 0))) {
-          return true
-        }
+    hasCharges () {
+      return this.termRelease != null && this.termRelease.includes('charge')
+    },
+    hasAnyInjuries () {
+      return this.others != null && this.others.includes('anyInjuries')
+    },
+    hasAdverseEvents () {
+      return this.others != null && this.others.includes('adverseEvents')
+    },
+    hasHelpNeeded () {
+      return this.others != null && this.others.includes('helpNeeded')
+    },
+    hasSpecialRequest () {
+      return this.others != null && this.others.includes('specialRequest')
+    },
+    isValidTime () {
+      if (this.time == null) {
+        return { valid: null }
+      } else if (this.time == "") {
+        return { valid: false, reason: 'A valid time must be provided' }
+      } else if (!this.time.match(/([01]?\d|2[0-3]):[0-5]\d/)) {
+        return { valid: false, reason: 'Please enter the time in 24-hour format with a colon, hh:mm' }
+      } else {
+        return { valid: true }
       }
-      return false
-    }
+    },
+    isValidDate () {
+      if (this.date == null) {
+        return { valid: null }
+      } else if (this.date == '') {
+        return { valid: false, reason: 'Please select a date' }
+      } else {
+        return { valid: true }
+      }
+    },
+    isValidLocation () {
+      if (this.location == null) {
+        return { valid: null }
+      } else if (this.location == '') {
+        return { valid: false, reason: 'Please enter a location' }
+      } else {
+        return { valid: true }
+      }
+    },
+    isValidName () {
+      if (this.nameSupplied === false) {
+        return { valid: true }
+      } else if (this.name == null) {
+        return { valid: null }
+      } else if (this.nameSupplied === true && this.name == '') {
+        return { valid: false, reason: 'Please enter a name, or confirm that you do not want to provide a name' }
+      } else {
+        return { valid: true }
+      }
+    },
   },
   methods: {
+    validate () {
+      return false
+    },
     submitReport () {
-      if (!this.$refs.arresteeCount.validate()) {
+      if (!this.validate()) {
+        this.errors = ["Please correct errors in the form before submitting."]
         return
       }
       let report = {
-        stationName: this.stationName,
-        witnessEmail: this.witnessDetails,
-        arrestees: this.arrestees.map(x => ({
-          time: x.details.time,
-          date: x.details.date,
-          location: x.details.location,
-          name: x.details.name,
-          arrestingOfficerId: x.details.arrestingOfficerId,
-          concerns: x.details.concerns,
-          medicationName: x.details.medicationName,
-          observations: x.details.observations,
-        })),
+        fullname: this.fullname,
+        time: this.time,
+        date: this.date,
+        location: this.location,
+        email: this.email,
+        telephone: this.telephone,
+        offence: this.offence,
+        termRelease: this.termRelease,
+        charges: this.charges,
+        bailConditions: this.bailConditions,
+        courtDate: this.courtDate,
+        courtLocation: this.courtLocation,
+        policeStation: this.policeStation,
+        localXrGroup: this.localXrGroup,
+        nearestCity: this.nearestCity,
+        others: this.others,
+        adverseEvents: this.adverseEvents,
+        anyInjuries: this.anyInjuries,
+        helpNeeded: this.helpNeeded,
+        specialRequest: this.specialRequest,
+        numberRebels: this.numberRebels,
+        rebelsStillHeld: this.rebelsStillHeld,
+        beContactedBy: this.beContactedBy,
+        contactByEmail: this.contactByEmail,
+        contactByPhone: this.contactByPhone,
+        submitted: this.submitted,
       }
-      this.axios.post('/api/station_report', report).then(() => {
+      this.axios.post('/api/arrestee_report', report).then(() => {
         this.submitted = true
       }, error => {
         this.errors = [error]
