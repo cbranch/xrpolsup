@@ -3,11 +3,11 @@
     <h2>Report list</h2>
     <b-form-group
       label="Filter"
-      label-cols-sm="2"
+      label-cols-sm="1"
       label-align-sm="right"
       label-size="sm"
       label-for="filterInput"
-      class="mb-0"
+      class="mb-2"
     >
       <b-input-group size="sm">
         <b-form-input
@@ -21,11 +21,25 @@
         </b-input-group-append>
       </b-input-group>
     </b-form-group>
+    <b-pagination
+      v-model="currentPage"
+      :total-rows="rows"
+      :per-page="perPage"
+      aria-controls="report-table"
+      align="center"
+    ></b-pagination>
     <b-table striped hover
+      id="report-table"
       :items="reportList"
       :fields="reportFields"
       :filter="filter"
+      :per-page="perPage"
+      :current-page="currentPage"
+      primary-key="id"
       sort-by="arrestTime">
+      <template v-slot:cell(index)="data">
+        {{ data.index + 1 + ((currentPage - 1) * perPage) }}
+      </template>
       <template v-slot:cell(createdAt)="data">
         {{ new Date(data.value).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }) }}
       </template>
@@ -108,6 +122,8 @@
 export default {
   data () {
     return {
+      perPage: 50,
+      currentPage: 1,
       filter: null,
       editReportModal: {
         id: null,
@@ -132,6 +148,7 @@ export default {
   computed: {
     reportFields () {
       return [
+        { key: 'index', label: '' },
         { key: 'createdAt', label: 'Reported at', sortable: true },
         { key: 'arrestTime', label: 'Arrest time', sortable: true },
         { key: 'station', sortable: true },
@@ -146,6 +163,9 @@ export default {
     },
     reportList () {
       return this.$store.state.reports
+    },
+    rows () {
+      return this.$store.state.reports.length
     }
   },
   methods: {

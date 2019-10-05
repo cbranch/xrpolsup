@@ -2,7 +2,41 @@
   <b-container fluid>
     <h2>Users</h2>
     <b-alert :show="isAuthorized === false" variant="warning">You aren't authorized to view users</b-alert>
-    <b-table striped hover :items="users" :fields="userFields">
+    <b-form-group
+      label="Filter"
+      label-cols-sm="1"
+      label-align-sm="right"
+      label-size="sm"
+      label-for="filterInput"
+      class="mb-2"
+    >
+      <b-input-group size="sm">
+        <b-form-input
+          v-model="filter"
+          type="search"
+          id="filterInput"
+          placeholder="Type to Search"
+        ></b-form-input>
+        <b-input-group-append>
+          <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+        </b-input-group-append>
+      </b-input-group>
+    </b-form-group>
+    <b-pagination
+      v-model="currentPage"
+      :total-rows="rows"
+      :per-page="perPage"
+      aria-controls="user-table"
+      align="center"
+    ></b-pagination>
+    <b-table striped hover
+      id="user-table"
+      :items="users"
+      :fields="userFields"
+      :filter="filter"
+      :per-page="perPage"
+      :current-page="currentPage"
+      primary-key="id">
       <template v-slot:cell(createdAt)="data">
         {{ new Date(data.value).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }) }}
       </template>
@@ -63,6 +97,9 @@
 export default {
   data: () => ({
     isAuthorized: null,
+    perPage: 50,
+    currentPage: 1,
+    filter: null,
     users: [],
     passwordModal: {
       id: 'password-modal',
@@ -97,6 +134,9 @@ export default {
         { key: 'lastSeenAt', sortable: true },
         { key: 'actions' },
       ]
+    },
+    rows () {
+      return this.users.length
     }
   },
   created () {
@@ -163,7 +203,7 @@ export default {
       })
     },
     getUsers() {
-      this.$io.socket.get('/api/v1/user', (resData, jwRes) => {
+      this.$io.socket.get('/api/v1/user', {limit: 10000}, (resData, jwRes) => {
         if (jwRes.statusCode == 403) {
           this.isAuthorized = false
         } else {

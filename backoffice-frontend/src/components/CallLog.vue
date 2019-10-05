@@ -8,7 +8,7 @@
       label-align-sm="right"
       label-size="sm"
       label-for="filterInput"
-      class="mb-0"
+      class="mb-2"
     >
       <b-input-group size="sm">
         <b-form-input
@@ -22,10 +22,21 @@
         </b-input-group-append>
       </b-input-group>
     </b-form-group>
+    <b-pagination
+      v-model="currentPage"
+      :total-rows="rows"
+      :per-page="perPage"
+      aria-controls="calllog-table"
+      align="center"
+    ></b-pagination>
     <b-table striped hover
+      id="calllog-table"
       :items="reportList"
       :fields="reportFields"
       :filter="filter"
+      :per-page="perPage"
+      :current-page="currentPage"
+      primary-key="id"
       sort-by="updatedAt">
       <template v-slot:cell(updatedAt)="data">
         {{ new Date(data.value).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }) }}
@@ -52,6 +63,8 @@
 export default {
   data () {
     return {
+      perPage: 50,
+      currentPage: 1,
       filter: null,
       callLogModal: {
         id: null,
@@ -69,6 +82,9 @@ export default {
     },
     reportList () {
       return this.$store.state.callLogs
+    },
+    rows () {
+      return this.$store.state.callLogs.length
     }
   },
   methods: {

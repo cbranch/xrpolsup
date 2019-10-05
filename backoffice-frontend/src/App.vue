@@ -59,7 +59,7 @@ export default {
       this.$io.socket.on('disconnect', () => {
         this.isConnected = false
       })
-      this.$io.socket.get('/api/v1/report', (resData, jwRes) => {
+      this.$io.socket.get('/api/v1/report', {limit: 10000}, (resData, jwRes) => {
         if (jwRes.statusCode == 401) {
           this.$router.push('login')
           this.$io.socket.disconnect()
@@ -71,7 +71,7 @@ export default {
               }
           })
 
-          this.$io.socket.get('/api/v1/release', (resData, jwRes) => {
+          this.$io.socket.get('/api/v1/release', {limit: 10000}, (resData, jwRes) => {
             if (jwRes.statusCode != 200) {
               return
             }
@@ -82,7 +82,7 @@ export default {
               }
             })
           })
-          this.$io.socket.get('/api/v1/calllog', (resData, jwRes) => {
+          this.$io.socket.get('/api/v1/calllog', {limit: 10000}, (resData, jwRes) => {
             if (jwRes.statusCode != 200) {
               return
             }
