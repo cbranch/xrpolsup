@@ -21,7 +21,7 @@ module.exports.bootstrap = async function() {
   }
   
   await User.createEach([
-    { username: 'rebel', nickname: 'Rebel', password: await sails.helpers.passwords.hashPassword('rebel'), isAdmin: true },
+    { username: 'rebel', nickname: 'Rebel', password: 'rebel', isAdmin: true },
     // etc.
   ]);
 
