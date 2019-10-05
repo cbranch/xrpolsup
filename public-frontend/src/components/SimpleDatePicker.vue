@@ -16,7 +16,7 @@ export default {
           date.setTime(currentDate.getTime()-(i*24*3600000));
           dates.push({
               value: date.toISOString().substring(0, 10),
-              text: date.toLocaleDateString('en-GB', {month: 'long', day: 'numeric'}),
+              text: date.toLocaleDateString('en-GB', {month: 'long', day: 'numeric', weekday: 'long'}),
           })
       }
       return dates
