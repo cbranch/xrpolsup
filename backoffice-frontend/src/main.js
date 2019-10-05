@@ -23,7 +23,8 @@ const store = new Vuex.Store({
     loggedIn: false,
     username: null,
     reports: [],
-    releases: []
+    releases: [],
+    callLogs: []
   },
   mutations: {
     setReport(state, x) {
@@ -55,6 +56,21 @@ const store = new Vuex.Store({
     },
     addRelease(state, x) {
       state.releases.push(x)
+    },
+    setCallLog(state, x) {
+      for (var i in state.callLogs) {
+        if (state.callLogs[i].id == x.id) {
+          Object.assign(state.callLogs[i], x)
+          return
+        }
+      }
+      state.callLogs.push(x)
+    },
+    setCallLogs(state, x) {
+      state.callLogs = x
+    },
+    addCallLog(state, x) {
+      state.callLogs.push(x)
     },
     logIn(state, username) {
       state.loggedIn = true

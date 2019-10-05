@@ -28,6 +28,13 @@ export default new Router({
           }
         },
         {
+          path: '/calllog',
+          name: 'CallLog',
+          component: resolve => {
+            require(['./components/CallLog.vue'], resolve)
+          }
+        },
+        {
           path: '/users',
           name: 'Users',
           component: resolve => {
