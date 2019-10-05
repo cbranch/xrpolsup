@@ -9,6 +9,8 @@
  * https://sailsjs.com/config/http
  */
 
+var serveStatic = require('serve-static')
+
 module.exports.http = {
 
   /****************************************************************************
@@ -26,17 +28,27 @@ module.exports.http = {
      * The main URL should show the public assets.
      * The backoffice domain should show the back office assets.
      */
-    staticRoutes: (function (){
-      console.log('Initializing `staticRoutes` (HTTP middleware)...');
+    routedWww: (function() {
+      const maxAge = 90 * 24 * 60 * 60 * 1000;
+      var publicMiddleware = serveStatic('.tmp/public/public', { maxAge });
+      var backofficeMiddleware = serveStatic('.tmp/public/backoffice', { maxAge });
+
       return function (req,res,next) {
-        if (req.hostname == 'arrestwatch.info') {
-          req.url = '/public' + req.url;
-        } else if (req.hostname == 'backoffice.arrestwatch.info') {
-          req.url = '/backoffice' + req.url;
+        if (req.hostname == 'arrestwatch.info' || req.hostname == 'staging.arrestwatch.info') {
+          return publicMiddleware(req, res, next);
+        } else if (req.hostname == 'backoffice.arrestwatch.info' || req.hostname == 'backoffice.staging.arrestwatch.info') {
+          return backofficeMiddleware(req, res, next);
+        } else {
+          return next();
         }
-        return next();
       };
     })(),
+
+    connectHistoryApiFallback: require('connect-history-api-fallback')({
+      rewrites: [
+        { from: /\/arrestee/, to: '/arrestee.html'}
+      ]
+    }),
 
     /***************************************************************************
     *                                                                          *
@@ -51,9 +63,9 @@ module.exports.http = {
       'bodyParser',
       'compress',
       'poweredBy',
-      'staticRoutes',
       'router',
-      'www',
+      'connectHistoryApiFallback',
+      'routedWww',
       'favicon',
     ],
 
