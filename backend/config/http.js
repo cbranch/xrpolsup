@@ -46,7 +46,7 @@ module.exports.http = {
 
     connectHistoryApiFallback: require('connect-history-api-fallback')({
       rewrites: [
-        { from: /\/arrestee/, to: '/arrestee.html'}
+        { from: /\/arrestee$/, to: '/arrestee.html'}
       ]
     }),
 
