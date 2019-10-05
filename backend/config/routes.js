@@ -20,6 +20,7 @@ module.exports.routes = {
   ***************************************************************************/
 
   'POST /api/v1/station_report': 'ReportController.post',
+  'POST /api/v1/arrestee_report': 'ReleaseController.post',
 
   'POST /api/v1/login': { action: 'login' },
   'POST /api/v1/logout': { action: 'logout' },

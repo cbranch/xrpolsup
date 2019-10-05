@@ -25,6 +25,9 @@ module.exports.policies = {
   'ReportController': {
     'post': true,
   },
+  'ReleaseController': {
+    'post': true,
+  },
   'login': true,
   'logout': true,
 

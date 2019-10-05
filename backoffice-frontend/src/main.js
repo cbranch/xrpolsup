@@ -22,7 +22,8 @@ const store = new Vuex.Store({
   state: {
     loggedIn: false,
     username: null,
-    reports: []
+    reports: [],
+    releases: []
   },
   mutations: {
     setReport(state, x) {
@@ -39,6 +40,21 @@ const store = new Vuex.Store({
     },
     addReport(state, x) {
       state.reports.push(x)
+    },
+    setRelease(state, x) {
+      for (var i in state.releases) {
+        if (state.releases[i].id == x.id) {
+          Object.assign(state.releases[i], x)
+          return
+        }
+      }
+      state.releases.push(x)
+    },
+    setReleases(state, x) {
+      state.releases = x
+    },
+    addRelease(state, x) {
+      state.releases.push(x)
     },
     logIn(state, username) {
       state.loggedIn = true
@@ -60,6 +76,7 @@ if (isProductionEnvironment) {
 let io = sailsIO(socketIO)
 io.sails.url = url
 io.sails.environment = process.env.NODE_ENV || 'development'
+io.sails.reconnection = true
 //io.sails.useCORSRouteToGetCookie = false
 
 Vue.prototype.$io = io

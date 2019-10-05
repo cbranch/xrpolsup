@@ -21,6 +21,13 @@ export default new Router({
           }
         },
         {
+          path: '/release',
+          name: 'Release',
+          component: resolve => {
+            require(['./components/Release.vue'], resolve)
+          }
+        },
+        {
           path: '/users',
           name: 'Users',
           component: resolve => {

@@ -5,7 +5,7 @@ module.exports = {
       template: 'public/witness.html',
       title: 'Witness Report'
     },
-    'arrestee': {
+    'pss': {
       entry: './src/pages/ArresteeReport/main.js',
       template: 'public/arrestee.html',
       title: 'Arrestee Report'

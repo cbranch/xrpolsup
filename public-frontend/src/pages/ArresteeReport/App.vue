@@ -16,7 +16,7 @@
     <b-row class="mb-2">
       <b-col>
         <b-form-group label="Full name / Alias" label-for="input-fullname">
-          <b-form-input id="input-fullname" v-model="fullname"></b-form-input>
+          <b-form-input id="input-fullname" v-model="name"></b-form-input>
         </b-form-group>
         <b-form-group label="When did this arrest take place?" label-for="input-time" :invalid-feedback="isValidTime.reason" :state="isValidTime.valid">
           <b-form-input id="input-time" v-model="time" :state="isValidTime.valid" placeholder="24-hour time, e.g. 13:00"></b-form-input>
@@ -27,17 +27,11 @@
         <b-form-group label="Where did this arrest take place?" label-for="input-location" :invalid-feedback="isValidLocation.reason" :state="isValidLocation.valid">
           <b-form-input id="input-location" v-model="location" :state="isValidLocation.valid" placeholder="Place name"></b-form-input>
         </b-form-group>
-        <b-form-group label="E-Mail" label-for="input-email">
-          <b-form-input id="input-email" v-model="email"></b-form-input>
-        </b-form-group>
-        <b-form-group label="Telephone" label-for="input-telephone">
-          <b-form-input id="input-telephone" v-model="telephone"></b-form-input>
-        </b-form-group>
         <b-form-group label="Named offence at time of arrest" label-for="input-offence">
           <b-form-input id="input-offence" v-model="offence"></b-form-input>
         </b-form-group>
         <b-form-group label="Terms of release">
-          <b-form-radio-group v-model="termRelease" stacked>
+          <b-form-radio-group v-model="termsOfRelease" stacked>
             <b-form-radio value="rui">Released under investigation (RUI)</b-form-radio>
             <b-form-radio value="charge">Charge</b-form-radio>
             <b-form-group v-if="hasCharges" label="Name charges:" label-for="input-charges">
@@ -64,33 +58,31 @@
         <b-form-group label="Nearest City or Region" label-for="input-nearest-city">
           <b-form-input id="input-nearest-city" v-model="nearestCity"></b-form-input>
         </b-form-group>
-        <b-form-checkbox-group v-model="others" stacked>
-          <b-form-checkbox value="anyInjuries">Any injuries?</b-form-checkbox>  
-          <b-form-group v-if="hasAnyInjuries" label="Name injuries:" label-for="input-anyInjuries">
-            <b-form-input id="input-anyInjuries" v-model="anyInjuries"></b-form-input>
-          </b-form-group>
-          <b-form-checkbox value="adverseEvents">Adverse events?</b-form-checkbox>  
-          <b-form-group v-if="hasAdverseEvents" label="Name adverse events:" label-for="input-adverseEvents">
-            <b-form-input id="input-adverseEvents" v-model="adverseEvents"></b-form-input>
-          </b-form-group>
-          <b-form-checkbox value="held24hrs">Held more than 24hr?</b-form-checkbox>  
-          <b-form-checkbox value="helpNeeded">Help needed?</b-form-checkbox>  
-          <b-form-group v-if="hasHelpNeeded" label="Describe help needed:" label-for="input-helpNeeded">
-            <b-form-input id="input-helpNeeded" v-model="helpNeeded"></b-form-input>
-          </b-form-group>
+        <b-form-checkbox v-model="hasAnyInjuries">Any injuries?</b-form-checkbox>  
+        <b-form-group v-if="hasAnyInjuries" label="Name injuries:" label-for="input-anyInjuries">
+          <b-form-input id="input-anyInjuries" v-model="anyInjuries"></b-form-input>
+        </b-form-group>
+        <b-form-checkbox v-model="hasAdverseEvents">Adverse events?</b-form-checkbox>  
+        <b-form-group v-if="hasAdverseEvents" label="Name adverse events:" label-for="input-adverseEvents">
+          <b-form-input id="input-adverseEvents" v-model="adverseEvents"></b-form-input>
+        </b-form-group>
+        <b-form-checkbox v-model="heldMoreThan24Hours">Held more than 24hr?</b-form-checkbox>  
+        <b-form-checkbox v-model="hasHelpNeeded">Help needed?</b-form-checkbox>  
+        <b-form-group v-if="hasHelpNeeded" label="Describe help needed:" label-for="input-helpNeeded">
+          <b-form-input id="input-helpNeeded" v-model="helpNeeded"></b-form-input>
+        </b-form-group>
 
-          <b-form-checkbox value="specialRequest">Special request?</b-form-checkbox>  
-          <b-form-group v-if="hasSpecialRequest" label="Special request needed:" label-for="input-specialRequest">
-            <b-form-input id="input-specialRequest" v-model="specialRequest"></b-form-input>
-          </b-form-group>
-        </b-form-checkbox-group>
+        <b-form-checkbox value="specialRequest">Special request?</b-form-checkbox>  
+        <b-form-group v-if="hasSpecialRequest" label="Special request needed:" label-for="input-specialRequest">
+          <b-form-input id="input-specialRequest" v-model="specialRequest"></b-form-input>
+        </b-form-group>
 
         <b-form-group label="How many rebels were you brought to this station with?" label-for="input-number-rebels">
-          <b-form-input id="input-number-rebels" v-model="numberRebels"></b-form-input>
+          <b-form-input type="number" id="input-number-rebels" v-model="numberRebels"></b-form-input>
         </b-form-group>
 
         <b-form-group label="Roughly how many rebels are still held in this station?" label-for="input-rebels-still-held">
-          <b-form-input id="input-rebels-still-held" v-model="rebelsStillHeld"></b-form-input>
+          <b-form-input type="number" id="input-rebels-still-held" v-model="rebelsStillHeld"></b-form-input>
         </b-form-group>
 
         <b-form-group label="By providing this data I consent to be contacted by" label-for="input-rebels-still-held">
@@ -99,7 +91,7 @@
             <b-form-input id="input-by-email" v-model="contactByEmail"></b-form-input>
           </b-form-group>
 
-          <b-form-checkbox value="wantContactByPhone">Contact by Phone</b-form-checkbox>  
+          <b-form-checkbox v-model="wantContactByPhone">Contact by Phone</b-form-checkbox>  
           <b-form-group v-if="wantContactByPhone" label="Phone:" label-for="input-by-phone">
             <b-form-input id="input-by-phone" v-model="contactByPhone"></b-form-input>
           </b-form-group>
@@ -135,14 +127,12 @@ export default {
   },
   data () {
     return {
-      fullname: null,
+      name: null,
       time: null,
       date: null,
       location: null,
-      email: null,
-      telephone: null,
       offence: null,
-      termRelease: null,
+      termsOfRelease: null,
       charges: null,
       bailConditions: null,
       courtDate: null,
@@ -150,14 +140,17 @@ export default {
       policeStation: null,
       localXrGroup: null,
       nearestCity: null,
-      others: null,
+      hasAdverseEvents: false,
       adverseEvents: null,
+      hasAnyInjuries: false,
       anyInjuries: null,
+      heldMoreThan24Hours: false,
+      hasHelpNeeded: false,
       helpNeeded: null,
+      hasSpecialRequest: false,
       specialRequest: null,
       numberRebels: null,
       rebelsStillHeld: null,
-      beContactedBy: null,
       wantContactByEmail: false,
       contactByEmail: null,
       wantContactByPhone: false,
@@ -168,19 +161,7 @@ export default {
   },
   computed: {
     hasCharges () {
-      return this.termRelease != null && this.termRelease.includes('charge')
-    },
-    hasAnyInjuries () {
-      return this.others != null && this.others.includes('anyInjuries')
-    },
-    hasAdverseEvents () {
-      return this.others != null && this.others.includes('adverseEvents')
-    },
-    hasHelpNeeded () {
-      return this.others != null && this.others.includes('helpNeeded')
-    },
-    hasSpecialRequest () {
-      return this.others != null && this.others.includes('specialRequest')
+      return this.termsOfRelease != null && this.termsOfRelease.includes('charge')
     },
     isValidTime () {
       if (this.time == null) {
@@ -225,7 +206,12 @@ export default {
   },
   methods: {
     validate () {
-      return false
+      this.time = this.time || ''
+      this.date = this.date || ''
+      this.location = this.location || ''
+      this.station = this.station || ''
+      this.name = this.name || ''
+      return this.isValidTime.valid && this.isValidDate.valid && this.isValidLocation.valid && this.isValidName.valid
     },
     submitReport () {
       if (!this.validate()) {
@@ -233,34 +219,35 @@ export default {
         return
       }
       let report = {
-        fullname: this.fullname,
+        name: this.name,
         time: this.time,
         date: this.date,
         location: this.location,
-        email: this.email,
-        telephone: this.telephone,
         offence: this.offence,
-        termRelease: this.termRelease,
-        charges: this.charges,
+        termsOfRelease: this.termsOfRelease,
+        charges: this.hasCharges ? this.charges : '',
         bailConditions: this.bailConditions,
         courtDate: this.courtDate,
         courtLocation: this.courtLocation,
         policeStation: this.policeStation,
-        localXrGroup: this.localXrGroup,
+        localXRGroup: this.localXrGroup,
         nearestCity: this.nearestCity,
-        others: this.others,
+        hasAdverseEvents: this.hasAdverseEvents,
         adverseEvents: this.adverseEvents,
+        hasAnyInjuries: this.hasAnyInjuries,
         anyInjuries: this.anyInjuries,
+        heldMoreThan24Hours: this.heldMoreThan24Hours,
+        hasHelpNeeded: this.hasHelpNeeded,
         helpNeeded: this.helpNeeded,
+        hasSpecialRequest: this.hasSpecialRequest,
         specialRequest: this.specialRequest,
         numberRebels: this.numberRebels,
         rebelsStillHeld: this.rebelsStillHeld,
-        beContactedBy: this.beContactedBy,
-        contactByEmail: this.contactByEmail,
-        contactByPhone: this.contactByPhone,
+        contactByEmail: this.wantContactByEmail ? this.contactByEmail : '',
+        contactByPhone: this.wantContactByPhone ? this.contactByPhone : '',
         submitted: this.submitted,
       }
-      this.axios.post('/api/arrestee_report', report).then(() => {
+      this.axios.post('/api/v1/arrestee_report', report).then(() => {
         this.submitted = true
       }, error => {
         this.errors = [error]
