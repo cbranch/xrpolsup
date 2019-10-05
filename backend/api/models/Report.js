@@ -13,6 +13,7 @@ module.exports = {
       concernMedicationNeed: { type: 'boolean', defaultsTo: false },
       medicationName: { type: 'string' },
       observations: { type: 'string' },
+      comment: { type: 'string' },
       witness: { model: 'witness' },
       isHidden: { type: 'boolean', defaultsTo: false },
     },

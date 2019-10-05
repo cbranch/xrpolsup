@@ -17,40 +17,24 @@ module.exports = {
         .catch(error => res.serverError(error))
 
       let newRecords = arrestees.map(x => {
-        let {time, date, location, name, arrestingOfficerId, concerns, medicationName, observations} = x;
-        const arrestTime = Date.parse(date + "T" + time + ":00")
-        if (location == null) {
-          location = ""
-        }
-        if (name == null) {
-          name = ""
-        }
-        if (arrestingOfficerId == null) {
-          arrestingOfficerId = ""
-        }
-        if (concerns == null) {
-          concerns = []
-        }
-        if (medicationName == null) {
-          medicationName = ""
-        }
-        if (observations == null) {
-          observations = ""
-        }
+        let {time, date, location, name, arrestingOfficerId, concerns, medicationName, observations, comment} = x;
+        concerns = concerns || []
         return {
           station: stationName,
-          arrestTime,
-          location,
-          name,
-          arrestingOfficerId,
+          arrestTime: Date.parse(date + "T" + time + ":00"),
+          location: location || "",
+          name: name || "",
+          arrestingOfficerId: arrestingOfficerId || "",
           concernMentalDistress: concerns.includes("mentalDistress"),
           concernPhysicalDistress: concerns.includes("physicalDistress"),
           concernMinor: concerns.includes("minor"),
           concernPoliceBehaviour: concerns.includes("policeBehaviour"),
           concernPolicePrejudice: concerns.includes("policePrejudice"),
           concernMedicationNeed: concerns.includes("medicationNeed"),
-          medicationName,
-          observations,
+          medicationName: medicationName || "",
+          observations: observations || "",
+          comment: comment || "",
+          witness: witness.id,
         }
       })
       sails.log.info(`Received ${newRecords.length} reports`)

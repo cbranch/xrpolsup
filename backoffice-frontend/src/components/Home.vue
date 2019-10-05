@@ -40,6 +40,11 @@
         <div v-if="data.item.concernPolicePrejudice">Police prejudice</div>
         <div v-if="data.item.concernMedicationNeed">Medication need: {{ data.item.medicationName }}</div>
       </template>
+      <template v-slot:cell(comment)="data">
+        <b-button v-if="data.item.comment" v-b-popover.hover.top="data.item.comment" title="Comment" size="sm">
+          Show
+        </b-button>
+      </template>
       <template v-slot:cell(actions)="data">
         <b-button size="sm" @click="editReport(data.item, $event.target)">Edit</b-button>
       </template>
@@ -86,8 +91,11 @@
             <b-form-group label="Observations" label-for="input-observations" label-cols-md="3">
               <b-form-input id="input-observations" v-model="editReportModal.observations"></b-form-input>
             </b-form-group>
-            <b-form-group label="Witness" label-for="input-witness" label-cols-md="3">
-              <b-form-input id="input-witness" v-model="editReportModal.witness"></b-form-input>
+            <b-form-group label="Witness" label-for="input-witness" label-cols-md="3" v-if="editReportModal.witness">
+              <p>Unique ID: {{ editReportModal.witness.id }}<br><b-form-input id="input-witness" v-model="editReportModal.witness.witnessEmail"></b-form-input></p>
+            </b-form-group>
+            <b-form-group label="Comment" label-for="input-comment" label-cols-md="3">
+              <b-form-textarea id="input-comment" v-model="editReportModal.comment" rows="3" max-rows="10"></b-form-textarea>
             </b-form-group>
           </b-col>
         </b-row>
@@ -117,6 +125,7 @@ export default {
         medicationName: null,
         observations: null,
         witness: null,
+        comment: null,
       }
     }
   },
@@ -125,12 +134,13 @@ export default {
       return [
         { key: 'createdAt', label: 'Reported at', sortable: true },
         { key: 'arrestTime', label: 'Arrest time', sortable: true },
-        { key: 'station' },
-        { key: 'location' },
-        { key: 'name' },
-        { key: 'arrestingOfficerId', label: 'Officer ID' },
-        { key: 'concerns' },
+        { key: 'station', sortable: true },
+        { key: 'location', sortable: true },
+        { key: 'name', sortable: true },
+        { key: 'arrestingOfficerId', label: 'Officer ID', sortable: true },
+        { key: 'concerns', sortable: true },
         { key: 'observations' },
+        { key: 'comment' },
         { key: 'actions', label: '' },
       ]
     },

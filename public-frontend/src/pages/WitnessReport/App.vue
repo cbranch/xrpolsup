@@ -110,7 +110,7 @@ export default {
       }
       let report = {
         stationName: this.reportOverview.stationName,
-        witnessEmail: this.reportOverview.witnessDetails,
+        witnessEmail: this.reportOverview.witnessEmail,
         arrestees: this.populatedArrestees.map(x => {
           var arrestee = x.details != null ? x.details : {}
           return {

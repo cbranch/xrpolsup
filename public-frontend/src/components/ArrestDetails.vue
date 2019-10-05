@@ -65,6 +65,7 @@ export default {
         concerns: this.concerns,
         medicationName: this.medicationName,
         observations: this.observations,
+        comment: this.comment,
       })
     },
     validate () {
