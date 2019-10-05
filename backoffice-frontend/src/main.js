@@ -24,6 +24,7 @@ const store = new Vuex.Store({
     username: null,
     reports: [],
     releases: [],
+    legalObserverLogs: [],
     callLogs: []
   },
   mutations: {
@@ -56,6 +57,21 @@ const store = new Vuex.Store({
     },
     addRelease(state, x) {
       state.releases.push(x)
+    },
+    setLegalObserverLog(state, x) {
+      for (var i in state.legalObserverLogs) {
+        if (state.legalObserverLogs[i].id == x.id) {
+          Object.assign(state.legalObserverLogs[i], x)
+          return
+        }
+      }
+      state.legalObserverLogs.push(x)
+    },
+    setLegalObserverLogs(state, x) {
+      state.legalObserverLogs = x
+    },
+    addLegalObserverLog(state, x) {
+      state.legalObserverLogs.push(x)
     },
     setCallLog(state, x) {
       for (var i in state.callLogs) {

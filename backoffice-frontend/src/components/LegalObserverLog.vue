@@ -1,6 +1,6 @@
 <template>
   <b-container fluid>
-    <h2>Call log</h2>
+    <h2>Legal Observer log</h2>
     <b-button block variant="primary" class="my-2" @click="addCallLog($event.target)">Add log</b-button>
     <b-form-group
       label="Filter"
@@ -36,23 +36,31 @@
       :filter="filter"
       :per-page="perPage"
       :current-page="currentPage"
+      :tbody-tr-class="rowClass"
       primary-key="id"
-      sort-by="updatedAt"
+      sort-by="createdAt"
       sort-desc>
-      <template v-slot:cell(updatedAt)="data">
+      <template v-slot:cell(createdAt)="data">
         {{ new Date(data.value).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }) }}
       </template>
       <template v-slot:cell(actions)="data">
         <b-button size="sm" @click="editCallLog(data.item, $event.target)">Edit</b-button>
       </template>
     </b-table>
-    <b-modal id="callLogModal" title="Edit report" size="lg" @ok="commitCallLog">
+    <b-modal id="callLogModal" title="Edit legal observer log" size="lg" @ok="commitCallLog">
       <b-container fluid>
         <b-row>
           <b-col>
-            <b-form-group label="Comment" label-for="input-comment" label-cols-md="3">
-              <b-form-textarea id="input-comment" v-model="callLogModal.comment" rows="3" max-rows="10"></b-form-textarea>
+            <b-form-group label="Name" label-for="input-name" label-cols-md="3">
+              <b-form-input id="input-name" v-model="callLogModal.name"></b-form-input>
             </b-form-group>
+            <b-form-group label="Phone" label-for="input-phone" label-cols-md="3">
+              <b-form-input id="input-phone" v-model="callLogModal.phone"></b-form-input>
+            </b-form-group>
+            <b-form-radio-group v-model="callLogModal.onShift">
+              <b-form-radio value="true">Going on shift</b-form-radio>
+              <b-form-radio value="false">Off shift</b-form-radio>
+            </b-form-radio-group>
           </b-col>
         </b-row>
       </b-container>
@@ -69,42 +77,59 @@ export default {
       filter: null,
       callLogModal: {
         id: null,
-        comment: null,
+        name: null,
+        phone: null,
+        onShift: null,
       }
     }
   },
   computed: {
     reportFields () {
       return [
-        { key: 'updatedAt', sortable: true },
-        { key: 'comment', sortable: true },
+        { key: 'createdAt', sortable: true },
+        { key: 'name', sortable: true },
+        { key: 'phone', sortable: true },
+        { key: 'onShift', sortable: true },
         { key: 'actions', label: '' },
       ]
     },
     reportList () {
-      return this.$store.state.callLogs
+      return this.$store.state.legalObserverLogs
     },
     rows () {
-      return this.$store.state.callLogs.length
+      return this.$store.state.legalObserverLogs.length
     }
   },
   methods: {
+    rowClass (item) {
+      if (!item) return
+      if (item.onShift) return 'table-success'
+      return 'table-danger'
+    },
     addCallLog (target) {
       this.callLogModal.id = null
-      this.callLogModal.comment = ""
+      this.callLogModal.name = ""
+      this.callLogModal.phone = ""
+      this.callLogModal.onShift = true
       this.$root.$emit('bv::show::modal', 'callLogModal', target)
     },
     editCallLog (item, target) {
       this.callLogModal.id = item.id
-      this.callLogModal.comment = item.comment
+      this.callLogModal.name = item.name
+      this.callLogModal.phone = item.phone
+      this.callLogModal.onShift = item.onShift
       this.$root.$emit('bv::show::modal', 'callLogModal', target)
     },
     commitCallLog () {
-      var postData = {comment: this.callLogModal.comment}
+      var postData = {
+        name: this.callLogModal.name,
+        phone: this.callLogModal.phone,
+        onShift: this.callLogModal.onShift,
+      }
       if (this.callLogModal.id !== null) {
-        this.$io.socket.put('/api/v1/calllog/' + this.callLogModal.id, postData, (resData, jwRes) => {
+        this.$io.socket.put('/api/v1/legalobserverlog/' + this.callLogModal.id, postData, (resData, jwRes) => {
           if (jwRes.statusCode == 200) {
-            this.$store.commit('setCallLog', resData)
+            this.$store.commit('setLegalObserverLog', resData)
             this.$bvToast.toast('Log updated!', {
               title: 'Call log management',
               variant: 'primary',
@@ -119,9 +144,9 @@ export default {
           }
         })
       } else {
-        this.$io.socket.post('/api/v1/calllog', postData, (resData, jwRes) => {
+        this.$io.socket.post('/api/v1/legalobserverlog', postData, (resData, jwRes) => {
           if (jwRes.statusCode == 200) {
-            this.$store.commit('addCallLog', resData)
+            this.$store.commit('addLegalObserverLog', resData)
             this.$bvToast.toast('Log created!', {
               title: 'Call log management',
               variant: 'primary',

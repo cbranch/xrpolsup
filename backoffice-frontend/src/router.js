@@ -35,6 +35,13 @@ export default new Router({
           }
         },
         {
+          path: '/legalobserverlog',
+          name: 'LegalObserverLog',
+          component: resolve => {
+            require(['./components/LegalObserverLog.vue'], resolve)
+          }
+        },
+        {
           path: '/users',
           name: 'Users',
           component: resolve => {
