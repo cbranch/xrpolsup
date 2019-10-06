@@ -19,6 +19,7 @@
         ></b-form-input>
         <b-input-group-append>
           <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+          <b-form-checkbox class="mx-4" v-model="showHidden">Show deleted</b-form-checkbox>
         </b-input-group-append>
       </b-input-group>
     </b-form-group>
@@ -67,6 +68,7 @@ export default {
       perPage: 50,
       currentPage: 1,
       filter: null,
+      showHidden: false,
       callLogModal: {
         id: null,
         comment: null,
@@ -82,10 +84,10 @@ export default {
       ]
     },
     reportList () {
-      return this.$store.state.callLogs
+      return this.$store.state.callLogs.filter((x) => x.isHidden == this.showHidden)
     },
     rows () {
-      return this.$store.state.callLogs.length
+      return this.reportList.length
     }
   },
   methods: {

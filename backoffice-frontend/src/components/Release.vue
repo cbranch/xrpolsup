@@ -18,6 +18,7 @@
         ></b-form-input>
         <b-input-group-append>
           <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+          <b-form-checkbox class="mx-4" v-model="showHidden">Show deleted</b-form-checkbox>
         </b-input-group-append>
       </b-input-group>
     </b-form-group>
@@ -142,6 +143,7 @@ export default {
       perPage: 50,
       currentPage: 1,
       filter: null,
+      showHidden: false,
       editReleaseModal: {
         id: null,
         name: null,
@@ -187,10 +189,10 @@ export default {
       ]
     },
     reportList () {
-      return this.$store.state.releases
+      return this.$store.state.releases.filter((x) => x.isHidden == this.showHidden)
     },
     rows () {
-      return this.$store.state.releases.length
+      return this.reportList.length
     }
   },
   methods: {
