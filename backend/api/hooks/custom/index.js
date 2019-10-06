@@ -79,6 +79,13 @@ module.exports = function defineCustomHook(sails) {
               return res.unauthorized();
             }
 
+            // If the logged-in user has expired, wipe it from the session and return unauthorized.
+            var now = Date.now();
+            if (loggedInUser.expires !== 0 && loggedInUser.expires < now) {
+              delete req.session.userId;
+              return res.unauthorized();
+            }
+
             // Expose the user record as an extra property on the request object (`req.me`).
             // > Note that we make sure `req.me` doesn't already exist first.
             if (req.me !== undefined) {
@@ -91,7 +98,6 @@ module.exports = function defineCustomHook(sails) {
             //
             // (Note: As an optimization, this is run behind the scenes to avoid adding needless latency.)
             var MS_TO_BUFFER = 60*1000;
-            var now = Date.now();
             if (loggedInUser.lastSeenAt < now - MS_TO_BUFFER) {
               User.updateOne({id: loggedInUser.id})
               .set({ lastSeenAt: now })
@@ -104,6 +110,38 @@ module.exports = function defineCustomHook(sails) {
                 // Nothing else to do here.
               });//_∏_  (Meanwhile...)
             }
+
+            // If this is a GET request, then also expose an extra view local (`<%= me %>`).
+            // > Note that we make sure a local named `me` doesn't already exist first.
+            // > Also note that we strip off any properties that correspond with protected attributes.
+            if (req.method === 'GET') {
+              if (res.locals.me !== undefined) {
+                throw new Error('Cannot attach logged-in user as the view local `me`, because this view local already exists!  (Is it being attached somewhere else?)');
+              }
+
+              // Exclude any fields corresponding with attributes that have `protect: true`.
+              var sanitizedUser = _.extend({}, loggedInUser);
+              for (let attrName in User.attributes) {
+                if (User.attributes[attrName].protect) {
+                  delete sanitizedUser[attrName];
+                }
+              }//∞
+
+              // If there is still a "password" in sanitized user data, then delete it just to be safe.
+              // (But also log a warning so this isn't hopelessly confusing.)
+              if (sanitizedUser.password) {
+                sails.log.warn('The logged in user record has a `password` property, but it was still there after pruning off all properties that match `protect: true` attributes in the User model.  So, just to be safe, removing the `password` property anyway...');
+                delete sanitizedUser.password;
+              }//ﬁ
+
+              res.locals.me = sanitizedUser;
+
+              // Include information on the locals as to whether billing features
+              // are enabled for this app, and whether email verification is required.
+              res.locals.isBillingEnabled = sails.config.custom.enableBillingFeatures;
+              res.locals.isEmailVerificationRequired = sails.config.custom.verifyEmailAddresses;
+
+            }//ﬁ
 
             // Prevent the browser from caching logged-in users' pages.
             // (including w/ the Chrome back button)

@@ -22,6 +22,8 @@ module.exports.policies = {
   'release/*': 'can-see-release',
   // User management is for admins only
   'user/*': 'is-admin',
+  // ...except for seeing the current user
+  'user/current': 'is-logged-in',
 
   // No login required for the following:
   'ReportController': {

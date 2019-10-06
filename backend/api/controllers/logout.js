@@ -29,6 +29,14 @@ actually logged in.  (If they weren't, then this action is just a no-op.)`,
 
   fn: async function () {
 
+    // If the account has an expiration date, expire it immediately
+    await User.updateOne({
+      id: this.req.session.userId,
+      expires: { '>': 0 },
+    }).set({
+      expires: Date.now()
+    })
+
     // Clear the `userId` property from this session.
     delete this.req.session.userId;
 

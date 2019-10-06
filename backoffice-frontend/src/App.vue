@@ -15,8 +15,11 @@
           <b-nav-item :to="{ name: 'LegalObserverLog' }">Legal observers</b-nav-item>
           <b-nav-item :to="{ name: 'CallLog' }">Call log</b-nav-item>
           <b-nav-item :to="{ name: 'Users' }">Users</b-nav-item>
-          <b-nav-item :to="{ name: 'Login' }" v-if="!$store.state.loggedIn">Login</b-nav-item>
-          <b-nav-item :to="{ name: 'Login' }" v-if="$store.state.loggedIn">Logout</b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav class="ml-auto">
+          <b-nav-text right v-if="$store.state.loggedIn">Logged in as {{ $store.state.username }}</b-nav-text>
+          <b-nav-item right :to="{ name: 'Login' }" v-if="!$store.state.loggedIn">Login</b-nav-item>
+          <b-nav-item right :to="{ name: 'Login' }" v-if="$store.state.loggedIn">Logout</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -60,16 +63,23 @@ export default {
       this.$io.socket.on('disconnect', () => {
         this.isConnected = false
       })
-      this.$io.socket.get('/api/v1/report', {limit: 10000}, (resData, jwRes) => {
+      this.$io.socket.get('/api/v1/user/current', (resData, jwRes) => {
         if (jwRes.statusCode == 401) {
           this.$router.push('login')
           this.$io.socket.disconnect()
         } else if (jwRes.statusCode == 200) {
-          this.$store.commit('setReports', resData)
-          this.$io.socket.on('report', (e) => {
-              if (e.verb === 'created') {
-                  this.$store.commit('addReport', e.data)
-              }
+          this.$store.commit('logIn', resData.username)
+
+          this.$io.socket.get('/api/v1/report', {limit: 10000}, (resData, jwRes) => {
+            if (jwRes.statusCode != 200) {
+              return
+            }
+            this.$store.commit('setReports', resData)
+            this.$io.socket.on('report', (e) => {
+                if (e.verb === 'created') {
+                    this.$store.commit('addReport', e.data)
+                }
+            })
           })
 
           this.$io.socket.get('/api/v1/release', {limit: 10000}, (resData, jwRes) => {
