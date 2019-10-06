@@ -64,7 +64,13 @@
         <b-button size="sm" @click="editReport(data.item, $event.target)">Edit</b-button>
       </template>
     </b-table>
-    <b-modal id="editReportModal" title="Edit report" size="lg" @ok="commitEditReport">
+    <b-modal id="editReportModal" title="Edit report" size="lg" @ok="commitEditReport" @hide="hideEditReport" scrollable>
+      <template v-slot:modal-footer="{ ok, cancel, hide }">
+        <b-button variant="primary" @click="ok()">OK</b-button>
+        <b-button variant="secondary" @click="cancel()">Cancel</b-button>
+        <b-button variant="outline-danger" @click="hide('delete')">Delete</b-button>
+      </template>
+      <template v-slot:default="">
       <b-container fluid>
         <b-row>
           <b-col>
@@ -115,6 +121,7 @@
           </b-col>
         </b-row>
       </b-container>
+      </template>
     </b-modal>
   </b-container>
 </template>
@@ -144,6 +151,7 @@ export default {
         observations: null,
         witness: null,
         comment: null,
+        isHidden: null,
       }
     }
   },
@@ -195,6 +203,12 @@ export default {
           })
         }
       })
+    },
+    hideEditReport (event) {
+      if (event.trigger == "delete") {
+        this.editReportModal.isHidden = true
+        this.commitEditReport()
+      }
     }
   }
 }

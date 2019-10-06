@@ -53,7 +53,13 @@
         <b-button size="sm" @click="editRelease(data.item, $event.target)">Edit</b-button>
       </template>
     </b-table>
-    <b-modal id="editReleaseModal" title="Edit release" size="lg" @ok="commitEditRelease">
+    <b-modal id="editReleaseModal" title="Edit release" size="lg" @ok="commitEditRelease" @hide="hideEditRelease" scrollable>
+      <template v-slot:modal-footer="{ ok, cancel, hide }">
+        <b-button variant="primary" @click="ok()">OK</b-button>
+        <b-button variant="secondary" @click="cancel()">Cancel</b-button>
+        <b-button variant="outline-danger" @click="hide('delete')">Delete</b-button>
+      </template>
+      <template v-slot:default="">
       <b-container fluid>
         <b-row>
           <b-col>
@@ -132,6 +138,7 @@
           </b-col>
         </b-row>
       </b-container>
+      </template>
     </b-modal>
   </b-container>
 </template>
@@ -220,6 +227,12 @@ export default {
           })
         }
       })
+    },
+    hideEditRelease (event) {
+      if (event.trigger == "delete") {
+        this.editReleaseModal.isHidden = true
+        this.commitEditRelease()
+      }
     }
   }
 }

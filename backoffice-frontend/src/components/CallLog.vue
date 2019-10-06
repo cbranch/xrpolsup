@@ -47,7 +47,13 @@
         <b-button size="sm" @click="editCallLog(data.item, $event.target)">Edit</b-button>
       </template>
     </b-table>
-    <b-modal id="callLogModal" title="Edit report" size="lg" @ok="commitCallLog">
+    <b-modal id="callLogModal" title="Edit report" size="lg" @ok="commitCallLog" @hide="hideCallLog">
+      <template v-slot:modal-footer="{ ok, cancel, hide }">
+        <b-button variant="primary" @click="ok()">OK</b-button>
+        <b-button variant="secondary" @click="cancel()">Cancel</b-button>
+        <b-button variant="outline-danger" @click="hide('delete')">Delete</b-button>
+      </template>
+      <template v-slot:default="">
       <b-container fluid>
         <b-row>
           <b-col>
@@ -57,6 +63,7 @@
           </b-col>
         </b-row>
       </b-container>
+      </template>
     </b-modal>
   </b-container>
 </template>
@@ -72,6 +79,7 @@ export default {
       callLogModal: {
         id: null,
         comment: null,
+        isHidden: null,
       }
     }
   },
@@ -94,17 +102,16 @@ export default {
     addCallLog (target) {
       this.callLogModal.id = null
       this.callLogModal.comment = ""
+      this.callLogModal.isHidden = false
       this.$root.$emit('bv::show::modal', 'callLogModal', target)
     },
     editCallLog (item, target) {
-      this.callLogModal.id = item.id
-      this.callLogModal.comment = item.comment
+      this.callLogModal = Object.assign({}, item)
       this.$root.$emit('bv::show::modal', 'callLogModal', target)
     },
     commitCallLog () {
-      var postData = {comment: this.callLogModal.comment}
       if (this.callLogModal.id !== null) {
-        this.$io.socket.put('/api/v1/calllog/' + this.callLogModal.id, postData, (resData, jwRes) => {
+        this.$io.socket.put('/api/v1/calllog/' + this.callLogModal.id, this.callLogModal, (resData, jwRes) => {
           if (jwRes.statusCode == 200) {
             this.$store.commit('setCallLog', resData)
             this.$bvToast.toast('Log updated!', {
@@ -121,7 +128,7 @@ export default {
           }
         })
       } else {
-        this.$io.socket.post('/api/v1/calllog', postData, (resData, jwRes) => {
+        this.$io.socket.post('/api/v1/calllog', this.callLogModal, (resData, jwRes) => {
           if (jwRes.statusCode == 200) {
             this.$store.commit('addCallLog', resData)
             this.$bvToast.toast('Log created!', {
@@ -137,6 +144,12 @@ export default {
             })
           }
         })
+      }
+    },
+    hideCallLog (event) {
+      if (event.trigger == "delete") {
+        this.callLogModal.isHidden = true
+        this.commitCallLog()
       }
     }
   }
