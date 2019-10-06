@@ -31,7 +31,7 @@
     </div>
     <b-row class="my-4" v-if="overviewComplete">
       <b-col>
-        <b-button block variant="primary" v-on:click="submitReport">Submit arrestee report</b-button>
+        <b-button block variant="primary" v-on:click="submitReport" :disabled="isSubmitting">Submit arrestee report <b-spinner v-if="isSubmitting" label="Spinning"></b-spinner></b-button>
       </b-col>
     </b-row>
     <b-row class="my-4" v-if="errors.length > 0">
@@ -64,6 +64,7 @@ export default {
       overviewComplete: false,
       arrestees: [],
       submitted: false,
+      isSubmitting: false,
       errors: [],
     }
   },
@@ -106,6 +107,9 @@ export default {
       return true
     },
     submitReport () {
+      if (this.isSubmitting) {
+        return
+      }
       if (!this.validate()) {
         this.errors = ["Please correct errors in the form before submitting."]
         return
@@ -128,9 +132,12 @@ export default {
           }
         }),
       }
+      this.isSubmitting = true
       this.axios.post('/api/v1/station_report', report).then(() => {
+        this.isSubmitting = false
         this.submitted = true
       }, error => {
+        this.isSubmitting = false
         this.errors = [error]
       })
     }

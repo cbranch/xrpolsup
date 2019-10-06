@@ -104,7 +104,7 @@
     </b-row>
     <b-row class="my-4">
       <b-col>
-        <b-button block variant="primary" v-on:click="submitReport">Submit post-arrest report</b-button>
+        <b-button block variant="primary" v-on:click="submitReport" :disabled="isSubmitting">Submit post-arrest report <b-spinner v-if="isSubmitting" label="Spinning"></b-spinner></b-button>
       </b-col>
     </b-row>
     <b-row class="my-4" v-if="errors.length > 0">
@@ -161,6 +161,7 @@ export default {
       contactByPhone: null,
       canShareWithLocalXRGroup: false,
       submitted: false,
+      isSubmitting: false,
       errors: [],
     }
   },
@@ -219,6 +220,9 @@ export default {
       return this.isValidTime.valid && this.isValidDate.valid && this.isValidLocation.valid && this.isValidName.valid
     },
     submitReport () {
+      if (this.isSubmitting) {
+        return
+      }
       if (!this.validate()) {
         this.errors = ["Please correct errors in the form before submitting."]
         return
@@ -253,9 +257,12 @@ export default {
         canShareWithLocalXRGroup: this.canShareWithLocalXRGroup,
         submitted: this.submitted,
       }
+      this.isSubmitting = true
       this.axios.post('/api/v1/arrestee_report', report).then(() => {
+        this.isSubmitting = false
         this.submitted = true
       }, error => {
+        this.isSubmitting = false
         this.errors = [error]
       })
     }
