@@ -19,6 +19,9 @@ module.exports = {
       let newRecords = arrestees.map(x => {
         let {time, date, location, name, arrestingOfficerId, concerns, medicationName, observations, comment} = x;
         concerns = concerns || []
+	if (time.length == 4) {
+	  time = "0" + time
+	}
         return {
           station: stationName,
           arrestTime: Date.parse(date + "T" + time + ":00"),
