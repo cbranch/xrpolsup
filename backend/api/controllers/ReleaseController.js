@@ -27,6 +27,9 @@ module.exports = {
       } = req.allParams();
 
       if (name == "") { return res.badRequest('name is a required field'); }
+      if (time.length == 4) {
+        time = "0" + time
+      }
       var arrestTime = Date.parse(date + "T" + time + ":00")
       if (isNaN(arrestTime)) { return res.badRequest('time and date must be valid'); }
 
