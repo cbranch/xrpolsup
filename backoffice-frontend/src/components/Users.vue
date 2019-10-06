@@ -74,7 +74,7 @@
         <b-form-input id="input-username" v-model="addUserModal.username"></b-form-input>
       </b-form-group>
       <b-form-group label="Password" label-for="input-password">
-        <b-form-input id="input-password" v-model="addUserModal.password"></b-form-input>
+        <b-form-input type="password" id="input-password" v-model="addUserModal.password"></b-form-input>
       </b-form-group>
       <b-form-group label="Nickname" label-for="input-nickname">
         <b-form-input id="input-nickname" v-model="addUserModal.nickname" placeholder="(optional)"></b-form-input>
