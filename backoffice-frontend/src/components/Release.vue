@@ -124,6 +124,7 @@
             <b-form-group label="Phone:" label-for="input-by-phone" label-cols-md="3">
               <b-form-input id="input-by-phone" v-model="editReleaseModal.phone"></b-form-input>
             </b-form-group>
+            <b-form-checkbox v-model="editReleaseModal.canShareWithLocalXRGroup">Consent to share with local XR group</b-form-checkbox>
             <b-form-group label="Comment" label-for="input-comment" label-cols-md="3">
               <b-form-textarea id="input-comment" v-model="editReleaseModal.comment" rows="3" max-rows="10"></b-form-textarea>
             </b-form-group>
@@ -164,6 +165,7 @@ export default {
         rebelsStillHeld: null,
         email: null,
         phone: null,
+        canShareWithLocalXRGroup: null,
         comment: null,
         isHidden: null,
       }

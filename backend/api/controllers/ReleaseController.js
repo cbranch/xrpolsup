@@ -24,6 +24,7 @@ module.exports = {
         rebelsStillHeld,
         contactByEmail,
         contactByPhone,
+        canShareWithLocalXRGroup,
       } = req.allParams();
 
       if (name == "") { return res.badRequest('name is a required field'); }
@@ -56,6 +57,7 @@ module.exports = {
           rebelsStillHeld: rebelsStillHeld || 0,
           email: contactByEmail || "",
           phone: contactByPhone || "",
+          canShareWithLocalXRGroup: canShareWithLocalXRGroup || false,
         })
         .fetch()
         .catch(error => res.serverError(error))

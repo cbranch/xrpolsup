@@ -21,6 +21,7 @@ module.exports = {
       rebelsStillHeld: { type: 'number' },
       email: { type: 'string' },
       phone: { type: 'string' },
+      canShareWithLocalXRGroup: { type: 'boolean', defaultsTo: false },
       comment: { type: 'string' },
       isHidden: { type: 'boolean', defaultsTo: false },
     },

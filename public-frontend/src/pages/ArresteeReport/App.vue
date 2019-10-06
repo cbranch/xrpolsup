@@ -96,6 +96,10 @@
             <b-form-input id="input-by-phone" v-model="contactByPhone"></b-form-input>
           </b-form-group>
         </b-form-group>
+
+        <b-form-group label="In order to help us provide ongoing arrest support, can we share your contact details with your local XR group?" label-for="input-canShareWithLocalXRGroup">
+          <b-form-checkbox id="canShareWithLocalXRGroup" v-model="canShareWithLocalXRGroup">I consent to sharing with my local XR group</b-form-checkbox>
+        </b-form-group>
       </b-col>
     </b-row>
     <b-row class="my-4">
@@ -155,6 +159,7 @@ export default {
       contactByEmail: null,
       wantContactByPhone: false,
       contactByPhone: null,
+      canShareWithLocalXRGroup: false,
       submitted: false,
       errors: [],
     }
@@ -245,6 +250,7 @@ export default {
         rebelsStillHeld: this.rebelsStillHeld,
         contactByEmail: this.wantContactByEmail ? this.contactByEmail : '',
         contactByPhone: this.wantContactByPhone ? this.contactByPhone : '',
+        canShareWithLocalXRGroup: this.canShareWithLocalXRGroup,
         submitted: this.submitted,
       }
       this.axios.post('/api/v1/arrestee_report', report).then(() => {
