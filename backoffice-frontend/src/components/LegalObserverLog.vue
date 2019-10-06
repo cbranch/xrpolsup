@@ -44,6 +44,9 @@
       <template v-slot:cell(createdAt)="data">
         {{ new Date(data.value).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }) }}
       </template>
+      <template v-slot:cell(onShift)="data">
+        {{ data.value ? "On shift" : "Off shift" }}
+      </template>
       <template v-slot:cell(actions)="data">
         <b-button size="sm" @click="editCallLog(data.item, $event.target)">Edit</b-button>
       </template>
@@ -91,7 +94,7 @@ export default {
         { key: 'createdAt', sortable: true },
         { key: 'name', sortable: true },
         { key: 'phone', sortable: true },
-        { key: 'onShift', sortable: true },
+        { key: 'onShift', label: 'Shift', sortable: true },
         { key: 'actions', label: '' },
       ]
     },
