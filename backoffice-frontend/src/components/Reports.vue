@@ -39,7 +39,7 @@ export default {
       ]
     },
     stationList () {
-      let stations = groupBy(this.$store.state.reports, report => report.station == "" ? report.station : report.station.toString().toLowerCase())
+      let stations = groupBy(this.$store.state.reports, report => report.station == "" ? report.station : report.station.toString().toLowerCase().trim())
       return [...stations.entries()].map(x => ({station: x[0], count: x[1].length}))
     }
   }
