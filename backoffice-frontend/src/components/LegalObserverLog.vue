@@ -150,7 +150,7 @@ export default {
           }
         })
       } else {
-        this.$io.socket.post('/api/v1/legalobserverlog', this.CallLogModal, (resData, jwRes) => {
+        this.$io.socket.post('/api/v1/legalobserverlog', this.callLogModal, (resData, jwRes) => {
           if (jwRes.statusCode == 200) {
             this.$store.commit('addLegalObserverLog', resData)
             this.$bvToast.toast('Log created!', {
