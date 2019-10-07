@@ -128,7 +128,9 @@ export default {
           }
         })
       } else {
-        this.$io.socket.post('/api/v1/calllog', this.callLogModal, (resData, jwRes) => {
+        var postData = Object.assign({}, this.callLogModal)
+        delete postData.id
+        this.$io.socket.post('/api/v1/calllog', postData, (resData, jwRes) => {
           if (jwRes.statusCode == 200) {
             this.$store.commit('addCallLog', resData)
             this.$bvToast.toast('Log created!', {
