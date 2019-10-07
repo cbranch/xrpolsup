@@ -77,7 +77,7 @@ export default {
     arresteeCount () {
       if (this.reportOverview != null) {
         if (this.reportOverview.arrestCount != null) {
-          return Math.max(1, Math.min(9, this.reportOverview.arrestCount))
+          return Math.max(1, Math.min(30, this.reportOverview.arrestCount))
         }
       }
       return 0
