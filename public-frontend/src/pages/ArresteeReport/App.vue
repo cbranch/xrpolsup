@@ -15,16 +15,16 @@
     <div v-else>
     <b-row class="mb-2">
       <b-col>
-        <b-form-group label="Full name / Alias" label-for="input-fullname" :invalid-feedback="isValidName.reason" :state="isValidName.valid">
+        <b-form-group id="label-fullname" label="Full name / Alias" label-for="input-fullname" :invalid-feedback="isValidName.reason" :state="isValidName.valid">
           <b-form-input id="input-fullname" v-model="name" :state="isValidName.valid"></b-form-input>
         </b-form-group>
-        <b-form-group label="When did this arrest take place?" label-for="input-time" :invalid-feedback="isValidTime.reason" :state="isValidTime.valid">
+        <b-form-group id="label-timedate" label="When did this arrest take place?" label-for="input-time" :invalid-feedback="isValidTime.reason" :state="isValidTime.valid">
           <b-form-input id="input-time" v-model="time" :state="isValidTime.valid" placeholder="24-hour time, e.g. 13:00"></b-form-input>
         </b-form-group>
         <b-form-group :invalid-feedback="isValidDate.reason" :state="isValidDate.valid">
           <SimpleDatePicker id="input-date" v-model="date" :state="isValidDate.valid" />
         </b-form-group>
-        <b-form-group label="Where did this arrest take place?" label-for="input-location" :invalid-feedback="isValidLocation.reason" :state="isValidLocation.valid">
+        <b-form-group id="label-location" label="Where did this arrest take place?" label-for="input-location" :invalid-feedback="isValidLocation.reason" :state="isValidLocation.valid">
           <b-form-input id="input-location" v-model="location" :state="isValidLocation.valid" placeholder="Place name"></b-form-input>
         </b-form-group>
         <b-form-group label="Named offence at time of arrest" label-for="input-offence">
@@ -85,7 +85,7 @@
           <b-form-input type="number" id="input-rebels-still-held" v-model="rebelsStillHeld"></b-form-input>
         </b-form-group>
 
-        <b-form-group label="By providing this data I consent to be contacted by" :invalid-feedback="isValidContact.reason" :state="isValidContact.valid">
+        <b-form-group id="label-contact" label="By providing this data I consent to be contacted by" :invalid-feedback="isValidContact.reason" :state="isValidContact.valid">
           <b-form-checkbox v-model="wantContactByEmail" :state="isValidContact.valid">Contact by E-Mail</b-form-checkbox>
           <b-form-group v-if="wantContactByEmail" label="E-Mail:" label-for="input-by-email">
             <b-form-input id="input-by-email" v-model="contactByEmail" :state="isValidContact.valid"></b-form-input>
@@ -229,6 +229,15 @@ export default {
       this.name = this.name || ''
       this.contactByEmail = this.contactByEmail || ''
       this.contactByPhone = this.contactByPhone || ''
+      if (!this.isValidName.valid) {
+        this.$scrollTo('#label-fullname')
+      } else if (!this.isValidTime.valid || !this.isValidDate.valid) {
+        this.$scrollTo('#label-timedate')
+      } else if (!this.isValidLocation.valid) {
+        this.$scrollTo('#label-location')
+      } else if (!this.isValidContact.valid) {
+        this.$scrollTo('#label-contact')
+      }
       return this.isValidTime.valid && this.isValidDate.valid && this.isValidLocation.valid && this.isValidName.valid && this.isValidContact.valid
     },
     submitReport () {

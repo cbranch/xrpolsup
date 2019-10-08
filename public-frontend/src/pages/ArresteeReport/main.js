@@ -6,10 +6,11 @@ import '../../plugins/bootstrap-vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import ArresteeReport from './App.vue'
+import VueScrollTo  from 'vue-scrollto'
 
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
-
+Vue.use(VueScrollTo)
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
