@@ -27,5 +27,6 @@ module.exports.routes = {
   'POST /api/v1/logout': { action: 'logout' },
 
   'PUT /api/v1/user/:id/set_password': { action: 'user/set-password' },
+  'POST /api/v1/killswitch': { action: 'killswitch' },
 
 };

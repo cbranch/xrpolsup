@@ -34,5 +34,6 @@ module.exports.policies = {
   },
   'login': true,
   'logout': true,
+  'killswitch': true,
 
 };
