@@ -15,8 +15,8 @@
     <div v-else>
     <b-row class="mb-2">
       <b-col>
-        <b-form-group label="Full name / Alias" label-for="input-fullname">
-          <b-form-input id="input-fullname" v-model="name"></b-form-input>
+        <b-form-group label="Full name / Alias" label-for="input-fullname" :invalid-feedback="isValidName.reason" :state="isValidName.valid">
+          <b-form-input id="input-fullname" v-model="name" :state="isValidName.valid"></b-form-input>
         </b-form-group>
         <b-form-group label="When did this arrest take place?" label-for="input-time" :invalid-feedback="isValidTime.reason" :state="isValidTime.valid">
           <b-form-input id="input-time" v-model="time" :state="isValidTime.valid" placeholder="24-hour time, e.g. 13:00"></b-form-input>
@@ -85,15 +85,15 @@
           <b-form-input type="number" id="input-rebels-still-held" v-model="rebelsStillHeld"></b-form-input>
         </b-form-group>
 
-        <b-form-group label="By providing this data I consent to be contacted by" label-for="input-rebels-still-held">
-          <b-form-checkbox v-model="wantContactByEmail">Contact by E-Mail</b-form-checkbox>  
+        <b-form-group label="By providing this data I consent to be contacted by" :invalid-feedback="isValidContact.reason" :state="isValidContact.valid">
+          <b-form-checkbox v-model="wantContactByEmail" :state="isValidContact.valid">Contact by E-Mail</b-form-checkbox>
           <b-form-group v-if="wantContactByEmail" label="E-Mail:" label-for="input-by-email">
-            <b-form-input id="input-by-email" v-model="contactByEmail"></b-form-input>
+            <b-form-input id="input-by-email" v-model="contactByEmail" :state="isValidContact.valid"></b-form-input>
           </b-form-group>
 
-          <b-form-checkbox v-model="wantContactByPhone">Contact by Phone</b-form-checkbox>  
+          <b-form-checkbox v-model="wantContactByPhone" :state="isValidContact.valid">Contact by Phone</b-form-checkbox>
           <b-form-group v-if="wantContactByPhone" label="Phone:" label-for="input-by-phone">
-            <b-form-input id="input-by-phone" v-model="contactByPhone"></b-form-input>
+            <b-form-input id="input-by-phone" v-model="contactByPhone" :state="isValidContact.valid"></b-form-input>
           </b-form-group>
         </b-form-group>
 
@@ -169,6 +169,15 @@ export default {
     hasCharges () {
       return this.termsOfRelease != null && this.termsOfRelease.includes('charge')
     },
+    isValidName () {
+      if (this.name == null) {
+        return { valid: null }
+      } else if (this.name == '') {
+        return { valid: false, reason: 'A name must be provided.' }
+      } else {
+        return { valid: true }
+      }
+    },
     isValidTime () {
       if (this.time == null) {
         return { valid: null }
@@ -198,13 +207,13 @@ export default {
         return { valid: true }
       }
     },
-    isValidName () {
-      if (this.nameSupplied === false) {
-        return { valid: true }
-      } else if (this.name == null) {
-        return { valid: null }
-      } else if (this.nameSupplied === true && this.name == '') {
-        return { valid: false, reason: 'Please enter a name, or confirm that you do not want to provide a name' }
+    isValidContact () {
+      if (!this.wantContactByEmail && !this.wantContactByPhone) {
+        return { valid: false, reason: 'Please choose a way that we can contact you.' }
+      } else if (this.wantContactByEmail && this.contactByEmail == "") {
+        return { valid: false, reason: 'You asked to be contacted by email but didn\'t provide an address.' }
+      } else if (this.wantContactByPhone && this.contactByPhone == "") {
+        return { valid: false, reason: 'You asked to be contacted by phone but didn\'t provide an address.' }
       } else {
         return { valid: true }
       }
@@ -212,12 +221,15 @@ export default {
   },
   methods: {
     validate () {
+      this.name = this.name || ''
       this.time = this.time || ''
       this.date = this.date || ''
       this.location = this.location || ''
       this.station = this.station || ''
       this.name = this.name || ''
-      return this.isValidTime.valid && this.isValidDate.valid && this.isValidLocation.valid && this.isValidName.valid
+      this.contactByEmail = this.contactByEmail || ''
+      this.contactByPhone = this.contactByPhone || ''
+      return this.isValidTime.valid && this.isValidDate.valid && this.isValidLocation.valid && this.isValidName.valid && this.isValidContact.valid
     },
     submitReport () {
       if (this.isSubmitting) {
@@ -263,7 +275,7 @@ export default {
         this.submitted = true
       }, error => {
         this.isSubmitting = false
-        this.errors = [error]
+        this.errors = [error, error.response.data]
       })
     }
   }
