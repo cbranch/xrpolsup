@@ -186,7 +186,7 @@ export default {
         { key: 'createdAt', label: 'Reported at', sortable: true },
         { key: 'arrestTime', label: 'Arrest time', sortable: true },
         { key: 'name', sortable: true },
-        { key: 'station', sortable: true },
+        { key: 'policeStation', sortable: true },
         { key: 'location', sortable: true },
         { key: 'localXRGroup', label: 'Local XR group', sortable: true },
         { key: 'numberRebels', label: 'With # Rebels', sortable: true },
