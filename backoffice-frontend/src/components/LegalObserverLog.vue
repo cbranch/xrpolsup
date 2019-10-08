@@ -44,6 +44,11 @@
       <template v-slot:cell(createdAt)="data">
         {{ new Date(data.value).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }) }}
       </template>
+      <template v-slot:cell(comment)="data">
+        <b-button v-if="data.item.comment" v-b-popover.hover.top="data.item.comment" title="Notes" size="sm">
+          Show
+        </b-button>
+      </template>
       <template v-slot:cell(onShift)="data">
         {{ data.value ? "On shift" : "Off shift" }}
       </template>
@@ -67,10 +72,16 @@
             <b-form-group label="Phone" label-for="input-phone" label-cols-md="3">
               <b-form-input id="input-phone" v-model="callLogModal.phone"></b-form-input>
             </b-form-group>
+            <b-form-group label="Location" label-for="input-location" label-cols-md="3">
+              <b-form-input id="input-location" v-model="callLogModal.location"></b-form-input>
+            </b-form-group>
             <b-form-radio-group v-model="callLogModal.onShift">
               <b-form-radio value="true">Going on shift</b-form-radio>
               <b-form-radio value="false">Off shift</b-form-radio>
             </b-form-radio-group>
+            <b-form-group label="Notes" label-for="input-comment" label-cols-md="3">
+              <b-form-input id="input-comment" v-model="callLogModal.comment"></b-form-input>
+            </b-form-group>
           </b-col>
         </b-row>
       </b-container>
@@ -93,6 +104,8 @@ export default {
         phone: null,
         onShift: null,
         isHidden: null,
+        location: null,
+        comment: null,
       }
     }
   },
@@ -102,6 +115,8 @@ export default {
         { key: 'createdAt', sortable: true },
         { key: 'name', sortable: true },
         { key: 'phone', sortable: true },
+        { key: 'location', sortable: true },
+        { key: 'comment', label: 'Notes' },
         { key: 'onShift', label: 'Shift', sortable: true },
         { key: 'actions', label: '' },
       ]
@@ -123,6 +138,8 @@ export default {
       this.callLogModal.id = null
       this.callLogModal.name = ""
       this.callLogModal.phone = ""
+      this.callLogModal.location = ""
+      this.callLogModal.comment = ""
       this.callLogModal.onShift = true
       this.callLogModal.isHidden = false
       this.$root.$emit('bv::show::modal', 'callLogModal', target)
