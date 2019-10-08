@@ -46,7 +46,8 @@ module.exports.http = {
 
     connectHistoryApiFallback: require('connect-history-api-fallback')({
       rewrites: [
-        { from: /\/pss$/, to: '/pss.html'}
+        { from: /^\/killswitch\//, to: '/killswitch.html' },
+        { from: /\/pss$/, to: '/pss.html' }
       ]
     }),
 
