@@ -18,10 +18,17 @@ Vue.use(Vuex)
 Vue.use(VueAxios, axios)
 Vue.use(Datetime)
 
+var filterDateStart = new Date()
+if (filterDateStart.getHours() < 4) {
+  filterDateStart = new Date(Date.now() - 1000*60*60*24)
+}
+filterDateStart.setHours(4, 0, 0, 0)
+
 const store = new Vuex.Store({
   state: {
     loggedIn: false,
     username: null,
+    filterDateStart,
     reports: [],
     releases: [],
     legalObserverLogs: [],
@@ -95,7 +102,18 @@ const store = new Vuex.Store({
     logOut(state) {
       state.loggedIn = false
       state.username = null
+    },
+    setFilterDateStart(state, date) {
+      state.filterDateStart = date
     }
+  },
+  getters: {
+    filteredReports(state) {
+      return state.reports.filter(report => report.updatedAt > state.filterDateStart)
+    },
+    filteredReleases(state) {
+      return state.releases.filter(release => release.updatedAt > state.filterDateStart)
+    },
   }
 })
 

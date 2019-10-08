@@ -172,10 +172,10 @@ export default {
       ]
     },
     reportList () {
-      return this.$store.state.reports.filter((x) => x.isHidden == this.showHidden)
+      return this.$store.getters.filteredReports.filter((x) => x.isHidden == this.showHidden)
     },
     rows () {
-      return this.reportList.length
+      return this.$store.getters.filteredReports.length
     }
   },
   methods: {

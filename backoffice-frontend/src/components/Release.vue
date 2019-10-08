@@ -196,7 +196,7 @@ export default {
       ]
     },
     reportList () {
-      return this.$store.state.releases.filter((x) => x.isHidden == this.showHidden)
+      return this.$store.getters.filteredReleases.filter((x) => x.isHidden == this.showHidden)
     },
     rows () {
       return this.reportList.length

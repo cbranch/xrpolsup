@@ -15,6 +15,9 @@
           <b-nav-item :to="{ name: 'LegalObserverLog' }">Legal observers</b-nav-item>
           <b-nav-item :to="{ name: 'CallLog' }">Call log</b-nav-item>
           <b-nav-item :to="{ name: 'Users' }">Users</b-nav-item>
+          <b-nav-form>
+            View data from:&nbsp;<datetime type="datetime" v-model="filterDateStart"></datetime>
+          </b-nav-form>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
           <b-nav-text right v-if="$store.state.loggedIn">Logged in as {{ $store.state.username }}</b-nav-text>
@@ -51,6 +54,16 @@ export default {
   },
   created () {
     this.connectState()
+  },
+  computed: {
+    filterDateStart: {
+      get () {
+        return this.$store.state.filterDateStart.toISOString()
+      },
+      set (newValue) {
+        this.$store.commit('setFilterDateStart', new Date(newValue))
+      }
+    }
   },
   methods: {
     connectState () {
