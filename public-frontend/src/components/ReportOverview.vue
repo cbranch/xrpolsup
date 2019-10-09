@@ -2,7 +2,12 @@
   <div>
     <b-card-body>
       <b-card-text>
-        <b-form-group label="Thank you for reporting arrests. Do you know which police station the arrestees have been taken to?">
+        <b-form-group label="Thank you for reporting arrests. Are you reporting somebody else's arrest or your own arrest?">
+          <b-button variant="outline-secondary" @click="ownArrest = false" :pressed="ownArrest === false">Somebody else's arrest</b-button>&nbsp;
+          <b-button variant="outline-secondary" @click="ownArrest = true" :pressed="ownArrest">My own</b-button>
+        </b-form-group>
+        <p v-if="ownArrest">Please use <a href="/pss">this form for reporting your own arrest and release</a>.</p>
+        <b-form-group v-if="ownArrest === false" label="Do you know which police station the arrestees have been taken to?">
           <YesNo v-model="stationKnown" />
         </b-form-group>
         <b-form-group v-if="stationKnown === true" label="What is the station name?">
@@ -55,6 +60,7 @@ export default {
   props: ['value'],
   data () {
     return {
+      ownArrest: null,
       stationKnown: null,
       stationToBeFoundOut: null,
     }
