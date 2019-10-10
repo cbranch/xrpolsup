@@ -85,15 +85,15 @@
           <b-form-input type="number" id="input-rebels-still-held" v-model="rebelsStillHeld"></b-form-input>
         </b-form-group>
 
-        <b-form-group id="label-contact" label="By providing this data I consent to be contacted by" :invalid-feedback="isValidContact.reason" :state="isValidContact.valid">
-          <b-form-checkbox v-model="wantContactByEmail" :state="isValidContact.valid">Contact by E-Mail</b-form-checkbox>
+        <b-form-group id="label-contact" label="By providing this data I consent to be contacted by">
+          <b-form-checkbox v-model="wantContactByEmail">Contact by E-Mail</b-form-checkbox>
           <b-form-group v-if="wantContactByEmail" label="E-Mail:" label-for="input-by-email">
-            <b-form-input id="input-by-email" v-model="contactByEmail" :state="isValidContact.valid"></b-form-input>
+            <b-form-input id="input-by-email" v-model="contactByEmail"></b-form-input>
           </b-form-group>
 
-          <b-form-checkbox v-model="wantContactByPhone" :state="isValidContact.valid">Contact by Phone</b-form-checkbox>
+          <b-form-checkbox v-model="wantContactByPhone">Contact by Phone</b-form-checkbox>
           <b-form-group v-if="wantContactByPhone" label="Phone:" label-for="input-by-phone">
-            <b-form-input id="input-by-phone" v-model="contactByPhone" :state="isValidContact.valid"></b-form-input>
+            <b-form-input id="input-by-phone" v-model="contactByPhone"></b-form-input>
           </b-form-group>
         </b-form-group>
 
@@ -207,17 +207,6 @@ export default {
         return { valid: true }
       }
     },
-    isValidContact () {
-      if (!this.wantContactByEmail && !this.wantContactByPhone) {
-        return { valid: false, reason: 'Please choose a way that we can contact you.' }
-      } else if (this.wantContactByEmail && this.contactByEmail == "") {
-        return { valid: false, reason: 'You asked to be contacted by email but didn\'t provide an address.' }
-      } else if (this.wantContactByPhone && this.contactByPhone == "") {
-        return { valid: false, reason: 'You asked to be contacted by phone but didn\'t provide an address.' }
-      } else {
-        return { valid: true }
-      }
-    },
   },
   methods: {
     validate () {
@@ -235,10 +224,8 @@ export default {
         this.$scrollTo('#label-timedate')
       } else if (!this.isValidLocation.valid) {
         this.$scrollTo('#label-location')
-      } else if (!this.isValidContact.valid) {
-        this.$scrollTo('#label-contact')
       }
-      return this.isValidTime.valid && this.isValidDate.valid && this.isValidLocation.valid && this.isValidName.valid && this.isValidContact.valid
+      return this.isValidTime.valid && this.isValidDate.valid && this.isValidLocation.valid && this.isValidName.valid
     },
     submitReport () {
       if (this.isSubmitting) {
