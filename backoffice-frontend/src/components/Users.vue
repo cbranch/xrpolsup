@@ -53,7 +53,7 @@
         <b-button size="sm" @click="setPassword(row.item, $event.target)" class="mr-1">
           Set password
         </b-button>
-        <b-button size="sm" @click="deleteUser(row.item)">
+        <b-button size="sm" @click="showDeleteUserModal(row.item, $event.target)">
           Delete
         </b-button>
       </template>
@@ -90,6 +90,11 @@
       </b-form-group>
       <p><b-form-checkbox id="input-canviewrelease" v-model="editUserModal.canViewRelease">Can view release form</b-form-checkbox></p>
     </b-modal>
+    <!-- Edit user modal -->
+    <b-modal id="deleteUserModal" title="Delete user" @ok="deleteUser">
+      <p>Really delete?</p>
+      <p>{{ deleteUserModal.username }}</p>
+    </b-modal>
   </b-container>
 </template>
 
@@ -119,6 +124,10 @@ export default {
       username: '',
       nickname: '',
       canViewRelease: false,
+    },
+    deleteUserModal: {
+      id: null,
+      username: '',
     }
   }),
   computed: {
@@ -241,6 +250,29 @@ export default {
         this.getUsers()
       })
     },
+    showDeleteUserModal(user, target) {
+      this.deleteUserModal.id = user.id
+      this.deleteUserModal.username = user.username
+      this.$root.$emit('bv::show::modal', 'deleteUserModal', target)
+    },
+    deleteUser() {
+      this.$io.socket.request({method: 'delete', url: '/api/v1/user/' + this.deleteUserModal.id}, (resData, jwRes) => {
+        if (jwRes.statusCode == 200) {
+          this.$bvToast.toast('User deleted!', {
+            title: 'User management',
+            variant: 'primary',
+            solid: true
+          })
+        } else {
+          this.$bvToast.toast('Failed to delete user: ' + jwRes, {
+            title: 'User management',
+            variant: 'warning',
+            solid: true
+          })
+        }
+        this.getUsers()
+      })
+    }
   }
 }
 </script>
