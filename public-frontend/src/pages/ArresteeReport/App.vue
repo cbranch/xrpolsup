@@ -96,6 +96,11 @@
             <b-form-input id="input-by-phone" v-model="contactByPhone"></b-form-input>
           </b-form-group>
         </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row class="my-4">
+      <b-col>
+        <h4>Further XR Support</h4>
 
         <p>If you would like a member of the XR-Press team to help you get your story heard in the next few days then please contact Zoey on this number: 07918&nbsp;165&nbsp;046</p>
         <p><b-form-checkbox id="canShareWithXRPress" v-model="canShareWithXRPress">If you would be happy for members of the XR-Press team to contact you in the future to discuss your options around press engagement then please tick here.</b-form-checkbox></p>
@@ -103,10 +108,13 @@
         <b-form-group label="In order to help us provide ongoing arrest support, can we share your contact details with your local XR group?" label-for="input-canShareWithLocalXRGroup">
           <b-form-checkbox id="canShareWithLocalXRGroup" v-model="canShareWithLocalXRGroup">I consent to sharing with my local XR group</b-form-checkbox>
         </b-form-group>
+
+        <p>Contact us at xr-legal@riseup.net &amp; XR-ArrestWelfare@protonmail.com for further support.</p>
       </b-col>
     </b-row>
     <b-row class="my-4">
       <b-col>
+        <p>We value and respect your personal data and privacy. By submitting this form, you agree that we may process your information in accordance with <a href="https://rebellion.earth/privacy-policy/" target="_blank">our privacy policy</a>.</p>
         <b-button block variant="primary" v-on:click="submitReport" :disabled="isSubmitting">Submit post-arrest report <b-spinner v-if="isSubmitting" label="Spinning"></b-spinner></b-button>
       </b-col>
     </b-row>
