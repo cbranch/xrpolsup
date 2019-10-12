@@ -97,6 +97,9 @@
           </b-form-group>
         </b-form-group>
 
+        <p>If you would like a member of the XR-Press team to help you get your story heard in the next few days then please contact Zoey on this number: 07918&nbsp;165&nbsp;046</p>
+        <p><b-form-checkbox id="canShareWithXRPress" v-model="canShareWithXRPress">If you would be happy for members of the XR-Press team to contact you in the future to discuss your options around press engagement then please tick here.</b-form-checkbox></p>
+
         <b-form-group label="In order to help us provide ongoing arrest support, can we share your contact details with your local XR group?" label-for="input-canShareWithLocalXRGroup">
           <b-form-checkbox id="canShareWithLocalXRGroup" v-model="canShareWithLocalXRGroup">I consent to sharing with my local XR group</b-form-checkbox>
         </b-form-group>
@@ -160,6 +163,7 @@ export default {
       wantContactByPhone: false,
       contactByPhone: null,
       canShareWithLocalXRGroup: false,
+      canShareWithXRPress: false,
       submitted: false,
       isSubmitting: false,
       errors: [],
@@ -262,6 +266,7 @@ export default {
         rebelsStillHeld: this.rebelsStillHeld,
         contactByEmail: this.wantContactByEmail ? this.contactByEmail : '',
         contactByPhone: this.wantContactByPhone ? this.contactByPhone : '',
+        canShareWithXRPress: this.canShareWithXRPress,
         canShareWithLocalXRGroup: this.canShareWithLocalXRGroup,
         submitted: this.submitted,
       }

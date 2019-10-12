@@ -22,6 +22,7 @@ module.exports = {
       email: { type: 'string' },
       phone: { type: 'string' },
       canShareWithLocalXRGroup: { type: 'boolean', defaultsTo: false },
+      canShareWithXRPress: { type: 'boolean', defaultsTo: false },
       comment: { type: 'string' },
       isHidden: { type: 'boolean', defaultsTo: false },
     },

@@ -132,6 +132,7 @@
               <b-form-input id="input-by-phone" v-model="editReleaseModal.phone"></b-form-input>
             </b-form-group>
             <b-form-checkbox v-model="editReleaseModal.canShareWithLocalXRGroup">Consent to share with local XR group</b-form-checkbox>
+            <b-form-checkbox v-model="editReleaseModal.canShareWithXRPress">Consent to share with XR press</b-form-checkbox>
             <b-form-group label="Comment" label-for="input-comment" label-cols-md="3">
               <b-form-textarea id="input-comment" v-model="editReleaseModal.comment" rows="3" max-rows="10"></b-form-textarea>
             </b-form-group>
@@ -175,6 +176,7 @@ export default {
         email: null,
         phone: null,
         canShareWithLocalXRGroup: null,
+        canShareWithXRPress: null,
         comment: null,
         isHidden: null,
       }
