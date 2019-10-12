@@ -195,7 +195,7 @@ export default {
         return { valid: null }
       } else if (this.time == "") {
         return { valid: false, reason: 'A valid time must be provided' }
-      } else if (!this.time.match(/([01]?\d|2[0-3]):[0-5]\d/)) {
+      } else if (!this.time.match(/^([01]?\d|2[0-3]):[0-5]\d$/)) {
         return { valid: false, reason: 'Please enter the time in 24-hour format with a colon, hh:mm' }
       } else {
         return { valid: true }
