@@ -44,7 +44,7 @@ module.exports = {
         }
         return {
           station: stationName,
-          arrestTime: Date.parse(date + "T" + time + ":00"),
+          arrestTime: date + "T" + time + ":00",
           location: location || "",
           name: name || "",
           arrestingOfficerId: arrestingOfficerId || "",

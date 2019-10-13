@@ -1,7 +1,11 @@
 module.exports = {
     attributes: {
       station: { type: 'string' },
-      arrestTime: { type: 'number', required: true },
+      arrestTime: {
+        type: 'ref',
+        columnType: 'timestamp',
+        required: true,
+      },
       location: { type: 'string', required: true },
       name: { type: 'string' },
       arrestingOfficerId: { type: 'string' },

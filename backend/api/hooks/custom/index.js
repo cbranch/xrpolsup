@@ -81,7 +81,8 @@ module.exports = function defineCustomHook(sails) {
 
             // If the logged-in user has expired, wipe it from the session and return unauthorized.
             var now = Date.now();
-            if (loggedInUser.expires !== 0 && loggedInUser.expires < now) {
+            var expires = Date.parse(loggedInUser.expires);
+            if (expires !== 0 && expires < now) {
               delete req.session.userId;
               return res.unauthorized();
             }
@@ -98,9 +99,10 @@ module.exports = function defineCustomHook(sails) {
             //
             // (Note: As an optimization, this is run behind the scenes to avoid adding needless latency.)
             var MS_TO_BUFFER = 60*1000;
-            if (loggedInUser.lastSeenAt < now - MS_TO_BUFFER) {
+            var lastSeenAt = Date.parse(loggedInUser.lastSeenAt);
+            if (lastSeenAt < now - MS_TO_BUFFER) {
               User.updateOne({id: loggedInUser.id})
-              .set({ lastSeenAt: now })
+              .set({ lastSeenAt: new Date(now).toISOString() })
               .exec((err)=>{
                 if (err) {
                   sails.log.error('Background task failed: Could not update user (`'+loggedInUser.id+'`) with a new `lastSeenAt` timestamp.  Error details: '+err.stack);

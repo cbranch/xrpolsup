@@ -1,7 +1,11 @@
 module.exports = {
     attributes: {
       name: { type: 'string' },
-      arrestTime: { type: 'number', required: true },
+      arrestTime: {
+        type: 'ref',
+        columnType: 'bigint',
+        required: true,
+      },
       location: { type: 'string', required: true },
       offence: { type: 'string' },
       termsOfRelease: { type: 'string' },

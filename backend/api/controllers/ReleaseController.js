@@ -32,8 +32,7 @@ module.exports = {
       if (time.length == 4) {
         time = "0" + time
       }
-      var arrestTime = Date.parse(date + "T" + time + ":00")
-      if (isNaN(arrestTime)) { return res.badRequest('time and date must be valid'); }
+      var arrestTime = date + "T" + time + ":00"
 
       const release = await Release
         .create({
