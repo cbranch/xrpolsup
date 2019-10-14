@@ -12,7 +12,7 @@ function setUpdatedAtMinimumTime(criteria) {
   const threshold = Date.now() - (1000*60*60*30);
   const query = {'>=': threshold};
   if ('updatedAt' in criteria.where) {
-    queryOptions.criteria.where.and = [
+    criteria.where.and = [
       { 'updatedAt': criteria.where['updatedAt'] },
       { 'updatedAt': query },
     ]
