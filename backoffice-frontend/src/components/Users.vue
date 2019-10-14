@@ -44,7 +44,7 @@
         {{ new Date(data.value).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }) }}
       </template>
       <template v-slot:cell(lastSeenAt)="data">
-        {{ new Date(data.value).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }) }}
+        {{ data.value == 0 ? "Never" : new Date(data.value).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }) }}
       </template>
       <template v-slot:cell(actions)="row">
         <b-button size="sm" @click="showEditUserModal(row.item, $event.target)" class="mr-1">
