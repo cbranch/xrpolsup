@@ -1,4 +1,24 @@
 module.exports = {
+    findOne: async (req, res) => {
+      const report = await Report
+        .findOne({id: req.param('id')})
+        .catch(error => res.serverError(error))
+
+      if (!report) {
+        return res.notFound()
+      }
+
+      if (report.updatedAt < (Date.now() - (1000*60*60*30))) {
+        return res.notFound()
+      }
+
+      if (req._sails.hooks.pubsub && req.isSocket) {
+        Report.subscribe(req, [report.id])
+      }
+
+      return res.ok(report)
+    },
+
     // A simplified report creation endpoint for public use
     post: async (req, res) => {
       let {stationName, witnessEmail, arrestees} = req.allParams();

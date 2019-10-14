@@ -8,6 +8,20 @@
  * https://sailsjs.com/anatomy/config/routes-js
  */
 
+function setUpdatedAtMinimumTime(criteria) {
+  const threshold = Date.now() - (1000*60*60*30);
+  const query = {'>=': threshold};
+  if ('updatedAt' in criteria.where) {
+    queryOptions.criteria.where.and = [
+      { 'updatedAt': criteria.where['updatedAt'] },
+      { 'updatedAt': query },
+    ]
+    delete criteria.where['updatedAt']
+  } else {
+    criteria.where['updatedAt'] = query
+  }
+}
+
 module.exports.routes = {
 
   /***************************************************************************
@@ -28,5 +42,14 @@ module.exports.routes = {
 
   'PUT /api/v1/user/:id/set_password': { action: 'user/set-password' },
   'POST /api/v1/killswitch': { action: 'killswitch' },
+
+  'GET /api/v1/report': {
+    action: 'report/find',
+    parseBlueprintOptions: function (req) {
+      var queryOptions = req._sails.hooks.blueprints.parseBlueprintOptions(req);
+      setUpdatedAtMinimumTime(queryOptions.criteria)
+      return queryOptions;
+    },
+  },
 
 };
