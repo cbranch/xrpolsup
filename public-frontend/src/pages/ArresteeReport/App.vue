@@ -102,7 +102,7 @@
       <b-col>
         <h4>Further XR Support</h4>
 
-        <p>If you would like a member of the XR-Press team to help you get your story heard in the next few days then please contact Zoey on this number: 07918&nbsp;165&nbsp;046</p>
+        <p>If you would like a member of the XR-Press team to help you get your story heard in the next few days then please contact Zoë on this number: 07918&nbsp;165&nbsp;046</p>
         <p><b-form-checkbox id="canShareWithXRPress" v-model="canShareWithXRPress">If you would be happy for members of the XR-Press team to contact you in the future to discuss your options around press engagement then please tick here.</b-form-checkbox></p>
 
         <b-form-group label="In order to help us provide ongoing arrest support, can we share your contact details with your local XR group?" label-for="input-canShareWithLocalXRGroup">
