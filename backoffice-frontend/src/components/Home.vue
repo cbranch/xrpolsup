@@ -123,6 +123,10 @@
       </b-container>
       </template>
     </b-modal>
+    <!-- Delete user modal -->
+    <b-modal id="deleteReportModal" title="Delete report" @ok="deleteReport">
+      <p>Really delete?</p>
+    </b-modal>
   </b-container>
 </template>
 
@@ -205,11 +209,14 @@ export default {
         }
       })
     },
-    hideEditReport (event) {
+    hideEditReport (event, target) {
       if (event.trigger == "delete") {
-        this.editReportModal.isHidden = true
-        this.commitEditReport()
+        this.$root.$emit('bv::show::modal', 'deleteReportModal', target)
       }
+    },
+    deleteReport() {
+      this.editReportModal.isHidden = true
+      this.commitEditReport()
     }
   }
 }
