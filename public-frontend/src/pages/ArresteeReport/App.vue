@@ -18,11 +18,8 @@
         <b-form-group id="label-fullname" label="Full name / Alias" label-for="input-fullname" :invalid-feedback="isValidName.reason" :state="isValidName.valid">
           <b-form-input id="input-fullname" v-model="name" :state="isValidName.valid"></b-form-input>
         </b-form-group>
-        <b-form-group id="label-timedate" label="When did this arrest take place?" label-for="input-time" :invalid-feedback="isValidTime.reason" :state="isValidTime.valid">
-          <b-form-input id="input-time" v-model="time" :state="isValidTime.valid" placeholder="24-hour time, e.g. 13:00"></b-form-input>
-        </b-form-group>
-        <b-form-group :invalid-feedback="isValidDate.reason" :state="isValidDate.valid">
-          <SimpleDatePicker id="input-date" v-model="date" :state="isValidDate.valid" />
+        <b-form-group id="label-datetime" label="When did this arrest take place?" label-for="input-time" :invalid-feedback="isValidDatetime.reason" :state="isValidDatetime.valid">
+          <datetime id="input-datetime" type="datetime" v-model="datetime" :state="isValidDatetime.valid" :max-datetime="new Date().toISOString()" />
         </b-form-group>
         <b-form-group id="label-location" label="Where did this arrest take place?" label-for="input-location" :invalid-feedback="isValidLocation.reason" :state="isValidLocation.valid">
           <b-form-input id="input-location" v-model="location" :state="isValidLocation.valid" placeholder="Place name"></b-form-input>
@@ -133,18 +130,12 @@
 </template>
 
 <script>
-import SimpleDatePicker from '../../components/SimpleDatePicker.vue'
-
 export default {
   name: 'ArresteeReport',
-  components: {
-    SimpleDatePicker
-  },
   data () {
     return {
       name: null,
-      time: null,
-      date: null,
+      datetime: null,
       location: null,
       offence: null,
       termsOfRelease: null,
@@ -190,21 +181,10 @@ export default {
         return { valid: true }
       }
     },
-    isValidTime () {
-      if (this.time == null) {
+    isValidDatetime () {
+      if (this.datetime == null) {
         return { valid: null }
-      } else if (this.time == "") {
-        return { valid: false, reason: 'A valid time must be provided' }
-      } else if (!this.time.match(/^([01]?\d|2[0-3]):[0-5]\d$/)) {
-        return { valid: false, reason: 'Please enter the time in 24-hour format with a colon, hh:mm' }
-      } else {
-        return { valid: true }
-      }
-    },
-    isValidDate () {
-      if (this.date == null) {
-        return { valid: null }
-      } else if (this.date == '') {
+      } else if (this.datetime == '') {
         return { valid: false, reason: 'Please select a date' }
       } else {
         return { valid: true }
@@ -223,8 +203,7 @@ export default {
   methods: {
     validate () {
       this.name = this.name || ''
-      this.time = this.time || ''
-      this.date = this.date || ''
+      this.datetime = this.datetime || ''
       this.location = this.location || ''
       this.station = this.station || ''
       this.name = this.name || ''
@@ -232,12 +211,12 @@ export default {
       this.contactByPhone = this.contactByPhone || ''
       if (!this.isValidName.valid) {
         this.$scrollTo('#label-fullname')
-      } else if (!this.isValidTime.valid || !this.isValidDate.valid) {
-        this.$scrollTo('#label-timedate')
+      } else if (!this.isValidDatetime.valid) {
+        this.$scrollTo('#label-datetime')
       } else if (!this.isValidLocation.valid) {
         this.$scrollTo('#label-location')
       }
-      return this.isValidTime.valid && this.isValidDate.valid && this.isValidLocation.valid && this.isValidName.valid
+      return this.isValidDatetime.valid && this.isValidLocation.valid && this.isValidName.valid
     },
     submitReport () {
       if (this.isSubmitting) {
@@ -247,10 +226,13 @@ export default {
         this.errors = ["Please correct errors in the form before submitting."]
         return
       }
+      const dateParts = /([\d-]*)T(\d+:\d+):.*Z/.exec(this.datetime)
+      const date = dateParts[1]
+      const time = dateParts[2]
       let report = {
         name: this.name,
-        time: this.time,
-        date: this.date,
+        time: time,
+        date: date,
         location: this.location,
         offence: this.offence,
         termsOfRelease: this.termsOfRelease,
