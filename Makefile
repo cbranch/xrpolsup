@@ -1,4 +1,4 @@
-.PHONY: all backend backoffice-frontend public-frontend
+.PHONY: all backend backoffice-frontend public-frontend deploy
 
 all: backend backoffice-frontend public-frontend
 
@@ -10,3 +10,6 @@ public-frontend:
 
 backend:
 	cd backend && npm install
+
+deploy:
+	sudo ./deploy.sh

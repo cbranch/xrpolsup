@@ -1,0 +1,18 @@
+[Unit]
+Description=xr backend service
+After=network.target
+
+[Service]
+Environment=NODE_ENV=production
+Environment=sails_datastores__default__adapter=sails-postgresql
+Environment=sails_datastores__default__url=postgresql://sails:password@localhost:5432/sails
+Environment=sails_custom__killSwitchToken=SomeRandomToken
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+Type=simple
+User=node
+ExecStart=/usr/bin/node app.js
+WorkingDirectory=/srv/node/xrpolsup
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
