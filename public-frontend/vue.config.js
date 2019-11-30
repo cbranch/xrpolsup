@@ -10,6 +10,11 @@ module.exports = {
       template: 'public/arrestee.html',
       title: 'Arrestee Report'
     },
+    'trial_observation': {
+      entry: './src/pages/TrialObservation/main.js',
+      template: 'public/trial_observation.html',
+      title: 'Trial Observation'
+    },
   },
   outputDir: '../backend/assets/public',
   lintOnSave: 'error',
