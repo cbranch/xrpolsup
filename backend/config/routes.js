@@ -37,6 +37,7 @@ module.exports.routes = {
   'POST /api/v1/arrestee_report': 'ReleaseController.post',
 
   'GET /api/v1/user/current': { action: 'user/current' },
+  'PUT /api/v1/user/change_password': { action: 'user/change-password' },
   'POST /api/v1/login': { action: 'login' },
   'POST /api/v1/logout': { action: 'logout' },
 

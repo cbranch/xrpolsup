@@ -24,6 +24,7 @@ module.exports.policies = {
   'user/*': 'is-admin',
   // ...except for seeing the current user
   'user/current': 'is-logged-in',
+  'user/change-password': 'is-logged-in',
 
   // No login required for the following:
   'ReportController': {
