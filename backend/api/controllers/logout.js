@@ -32,9 +32,9 @@ actually logged in.  (If they weren't, then this action is just a no-op.)`,
     // If the account has an expiration date, expire it immediately
     await User.updateOne({
       id: this.req.session.userId,
-      expires: { '>': 0 },
+      expires: { '!=': null },
     }).set({
-      expires: Date.now()
+      expires: new Date().toISOString()
     })
 
     // Clear the `userId` property from this session.
