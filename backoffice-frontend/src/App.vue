@@ -20,9 +20,8 @@
           </b-nav-form>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-text right v-if="$store.state.loggedIn">Logged in as {{ $store.state.username }}</b-nav-text>
           <b-nav-item right :to="{ name: 'Login' }" v-if="!$store.state.loggedIn">Login</b-nav-item>
-          <b-nav-item right :to="{ name: 'Login' }" v-if="$store.state.loggedIn">Logout</b-nav-item>
+          <b-nav-item right :to="{ name: 'Login' }" v-if="$store.state.loggedIn">Logged in as {{ $store.state.username }}</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
