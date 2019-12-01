@@ -65,8 +65,8 @@ export default {
     submit () {
       const body = { username: this.username, password: this.password }
       this.password = ""
-      this.axios.post('/api/v1/login', body).then(() => {
-        this.$store.commit('logIn', this.username)
+      this.axios.post('/api/v1/login', body).then((res) => {
+        this.$store.commit('logIn', res.data)
         this.$router.push('/')
       }).catch(error => {
         if (error.response.status == 401) {

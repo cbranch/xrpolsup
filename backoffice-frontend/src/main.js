@@ -27,7 +27,9 @@ filterDateStart.setHours(4, 0, 0, 0)
 const store = new Vuex.Store({
   state: {
     loggedIn: false,
+    userId: null,
     username: null,
+    nickname: null,
     filterDateStart,
     reports: [],
     releases: [],
@@ -95,13 +97,17 @@ const store = new Vuex.Store({
     addCallLog(state, x) {
       state.callLogs.push(x)
     },
-    logIn(state, username) {
+    logIn(state, user) {
       state.loggedIn = true
-      state.username = username
+      state.userId = user.id
+      state.username = user.username
+      state.nickname = user.nickname || user.username
     },
     logOut(state) {
       state.loggedIn = false
+      state.userId = null
       state.username = null
+      state.nickname = null
     },
     setFilterDateStart(state, date) {
       state.filterDateStart = date

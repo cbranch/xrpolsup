@@ -21,7 +21,7 @@
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
           <b-nav-item right :to="{ name: 'Login' }" v-if="!$store.state.loggedIn">Login</b-nav-item>
-          <b-nav-item right :to="{ name: 'Login' }" v-if="$store.state.loggedIn">Logged in as {{ $store.state.username }}</b-nav-item>
+          <b-nav-item right :to="{ name: 'Login' }" v-if="$store.state.loggedIn">Logged in as {{ $store.state.nickname }}</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -80,7 +80,7 @@ export default {
           this.$router.push('login')
           this.$io.socket.disconnect()
         } else if (jwRes.statusCode == 200) {
-          this.$store.commit('logIn', resData.username)
+          this.$store.commit('logIn', resData)
 
           var threshold = Date.now() - (1000*60*60*30)
           this.$io.socket.get('/api/v1/report', {limit: 10000, where: {updatedAt: {">": threshold}}}, (resData, jwRes) => {
