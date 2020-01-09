@@ -1,0 +1,12 @@
+[Unit]
+Description=backoffice backend gunicorn daemon
+After=network.target
+
+[Service]
+User=backoffice-backend
+Group=www-data
+WorkingDirectory=/srv/backoffice-backend
+ExecStart=/usr/local/bin/pipenv run gunicorn --access-logfile - --workers 3 --bind unix:/srv/backoffice-backend/server.sock backend.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
