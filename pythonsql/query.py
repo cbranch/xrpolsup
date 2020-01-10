@@ -70,7 +70,7 @@ if __name__ == '__main__':
 #        data = connect(query)
 #        savetofile(df=data,savepath='/Users/Greg/repositories/arrestwatchpython/',filename=name'.csv')
     data = connect('select "arrestTime" from "release" limit(10);')
-    savetofile(df=data,savepath='/Users/Greg/repositories/arrestwatchpython/',filename='test.csv')
+    savetofile(df=data,filename='arrestTime.csv')
     
     
     
