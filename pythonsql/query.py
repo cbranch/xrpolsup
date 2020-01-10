@@ -9,6 +9,8 @@ Created on Mon Nov 18 19:16:23 2019
 import psycopg2
 from config import config
 import pandas as pd
+import requests
+import os
 
 def connect(query):
     """ Connect to the PostgreSQL database server """
@@ -42,23 +44,33 @@ def connect(query):
             conn.close()
             print('Database connection closed.')
         
-def savetofile(df, savepath, sep=','):
+def savetofile(df, filename, savepath=os.getcwd(), sep=','):
     """ Save the data to a .csv """
     # Question for Chris: non-UTF8 characters on input?
+    url = 'https://cloud.extinctionrebellion.org.uk/remote.php/dav/files/gregxr/Back%20Office%20October%20Rebellion/test/testfolder/'+filename
+    username = 'gregxr'
+    password = 'rebellion1'
     try:
-        df.to_csv(savepath, sep, index=False)
+        df.to_csv(savepath+filename, sep, index=False)
+        r = requests.put(url, data=open(savepath+filename, 'rb'), auth=(username, password))
         print("Saved successfully!")
     except Exception as error:
         print("Saving not successful")
         print(error)
-        
-        
+        print(r.status_code)
+
+#-- Defining the queries
+queries = {
+    'fullrelease' : 'select * from public."release";',
+    'lastmonthrelease' : 'SELECT * FROM "release" where to_timestamp("release"."updatedAt"/1000) > (NOW() - interval \'1 month\')'
+        }
+
 if __name__ == '__main__':
-    data = connect('select name from public."release" limit(10);')
-    # currently doesn't save anywhere
-    print(data)
-    #savetofile(df=data)
-    
+#    for name, query in queries.items():
+#        data = connect(query)
+#        savetofile(df=data,savepath='/Users/Greg/repositories/arrestwatchpython/',filename=name'.csv')
+    data = connect('select "arrestTime" from "release" limit(10);')
+    savetofile(df=data,savepath='/Users/Greg/repositories/arrestwatchpython/',filename='test.csv')
     
     
     
