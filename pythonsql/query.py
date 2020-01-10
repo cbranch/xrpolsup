@@ -49,10 +49,10 @@ def savetofile(df, filename, savepath=os.getcwd(), sep=','):
     # Question for Chris: non-UTF8 characters on input?
     url = 'https://cloud.extinctionrebellion.org.uk/remote.php/dav/files/gregxr/Back%20Office%20October%20Rebellion/test/testfolder/'+filename
     username = 'gregxr'
-    password = 'rebellion1'
+    password = 'rebellion2'
     try:
-        df.to_csv(savepath+filename, sep, index=False)
-        r = requests.put(url, data=open(savepath+filename, 'rb'), auth=(username, password))
+        df.to_csv(savepath+'/'+filename, sep, index=False)
+        r = requests.put(url, data=open(savepath+'/'+filename, 'rb'), auth=(username, password))
         print("Saved successfully!")
     except Exception as error:
         print("Saving not successful")
