@@ -184,7 +184,7 @@ export default {
         notes: this.notes,
       }
       this.isSubmitting = true
-      this.axios.post('/api/v1/trial_observation', report).then(() => {
+      this.axios.post('/api/v2/trial_observation', report).then(() => {
         this.isSubmitting = false
         this.submitted = true
       }, error => {
