@@ -17,12 +17,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = 'u*8xr6ag!*v-&ewjvgc3)z#9jsfb-er!s!5uh@f9$748y#**zz'
 DEBUG = True
+ALLOWED_HOSTS = []
 
 if 'BACKOFFICE_SECRET_KEY' in os.environ:
     SECRET_KEY = os.environ['BACKOFFICE_SECRET_KEY']
     DEBUG = False
-
-ALLOWED_HOSTS = ['arrestwatch.info', 'backoffice.arrestwatch.info']
+    ALLOWED_HOSTS = ['arrestwatch.info', 'backoffice.arrestwatch.info']
 
 
 # Application definition

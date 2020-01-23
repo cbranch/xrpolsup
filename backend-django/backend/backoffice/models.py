@@ -38,3 +38,18 @@ class Observation(models.Model):
         super().delete(*args, **kwargs)
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)('observation', {'type': 'observation_deleted', 'id': id})
+
+class PleaHearing(models.Model):
+    createdAt = models.DateTimeField(auto_now_add=True)
+    validTo = models.DateTimeField(null=True)
+    identity = models.ForeignKey(Identity, on_delete=models.CASCADE)
+    name = models.TextField()
+    email = models.TextField()
+    phone = models.TextField()
+    hometown = models.TextField()
+    charge = models.TextField()
+    lawFirm = models.TextField()
+    consentToContact = models.BooleanField()
+    canShareWithLocalXRGroup = models.BooleanField()
+    consentToRecord = models.BooleanField()
+    consentToPress = models.BooleanField()

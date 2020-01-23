@@ -4,7 +4,7 @@ from django.http import JsonResponse, HttpResponseNotAllowed
 from django.views.decorators.csrf import csrf_exempt
 import django.utils.timezone
 
-from .models import Observation, Identity
+from .models import Observation, Identity, PleaHearing
 
 def index(request):
     return render(request, 'backoffice/index.html', {})
@@ -36,5 +36,31 @@ def observation(request):
     ob.costs = body.get('costs', '')
     ob.notes = body.get('notes', '')
     ob.save()
+
+    return JsonResponse({})
+
+@csrf_exempt
+def plea_hearing(request):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    body = json.loads(request.body)
+
+    identity = Identity()
+    identity.save()
+
+    ph = PleaHearing()
+    ph.identity = identity
+    ph.name = body.get('name', '')
+    ph.email = body.get('email', '')
+    ph.phone = body.get('phone', '')
+    ph.hometown = body.get('hometown', '')
+    ph.charge = body.get('charge', '')
+    ph.lawFirm = body.get('lawFirm', '')
+    ph.consentToContact = body.get('consentToContact', False)
+    ph.canShareWithLocalXRGroup = body.get('canShareWithLocalXRGroup', False)
+    ph.consentToRecord = body.get('consentToRecord', False)
+    ph.consentToPress = body.get('consentToPress', False)
+    ph.save()
 
     return JsonResponse({})
