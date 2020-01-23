@@ -15,6 +15,11 @@ module.exports = {
       template: 'public/trial_observation.html',
       title: 'Trial Observation'
     },
+    'plea_hearing': {
+      entry: './src/pages/PleaHearing/main.js',
+      template: 'public/plea_hearing.html',
+      title: 'Plea Hearing'
+    },
   },
   outputDir: '../backend/assets/public',
   lintOnSave: 'error',
