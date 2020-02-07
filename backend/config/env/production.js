@@ -341,7 +341,7 @@ module.exports = {
   * this, just try deploying without setting it and see if it works.)       *
   *                                                                         *
   ***************************************************************************/
-  port: 443,
+  port: 8080,
 
 
 
@@ -362,10 +362,10 @@ module.exports = {
   * > https://sailsjs.com/config/*#?sailsconfigssl                          *
   *                                                                         *
   **************************************************************************/
-  ssl: {
+  /*ssl: {
     cert: require('fs').readFileSync('/etc/xrpolsup/cert.pem'),
     key: require('fs').readFileSync('/etc/xrpolsup/key.pem')
-  },
+  },*/
 
 
 
