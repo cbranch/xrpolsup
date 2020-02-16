@@ -18,11 +18,8 @@ Vue.use(Vuex)
 Vue.use(VueAxios, axios)
 Vue.use(Datetime)
 
-var filterDateStart = new Date()
-if (filterDateStart.getHours() < 4) {
-  filterDateStart = new Date(Date.now() - 1000*60*60*24)
-}
-filterDateStart.setHours(4, 0, 0, 0)
+var filterDateStart = new Date(Date.now() - 1000*60*60*24)
+filterDateStart.setMinutes(0, 0, 0)
 
 const store = new Vuex.Store({
   state: {
