@@ -82,14 +82,17 @@
           <b-form-input type="number" id="input-rebels-still-held" v-model="rebelsStillHeld"></b-form-input>
         </b-form-group>
 
-        <b-form-group id="label-contact" label="By providing this data I consent to be contacted by">
-          <b-form-checkbox v-model="wantContactByEmail">Contact by E-Mail</b-form-checkbox>
-          <b-form-group v-if="wantContactByEmail" label="E-Mail:" label-for="input-by-email">
+        <b-form-group id="label-contact">
+          <label>We request your contact details so that we can contact you regarding post arrest support such as trial support, PALS, and access to crowd justice funds.
+            By providing this data, you consent to be contacted by:
+          </label>
+          <b-form-checkbox v-model="wantContactByEmail">E-mail</b-form-checkbox>
+          <b-form-group v-if="wantContactByEmail" label="Please enter your email address:" label-for="input-by-email">
             <b-form-input id="input-by-email" v-model="contactByEmail"></b-form-input>
           </b-form-group>
 
-          <b-form-checkbox v-model="wantContactByPhone">Contact by Phone</b-form-checkbox>
-          <b-form-group v-if="wantContactByPhone" label="Phone:" label-for="input-by-phone">
+          <b-form-checkbox v-model="wantContactByPhone">Phone</b-form-checkbox>
+          <b-form-group v-if="wantContactByPhone" label="Please enter your phone number:" label-for="input-by-phone">
             <b-form-input id="input-by-phone" v-model="contactByPhone"></b-form-input>
           </b-form-group>
         </b-form-group>
@@ -99,7 +102,6 @@
       <b-col>
         <h4>Further XR Support</h4>
 
-        <p>If you would like a member of the XR-Press team to help you get your story heard in the next few days then please contact Zoë on this number: 07918&nbsp;165&nbsp;046</p>
         <p><b-form-checkbox id="canShareWithXRPress" v-model="canShareWithXRPress">If you would be happy for members of the XR-Press team to contact you in the future to discuss your options around press engagement then please tick here.</b-form-checkbox></p>
 
         <b-form-group label="In order to help us provide ongoing arrest support, can we share your contact details with your local XR group?" label-for="input-canShareWithLocalXRGroup">
