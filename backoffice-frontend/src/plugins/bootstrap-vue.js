@@ -1,7 +1,10 @@
 import Vue from 'vue'
 
 import BootstrapVue from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+if (process.env.NODE_ENV === 'production') {
+    require('./bootstrap-vue-production.scss')
+} else {
+    require('./bootstrap-vue-staging.scss')
+}
 
 Vue.use(BootstrapVue)
