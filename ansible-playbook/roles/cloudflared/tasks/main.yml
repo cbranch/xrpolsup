@@ -1,0 +1,9 @@
+---
+- name: Download cloudflared
+  get_url:
+    url: https://bin.equinox.io/c/VdrWdbjqyF/cloudflared-stable-linux-amd64.deb
+    dest: /tmp/cloudflared-amd64.deb
+
+- name: Install cloudflared
+  apt:
+    deb: /tmp/cloudflared-amd64.deb

@@ -1,0 +1,54 @@
+---
+- name: Add group "arrestwatch"
+  group: name=arrestwatch
+
+- name: Add user "arrestwatch"
+  user: name=arrestwatch group=arrestwatch home=/srv/arrestwatch/
+
+- name: Install required packages
+  apt:
+    pkg:
+      - git
+      - python-setuptools
+      - python-psycopg2
+
+- name: Create arrestwatch database
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: "{{ aw_db_name }}"
+
+- name: Create arrestwatch database backend user
+  become: true
+  become_user: postgres
+  postgresql_user:
+    db: "{{ aw_db_name }}"
+    name: "{{ aw_db_user }}"
+    password: "{{ aw_db_pass }}"
+    priv: "ALL"
+
+- name: Checkout arrestwatch repo
+  become: true
+  become_user: arrestwatch
+  git:
+    repo: 'https://{{ gitlab_user | urlencode }}:{{ gitlab_pass | urlencode }}@code.organise.earth/otterchaos/arrestwatch.git'
+    dest: /srv/arrestwatch/checkout/
+
+- name: Make arrestwatch
+  become: true
+  become_user: arrestwatch
+  make:
+    chdir: /srv/arrestwatch/checkout/
+    params:
+      ENVIRONMENT: "{{ environment }}"
+
+- name: Migrate database
+  command:
+    cmd: node_modules/.bin/knex migrate:latest --env production
+    chdir: /srv/arrestwatch/checkout/backend/
+  environment:
+    DATABASE_URL: "postgresql://{{ aw_db_user }}:{{ aw_db_pass }}@localhost:5432/{{ aw_db_name }}"
+
+- name: Create arrestwatch backend systemd service
+  template: src=arrestwatch-backend.service dest=/etc/systemd/system/arrestwatch-backend.service
+  notify: restart arrestwatch-backend

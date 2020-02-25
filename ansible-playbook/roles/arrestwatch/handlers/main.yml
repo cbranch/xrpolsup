@@ -1,0 +1,7 @@
+---
+- name: restart arrestwatch-backend
+  systemd:
+    name: arrestwatch-backend
+    daemon_reload: yes
+    state: restarted
+    enabled: yes

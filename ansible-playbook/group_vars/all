@@ -1,0 +1,9 @@
+---
+nodejs_version: "12.x"
+has_ssl: true
+environment: production
+gitlab_user: replace_me
+gitlab_pass: replace_me
+aw_db_name: arrestwatch
+aw_db_user: backend
+aw_db_pass: replace_me

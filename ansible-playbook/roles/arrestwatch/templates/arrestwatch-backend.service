@@ -1,0 +1,18 @@
+[Unit]
+Description=XR arrestwatch backend service
+After=network.target
+
+[Service]
+Environment=NODE_ENV=production
+Environment=sails_datastores__default__adapter=sails-postgresql
+Environment=sails_datastores__default__url=postgresql://{{ aw_db_user }}:{{ aw_db_pass }}@localhost:5432/{{ aw_db_name }}
+Environment=sails_custom__killSwitchToken=DefaultKillSwitch
+Type=simple
+User=arrestwatch
+Group=arrestwatch
+ExecStart=/usr/bin/node app.js
+WorkingDirectory=/srv/arrestwatch/checkout/backend/
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
