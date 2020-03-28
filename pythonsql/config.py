@@ -12,7 +12,7 @@ from configparser import ConfigParser
  
 def config(filename='database.ini', section='postgresql'):
     # create a parser
-    parser = ConfigParser()
+    parser = ConfigParser(interpolation=None)
     # read config file
     parser.read(filename)
  
