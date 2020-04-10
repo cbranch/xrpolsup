@@ -63,7 +63,52 @@ def savetofile(df, url, sep=',', auth=None):
 
 #-- Defining the queries
 queries = {
-    'weekly_release_subset' : 'SELECT "id" AS "UID", "name" AS "Name", "arrestTime" AS "Date and Time of Arrest", "location" AS "Place of Arrest", "offence" AS "Named offence at time of arrest", "charges" AS "Charge", "termsOfRelease" AS "Terms of Release", "courtDate" AS "Plea Date", "courtLocation" AS "Court", "canShareWithXRPress" AS "XR Media", "canShareWithLocalXRGroup" AS "Local Group", "nearestCity" AS "Region", "phone" AS "Tel Number", "email" AS "E-mail", "localXRGroup" AS "Local XR Group", "bailConditions" AS "Bail Conditions", "comment" AS "COMMENTS" FROM "release" where to_timestamp("release"."updatedAt"/1000) > (NOW() - interval \'7 days\')',
+    'weekly_release_subset' : """SELECT
+        NULL AS "_",
+        NULL AS "_",
+        NULL AS "_",
+        "id" AS "UID",
+        "name" AS "Name",
+        NULL AS "_",
+        NULL AS "_",
+        "arrestTime" AS "Date and Time of Arrest",
+        "location" AS "Place of Arrest",
+        "offence" AS "Named offence at time of arrest",
+        "charges" AS "Charge",
+        "termsOfRelease" AS "Terms of Release",
+        "courtDate" AS "Plea Date",
+        NULL AS "_",
+        "courtLocation" AS "Court",
+        NULL AS "_",
+        NULL AS "_",
+        NULL AS "_",
+        NULL AS "_",
+        NULL AS "_",
+        NULL AS "_",
+        NULL AS "_",
+        "canShareWithXRPress" AS "XR Media",
+        NULL AS "_",
+        NULL AS "_",
+        "canShareWithLocalXRGroup" AS "Local Group",
+        NULL AS "_",
+        "nearestCity" AS "Region",
+        NULL AS "_",
+        NULL AS "_",
+        NULL AS "_",
+        NULL AS "_",
+        NULL AS "_",
+        "phone" AS "Tel Number",
+        "email" AS "E-mail",
+        NULL AS "_",
+        NULL AS "_",
+        "localXRGroup" AS "Local XR Group",
+        NULL AS "_",
+        "bailConditions" AS "Bail Conditions",
+        NULL AS "_",
+        "comment" AS "COMMENTS"
+        FROM "release"
+        WHERE to_timestamp("release"."updatedAt"/1000) > (NOW() - interval '7 days')
+        """,
 }
 
 if __name__ == '__main__':
