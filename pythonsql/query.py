@@ -47,15 +47,13 @@ def connect(query):
             print('Database connection closed.')
 
 def savetofile(df, url, sep=',', auth=None):
-    """ Save the data to a .csv """
+    """ Save the data to a .xlsx """
     try:
         csv = StringIO.StringIO()
-        df.to_csv(csv, sep, index=False)
-        print(csv.getvalue())
+        df.to_excel(csv, index=False, engine='xlsxwriter')
         csv.seek(0)
-        print("Putting %s" % url)
         r = requests.put(url, data=csv, auth=auth)
-        print("Saved successfully!")
+        print("Uploaded %s" % url)
     except Exception as error:
         print("Saving not successful")
         print(error)
@@ -71,7 +69,7 @@ queries = {
         "name" AS "Name",
         NULL AS "_",
         NULL AS "_",
-        "arrestTime" AS "Date and Time of Arrest",
+        "arrestTime"::timestamp without time zone AS "Date and Time of Arrest",
         "location" AS "Place of Arrest",
         "offence" AS "Named offence at time of arrest",
         "charges" AS "Charge",
@@ -117,5 +115,5 @@ if __name__ == '__main__':
     auth = (params["username"], params["password"])
     for name, query in queries.items():
         data = connect(query)
-        savetofile(df=data, url=urljoin(url, name+'.csv'), auth=auth)
+        savetofile(df=data, url=urljoin(url, name+'.xlsx'), auth=auth)
 
