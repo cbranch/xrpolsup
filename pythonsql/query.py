@@ -68,7 +68,7 @@ queries = {
         "id" AS "UID",
         "name" AS "Name",
         NULL AS "_",
-        NULL AS "_",
+        DATE("arrestTime"::timestamp without time zone) AS "Date of Arrest",
         "arrestTime"::timestamp without time zone AS "Date and Time of Arrest",
         "location" AS "Place of Arrest",
         "offence" AS "Named offence at time of arrest",
