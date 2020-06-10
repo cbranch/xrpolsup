@@ -48,14 +48,19 @@ def connect(query):
 
 def savetofile(df, url, sep=',', auth=None):
     """ Save the data to a .xlsx """
+    csv = StringIO.StringIO()
     try:
-        csv = StringIO.StringIO()
-        df.to_excel(csv, index=False, engine='xlsxwriter')
-        csv.seek(0)
+        df.to_excel(csv, index=False, engine='openpyxl')
+    except Exception as error:
+        print("Saving not successful")
+        print(error)
+        return
+    csv.seek(0)
+    try:
         r = requests.put(url, data=csv, auth=auth)
         print("Uploaded %s" % url)
     except Exception as error:
-        print("Saving not successful")
+        print("Uploading not successful")
         print(error)
         print(r.status_code)
 
