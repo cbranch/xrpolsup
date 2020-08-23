@@ -53,3 +53,24 @@ class PleaHearing(models.Model):
     canShareWithLocalXRGroup = models.BooleanField()
     consentToRecord = models.BooleanField()
     consentToPress = models.BooleanField()
+
+class StationRegion(models.Model):
+    name = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+class Station(models.Model):
+    createdAt = models.DateTimeField(auto_now_add=True)
+    name = models.TextField()
+    region = models.ForeignKey(StationRegion, on_delete=models.SET_NULL, null=True)
+    verified = models.BooleanField()
+    rejected = models.BooleanField()
+
+    def __str__(self):
+        descriptor = ""
+        if not self.verified:
+            descriptor = " (unverified)"
+        if self.rejected:
+            descriptor += " (rejected)"
+        return "{}{}".format(self.name, descriptor)
