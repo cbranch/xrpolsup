@@ -4,10 +4,15 @@ from django.http import JsonResponse, HttpResponseNotAllowed
 from django.views.decorators.csrf import csrf_exempt
 import django.utils.timezone
 
-from .models import Observation, Identity, PleaHearing
+from .models import Observation, Identity, PleaHearing, Station
 
 def index(request):
     return render(request, 'backoffice/index.html', {})
+
+def stations(request):
+    stations = Station.objects.exclude(verified=False, rejected=True)
+    response = {"stations": [station.name for station in stations]}
+    return JsonResponse(response)
 
 @csrf_exempt
 def observation(request):
