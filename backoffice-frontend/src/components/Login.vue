@@ -26,6 +26,9 @@
       </b-form>
     </div>
     <div v-else>
+      <b-modal id="gdpr-modal" title="GDPR notice" ok-only ok-title="Agree" @ok="submitReal">
+        <p class="my-4">By logging into and using the ArrestWatch backoffice, you agree to abide by our data collection and processing policies for GDPR compliance.</p>
+      </b-modal>
       <b-form @submit.prevent="submit">
         <b-form-group label="Username" label-cols="2" label-align="right">
           <b-form-input v-model="username"></b-form-input>
@@ -51,6 +54,7 @@ export default {
       newPassword: "",
       newPassword2: "",
       error: null,
+      gdprShown: false,
     }
   },
   computed: {
@@ -63,6 +67,14 @@ export default {
   },
   methods: {
     submit () {
+      if (!this.gdprShown) {
+        this.$root.$emit('bv::show::modal', 'gdpr-modal')
+        this.gdprShown = true
+      } else {
+        this.submitReal()
+      }
+    },
+    submitReal() {
       const body = { username: this.username, password: this.password }
       this.password = ""
       this.axios.post('/api/v1/login', body).then((res) => {
