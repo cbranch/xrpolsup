@@ -14,6 +14,14 @@ def stations(request):
     response = {"stations": [station.name for station in stations]}
     return JsonResponse(response)
 
+def station_regions(request):
+    stations = Station.objects.exclude(verified=False, rejected=True)
+    regions = {}
+    for station in stations:
+        regions.setdefault(station.region.name, []).append(station.name)
+    response = {"regions": regions}
+    return JsonResponse(response)
+
 @csrf_exempt
 def observation(request):
     if request.method != 'POST':
