@@ -21,6 +21,18 @@
           <b-form-checkbox class="mx-4" v-model="showHidden">Show deleted</b-form-checkbox>
         </b-input-group-append>
       </b-input-group>
+      <b-input-group size="sm">
+        <multiselect
+          v-model="selectedStations"
+          :options="stationList"
+          :multiple="true"
+          :close-on-select="true"
+          placeholder="Filter by station"
+          group-label="region"
+          group-values="stations"
+          :group-select="true"
+          ></multiselect>
+      </b-input-group>
     </b-form-group>
     <b-pagination
       v-model="currentPage"
@@ -33,7 +45,8 @@
       id="report-table"
       :items="reportList"
       :fields="reportFields"
-      :filter="filter"
+      :filter="compositeFilter"
+      :filter-function="filterTable"
       :per-page="perPage"
       :current-page="currentPage"
       primary-key="id"
@@ -131,13 +144,19 @@
 </template>
 
 <script>
+import Multiselect from 'vue-multiselect'
+
 export default {
+  components: {
+    Multiselect
+  },
   data () {
     return {
       perPage: 50,
       currentPage: 1,
       filter: null,
       showHidden: false,
+      selectedStations: null,
       editReportModal: {
         id: null,
         station: null,
@@ -180,6 +199,35 @@ export default {
     },
     rows () {
       return this.$store.getters.filteredReports.length
+    },
+    compositeFilter() {
+      var v = {}
+      if (this.filter != null && this.filter != '') {
+        v.text = this.filter
+      }
+      if (this.selectedStations != null && this.selectedStations.length > 0) {
+        v.stations = this.selectedStations
+      }
+      if (Object.keys(v).length > 0) {
+        return v
+      } else {
+        return null
+      }
+    }
+  },
+  asyncComputed: {
+    stationList: {
+      async get () {
+        var stationList = await this.$http.get('/api/v2/station_regions');
+        var options = Object.entries(stationList.data.regions).sort((a, b) => a[0].localeCompare(b[0])).flatMap(([region, stations]) => {
+          return {
+            region: region,
+            stations: stations,
+          }
+        });
+        return options
+      },
+      default: [ { value: null, text: "All stations" }]
     }
   },
   methods: {
@@ -216,7 +264,24 @@ export default {
     deleteReport() {
       this.editReportModal.isHidden = true
       this.commitEditReport()
+    },
+    filterTable(row, filter) {
+      const {text, stations} = filter;
+      for (var field in row) {
+        if (!row.hasOwnProperty(field)) {
+          continue
+        }
+        var value = row[field]
+        if (field == 'station' && stations != null && stations.includes(value)) {
+          return true
+        }
+        if (typeof value === 'string' && text != null && value.search(text) >= 0) {
+          return true
+        }
+      }
+      return false
     }
   }
 }
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

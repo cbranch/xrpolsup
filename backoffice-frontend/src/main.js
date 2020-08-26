@@ -11,12 +11,14 @@ import App from './App.vue'
 import router from './router.js'
 import Datetime from 'vue-datetime'
 import 'vue-datetime/dist/vue-datetime.css'
+import AsyncComputed from 'vue-async-computed'
 
 Vue.config.productionTip = false
 
 Vue.use(Vuex)
 Vue.use(VueAxios, axios)
 Vue.use(Datetime)
+Vue.use(AsyncComputed)
 
 var filterDateStart = new Date(Date.now() - 1000*60*60*24)
 filterDateStart.setMinutes(0, 0, 0)

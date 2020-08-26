@@ -15,8 +15,16 @@ module.exports = {
   lintOnSave: 'error',
   devServer: {
     proxy: {
-      '/api': {
+      '/api/v1': {
         target: 'http://localhost:1337',
+        changeOrigin: true
+      },
+      '/api/v2': {
+        target: 'http://localhost:8000',
+        changeOrigin: true
+      },
+      '/ws/': {
+        target: 'http://localhost:8000',
         changeOrigin: true
       }
     }
