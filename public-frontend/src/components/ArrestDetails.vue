@@ -10,6 +10,7 @@
         </b-form-group>
         <b-form-group label="Do you have any concerns to report regarding this arrest?">
           <b-form-checkbox-group v-model="concerns" @input="update" stacked>
+            <b-form-checkbox value="handcuffs">Handcuffs?</b-form-checkbox>
             <b-form-checkbox value="mentalDistress">Mental distress?</b-form-checkbox>
             <b-form-checkbox value="physicalDistress">Physical distress?</b-form-checkbox>
             <b-form-checkbox value="minor">Minor</b-form-checkbox>

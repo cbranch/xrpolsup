@@ -55,6 +55,7 @@ module.exports = {
           concernPolicePrejudice: concerns.includes("policePrejudice"),
           concernMedicationNeed: concerns.includes("medicationNeed"),
           medicationName: medicationName || "",
+          concernHandcuffs: concerns.includes("handcuffs"),
           observations: observations || "",
           comment: comment || "",
           witness: witness.id,

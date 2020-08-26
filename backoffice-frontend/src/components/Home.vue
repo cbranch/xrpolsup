@@ -61,6 +61,7 @@
         {{ new Date(data.value).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }) }}
       </template>
       <template v-slot:cell(concerns)="data">
+        <div v-if="data.item.concernHandcuffs">Handcuffs</div>
         <div v-if="data.item.concernMentalDistress">Mental distress</div>
         <div v-if="data.item.concernPhysicalDistress">Physical distress</div>
         <div v-if="data.item.concernMinor">Minor</div>
@@ -109,6 +110,7 @@
             <p>Concerns</p>
           </b-col>
           <b-col>
+            <b-form-checkbox v-model="editReportModal.concernHandcuffs">Handcuffs?</b-form-checkbox>
             <b-form-checkbox v-model="editReportModal.concernMentalDistress">Mental distress?</b-form-checkbox>
             <b-form-checkbox v-model="editReportModal.concernPhysicalDistress">Physical distress?</b-form-checkbox>
             <b-form-checkbox v-model="editReportModal.concernMinor">Minor</b-form-checkbox>
@@ -170,6 +172,7 @@ export default {
         concernPoliceBehaviour: false,
         concernPolicePrejudice: false,
         concernMedicationNeed: false,
+        concernHandcuffs: false,
         medicationName: null,
         observations: null,
         witness: null,

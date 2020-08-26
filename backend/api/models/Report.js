@@ -16,6 +16,7 @@ module.exports = {
       concernPolicePrejudice: { type: 'boolean', defaultsTo: false },
       concernMedicationNeed: { type: 'boolean', defaultsTo: false },
       medicationName: { type: 'string' },
+      concernHandcuffs: { type: 'boolean', defaultsTo: false },
       observations: { type: 'string' },
       comment: { type: 'string' },
       witness: { model: 'witness' },
