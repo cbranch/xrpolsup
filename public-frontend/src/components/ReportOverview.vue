@@ -11,7 +11,7 @@
           <YesNo v-model="stationKnown" />
         </b-form-group>
         <b-form-group v-if="stationKnown === true" label="What is the station name?">
-          <b-form-input v-model="stationName" placeholder="Station name"></b-form-input>
+          <StationSearch v-model="stationName"></StationSearch>
         </b-form-group>
         <b-form-group v-if="stationKnown === false" label="Can you find out?">
           <YesNo v-model="stationToBeFoundOut" />
@@ -51,11 +51,13 @@
 <script>
 import YesNo from './YesNo.vue'
 import SimpleDatePicker from './SimpleDatePicker.vue'
+import StationSearch from './StationSearch.vue'
 
 export default {
   components: {
     YesNo,
-    SimpleDatePicker
+    SimpleDatePicker,
+    StationSearch,
   },
   props: ['value'],
   data () {

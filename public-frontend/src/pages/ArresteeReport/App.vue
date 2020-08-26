@@ -47,7 +47,7 @@
           <b-form-input id="input-court-location" v-model="courtLocation"></b-form-input>
         </b-form-group>
         <b-form-group label="Police Station" label-for="input-police-station">
-          <b-form-input id="input-police-station" v-model="policeStation"></b-form-input>
+          <StationSearch id="input-police-station" v-model="policeStation"></StationSearch>
         </b-form-group>
         <b-form-group label="Local XR group" label-for="input-local-xr-group">
           <b-form-input id="input-local-xr-group" v-model="localXrGroup"></b-form-input>
@@ -132,8 +132,13 @@
 </template>
 
 <script>
+import StationSearch from '../../components/StationSearch.vue'
+
 export default {
   name: 'ArresteeReport',
+  components: {
+    StationSearch,
+  },
   data () {
     return {
       name: null,

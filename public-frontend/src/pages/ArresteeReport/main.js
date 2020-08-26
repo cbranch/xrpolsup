@@ -9,12 +9,15 @@ import ArresteeReport from './App.vue'
 import VueScrollTo  from 'vue-scrollto'
 import Datetime from 'vue-datetime'
 import 'vue-datetime/dist/vue-datetime.css'
+import Autocomplete from '@trevoreyre/autocomplete-vue'
+import '@trevoreyre/autocomplete-vue/dist/style.css'
 
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.use(VueScrollTo)
 Vue.use(Vuex)
 Vue.use(Datetime)
+Vue.use(Autocomplete)
 
 const store = new Vuex.Store({
   state: {

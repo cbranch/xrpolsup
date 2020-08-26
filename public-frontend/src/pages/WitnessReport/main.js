@@ -5,12 +5,15 @@ import Vuex from 'vuex'
 import '../../plugins/bootstrap-vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import Autocomplete from '@trevoreyre/autocomplete-vue'
+import '@trevoreyre/autocomplete-vue/dist/style.css'
 import WitnessReport from './App.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 
 Vue.use(Vuex)
+Vue.use(Autocomplete)
 
 const store = new Vuex.Store({
   state: {
