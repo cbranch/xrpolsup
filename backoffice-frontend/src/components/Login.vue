@@ -27,7 +27,10 @@
     </div>
     <div v-else>
       <b-modal id="gdpr-modal" title="GDPR notice" ok-only ok-title="Agree" @ok="submitReal">
-        <p class="my-4">By logging into and using the ArrestWatch backoffice, you agree to abide by our data collection and processing policies for GDPR compliance.</p>
+        <p class="my-4">
+          In order to proceed, please confirm you have read and agreed XR's Volunteer agreement:<br>
+          <a href="https://actionnetwork.org/forms/xr-data-protection-agreement-2">https://actionnetwork.org/forms/xr-data-protection-agreement-2</a>
+        </p>
       </b-modal>
       <b-form @submit.prevent="submit">
         <b-form-group label="Username" label-cols="2" label-align="right">
