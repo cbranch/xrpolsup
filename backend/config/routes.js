@@ -22,6 +22,12 @@ function setUpdatedAtMinimumTime(criteria) {
   }
 }
 
+function parseBlueprintOptionsWithDateRestriction(req) {
+  var queryOptions = req._sails.hooks.blueprints.parseBlueprintOptions(req);
+  setUpdatedAtMinimumTime(queryOptions.criteria);
+  return queryOptions;
+}
+
 module.exports.routes = {
 
   /***************************************************************************
@@ -46,11 +52,17 @@ module.exports.routes = {
 
   'GET /api/v1/report': {
     action: 'report/find',
-    parseBlueprintOptions: function (req) {
-      var queryOptions = req._sails.hooks.blueprints.parseBlueprintOptions(req);
-      setUpdatedAtMinimumTime(queryOptions.criteria)
-      return queryOptions;
-    },
+    parseBlueprintOptions: parseBlueprintOptionsWithDateRestriction,
+  },
+
+  'GET /api/v1/calllog': {
+    action: 'calllog/find',
+    parseBlueprintOptions: parseBlueprintOptionsWithDateRestriction,
+  },
+
+  'GET /api/v1/legalobserverlog': {
+    action: 'legalobserverlog/find',
+    parseBlueprintOptions: parseBlueprintOptionsWithDateRestriction,
   },
 
 };
