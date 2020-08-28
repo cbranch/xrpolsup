@@ -18,8 +18,8 @@
         <b-form-group id="label-fullname" label="Full name / Alias" label-for="input-fullname" :invalid-feedback="isValidName.reason" :state="isValidName.valid">
           <b-form-input id="input-fullname" v-model="name" :state="isValidName.valid"></b-form-input>
         </b-form-group>
-        <b-form-group id="label-datetime" label="When did this arrest take place?" label-for="input-time" :invalid-feedback="isValidDatetime.reason" :state="isValidDatetime.valid">
-          <datetime id="input-datetime" type="datetime" v-model="datetime" :state="isValidDatetime.valid" :max-datetime="new Date().toISOString()" />
+        <b-form-group id="label-datetime" label="When did this arrest take place?" label-for="input-datetime" :invalid-feedback="isValidDatetime.reason" :state="isValidDatetime.valid">
+          <datetime id="input-datetime" type="datetime" input-class="form-control" v-model="datetime" :state="isValidDatetime.valid" :max-datetime="new Date().toISOString()" />
         </b-form-group>
         <b-form-group id="label-location" label="Where did this arrest take place?" label-for="input-location" :invalid-feedback="isValidLocation.reason" :state="isValidLocation.valid">
           <b-form-input id="input-location" v-model="location" :state="isValidLocation.valid" placeholder="Place name"></b-form-input>

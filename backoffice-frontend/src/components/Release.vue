@@ -67,7 +67,7 @@
               <b-form-input id="input-fullname" v-model="editReleaseModal.name"></b-form-input>
             </b-form-group>
             <b-form-group label="Arrest time" label-for="input-time" label-cols-md="3">
-              <datetime type="datetime" id="input-arrestTime" v-model="editReleaseModal.arrestTime"></datetime>
+              <datetime type="datetime" id="input-arrestTime" input-class="form-control" v-model="editReleaseModal.arrestTime"></datetime>
             </b-form-group>
             <b-form-group label="Arrest location" label-for="input-location" label-cols-md="3">
               <b-form-input id="input-location" v-model="editReleaseModal.location"></b-form-input>

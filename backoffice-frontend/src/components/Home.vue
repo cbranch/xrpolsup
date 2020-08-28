@@ -92,7 +92,7 @@
               <b-form-input id="input-station" v-model="editReportModal.station"></b-form-input>
             </b-form-group>
             <b-form-group label="Arrest Time" label-for="input-arrestTime" label-cols-md="3">
-              <datetime type="datetime" id="input-arrestTime" v-model="editReportModal.arrestTime"></datetime>
+              <datetime type="datetime" id="input-arrestTime" input-class="form-control" v-model="editReportModal.arrestTime"></datetime>
             </b-form-group>
             <b-form-group label="Location" label-for="input-location" label-cols-md="3">
               <b-form-input id="input-location" v-model="editReportModal.location"></b-form-input>

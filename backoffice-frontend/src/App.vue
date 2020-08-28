@@ -16,7 +16,7 @@
           <b-nav-item :to="{ name: 'CallLog' }">Call log</b-nav-item>
           <b-nav-item :to="{ name: 'Users' }">Users</b-nav-item>
           <b-nav-form>
-            View data from:&nbsp;<datetime type="datetime" v-model="filterDateStart"></datetime>
+            View data from:&nbsp;<datetime type="datetime" input-class="form-control" v-model="filterDateStart"></datetime>
           </b-nav-form>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">

@@ -19,7 +19,7 @@
           <b-form-input id="input-court" v-model="court" :state="isValidCourt.valid"></b-form-input>
         </b-form-group>
         <b-form-group id="label-date" label="Hearing date" label-for="input-date" :invalid-feedback="isValidDate.reason" :state="isValidDate.valid" label-cols-lg="3">
-          <datetime id="input-date" type="date" v-model="date" :state="isValidDate.valid" :max-datetime="new Date().toISOString()" />
+          <datetime id="input-date" type="date" input-class="form-control" v-model="date" :state="isValidDate.valid" :max-datetime="new Date().toISOString()" />
         </b-form-group>
         <b-form-group id="label-bench" label="Bench (DJ or JPs)" label-for="input-bench" :invalid-feedback="isValidBench.reason" :state="isValidBench.valid" label-cols-lg="3">
           <b-form-input id="input-bench" v-model="bench" :state="isValidBench.valid"></b-form-input>
