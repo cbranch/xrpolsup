@@ -27,11 +27,8 @@
           <b-form-group v-if="isMassArrest == '2'" label="How many?" :invalid-feedback="isValidArrestCount.reason" :state="isValidArrestCount.valid">
             <b-form-input v-model="arrestCount" type="number"></b-form-input>
           </b-form-group>
-          <b-form-group label="When did this arrest take place?" label-for="input-time" :invalid-feedback="isValidTime.reason" :state="isValidTime.valid">
-            <b-form-input id="input-time" v-model="time" :state="isValidTime.valid" placeholder="24-hour time, e.g. 13:00"></b-form-input>
-          </b-form-group>
-          <b-form-group :invalid-feedback="isValidDate.reason" :state="isValidDate.valid">
-            <SimpleDatePicker id="input-date" v-model="date" :state="isValidDate.valid" />
+          <b-form-group label="When did this arrest take place?" label-for="input-datetime" :invalid-feedback="isValidDatetime.reason" :state="isValidDatetime.valid">
+            <datetime id="input-datetime" type="datetime" input-class="form-control" v-model="datetime" :state="isValidDatetime.valid" :max-datetime="new Date().toISOString()" />
           </b-form-group>
           <b-form-group label="Where did this arrest take place?" label-for="input-location" :invalid-feedback="isValidLocation.reason" :state="isValidLocation.valid">
             <b-form-input id="input-location" v-model="location" :state="isValidLocation.valid" placeholder="Place name"></b-form-input>
@@ -50,13 +47,11 @@
 
 <script>
 import YesNo from './YesNo.vue'
-import SimpleDatePicker from './SimpleDatePicker.vue'
 import StationSearch from './StationSearch.vue'
 
 export default {
   components: {
     YesNo,
-    SimpleDatePicker,
     StationSearch,
   },
   props: ['value'],
@@ -73,8 +68,7 @@ export default {
         stationName: null,
         witnessEmail: null,
         arrestCount: null,
-        time: null,
-        date: null,
+        datetime: null,
         location: null,
       }
     },
@@ -123,38 +117,19 @@ export default {
         return { valid: true }
       }
     },
-    time: {
+    datetime: {
       get() {
-        return this.localValue.time
+        return this.localValue.datetime
       },
       set(value) {
-        this.$emit('input', { ...this.localValue, time: value })
+        this.$emit('input', { ...this.localValue, datetime: value })
       },
     },
-    isValidTime () {
-      if (this.time == null) {
+    isValidDatetime () {
+      if (this.datetime == null) {
         return { valid: null }
-      } else if (this.time == "") {
-        return { valid: false, reason: 'A valid time must be provided' }
-      } else if (!this.time.match(/^([01]?\d|2[0-3]):[0-5]\d$/)) {
-        return { valid: false, reason: 'Please enter the time in 24-hour format with a colon, hh:mm' }
-      } else {
-        return { valid: true }
-      }
-    },
-    date: {
-      get() {
-        return this.localValue.date
-      },
-      set(value) {
-        this.$emit('input', { ...this.localValue, date: value })
-      },
-    },
-    isValidDate () {
-      if (this.date == null) {
-        return { valid: null }
-      } else if (this.date == '') {
-        return { valid: false, reason: 'Please select a date' }
+      } else if (this.datetime == '') {
+        return { valid: false, reason: 'Please select a date and time' }
       } else {
         return { valid: true }
       }
@@ -177,7 +152,7 @@ export default {
       }
     },
     valid () {
-      return this.isValidArrestCount.valid && this.isValidTime.valid && this.isValidDate.valid && this.isValidLocation.valid
+      return this.isValidArrestCount.valid && this.isValidDatetime.valid && this.isValidLocation.valid
     }
   },
   methods: {
@@ -186,11 +161,8 @@ export default {
       if (this.arrestCount == null) {
         setDefaults.arrestCount = 0
       }
-      if (this.time == null) {
-        setDefaults.time = ''
-      }
-      if (this.date == null) {
-        setDefaults.date = ''
+      if (this.datetime == null) {
+        setDefaults.datetime = ''
       }
       if (this.location == null) {
         setDefaults.location = ''

@@ -119,9 +119,10 @@ export default {
         witnessEmail: this.reportOverview.witnessEmail,
         arrestees: this.populatedArrestees.map(x => {
           var arrestee = x.details != null ? x.details : {}
+          const dateParts = /([\d-]*)T(\d+:\d+):.*Z/.exec(this.reportOverview.datetime)
           return {
-            time: this.reportOverview.time,
-            date: this.reportOverview.date,
+            date: dateParts[1],
+            time: dateParts[2],
             location: this.reportOverview.location,
             name: arrestee.name,
             arrestingOfficerId: arrestee.arrestingOfficerId,
