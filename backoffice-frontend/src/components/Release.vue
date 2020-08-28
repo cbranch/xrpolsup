@@ -212,7 +212,6 @@ export default {
     },
     commitEditRelease () {
       var postData = Object.assign({}, this.editReleaseModal)
-      postData.arrestTime = Date.parse(this.editReleaseModal.arrestTime).valueOf()
       this.$io.socket.put('/api/v1/release/' + this.editReleaseModal.id, postData, (resData, jwRes) => {
         if (jwRes.statusCode == 200) {
           this.$store.commit('setRelease', resData)

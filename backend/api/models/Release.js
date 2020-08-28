@@ -3,7 +3,7 @@ module.exports = {
       name: { type: 'string' },
       arrestTime: {
         type: 'ref',
-        columnType: 'bigint',
+        columnType: 'timestamptz',
         required: true,
       },
       location: { type: 'string', required: true },
