@@ -117,6 +117,7 @@ export default {
       let report = {
         stationName: this.reportOverview.stationName,
         witnessEmail: this.reportOverview.witnessEmail,
+        isHS2Action: this.reportOverview.isHS2Action,
         arrestees: this.populatedArrestees.map(x => {
           var arrestee = x.details != null ? x.details : {}
           const dateParts = /([\d-]*)T(\d+:\d+):.*Z/.exec(this.reportOverview.datetime)

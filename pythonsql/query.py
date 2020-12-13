@@ -110,7 +110,9 @@ queries = {
         NULL AS "_",
         "bailConditions" AS "Bail Conditions",
         NULL AS "_",
-        "comment" AS "COMMENTS"
+        "comment" AS "COMMENTS",
+        "isHS2Action" AS "Is HS2 Action",
+        "isPartOfXR" AS "Is Part of XR"
         FROM "release"
         WHERE to_timestamp("release"."updatedAt"/1000) > (NOW() - interval '7 days')
         """,

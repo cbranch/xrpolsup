@@ -21,5 +21,6 @@ module.exports = {
       comment: { type: 'string' },
       witness: { model: 'witness' },
       isHidden: { type: 'boolean', defaultsTo: false },
+      isHS2Action: { type: 'boolean', defaultsTo: false },
     },
   };

@@ -29,5 +29,7 @@ module.exports = {
       canShareWithXRPress: { type: 'boolean', defaultsTo: false },
       comment: { type: 'string' },
       isHidden: { type: 'boolean', defaultsTo: false },
+      isHS2Action: { type: 'boolean', defaultsTo: false },
+      isPartOfXR: { type: 'boolean', defaultsTo: false },
     },
   };

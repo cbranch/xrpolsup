@@ -2,23 +2,26 @@
   <b-container fluid>
     <h2>Report list</h2>
     <b-form-group
-      label="Filter"
       label-cols-sm="1"
       label-align-sm="right"
       label-size="sm"
       label-for="filterInput"
       class="mb-2"
     >
-      <b-input-group size="sm">
+      <b-input-group size="sm" prepend="Filter">
         <b-form-input
           v-model="filter"
-          type="search"
           id="filterInput"
           placeholder="Type to Search"
         ></b-form-input>
         <b-input-group-append>
           <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
-          <b-form-checkbox class="mx-4" v-model="showHidden">Show deleted</b-form-checkbox>
+          <b-form-checkbox v-model="showHidden" button>Show&nbsp;deleted</b-form-checkbox>
+          <b-form-select v-model="showHS2">
+            <b-form-select-option :value="null">Filter HS2?</b-form-select-option>
+            <b-form-select-option :value="true">Show HS2</b-form-select-option>
+            <b-form-select-option :value="false">Hide HS2</b-form-select-option>
+          </b-form-select>
         </b-input-group-append>
       </b-input-group>
       <b-input-group size="sm">
@@ -73,6 +76,9 @@
         <b-button v-if="data.item.comment" v-b-popover.hover.top="data.item.comment" title="Comment" size="sm">
           Show
         </b-button>
+      </template>
+      <template v-slot:cell(isHS2Action)="data">
+        {{ data.value ? '🚄' : '' }}
       </template>
       <template v-slot:cell(actions)="data">
         <b-button size="sm" @click="editReport(data.item, $event.target)">Edit</b-button>
@@ -133,6 +139,7 @@
             <b-form-group label="Comment" label-for="input-comment" label-cols-md="3">
               <b-form-textarea id="input-comment" v-model="editReportModal.comment" rows="3" max-rows="10"></b-form-textarea>
             </b-form-group>
+            <b-form-checkbox v-model="editReportModal.isHS2Action">Is this part of an HS2 action?</b-form-checkbox>
           </b-col>
         </b-row>
       </b-container>
@@ -158,6 +165,7 @@ export default {
       currentPage: 1,
       filter: null,
       showHidden: false,
+      showHS2: null,
       selectedStations: null,
       editReportModal: {
         id: null,
@@ -177,6 +185,7 @@ export default {
         observations: null,
         witness: null,
         comment: null,
+        isHS2Action: false,
         isHidden: null,
       }
     }
@@ -194,11 +203,16 @@ export default {
         { key: 'concerns', sortable: true },
         { key: 'observations' },
         { key: 'comment' },
+        { key: 'isHS2Action', label: 'HS2' },
         { key: 'actions', label: '' },
       ]
     },
     reportList () {
-      return this.$store.getters.filteredReports.filter((x) => x.isHidden == this.showHidden)
+      var reports = this.$store.getters.filteredReports.filter((x) => x.isHidden == this.showHidden)
+      if (this.showHS2 != null) {
+        reports = reports.filter((x) => x.isHS2Action == this.showHS2)
+      }
+      return reports
     },
     rows () {
       return this.$store.getters.filteredReports.length

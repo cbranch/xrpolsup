@@ -109,6 +109,9 @@
         </b-form-group>
 
         <p>Contact us at xr-legal@riseup.net &amp; XR-ArrestWelfare@protonmail.com for further support.</p>
+
+        <p><b-form-checkbox id="isHS2Action" v-model="isHS2Action">Is this part of an HS2 action?</b-form-checkbox></p>
+        <p><b-form-checkbox id="isPartOfXR" v-model="isPartOfXR">Do you consider yourself a member of XR?</b-form-checkbox></p>
       </b-col>
     </b-row>
     <b-row class="my-4">
@@ -170,6 +173,8 @@ export default {
       contactByPhone: null,
       canShareWithLocalXRGroup: false,
       canShareWithXRPress: false,
+      isHS2Action: false,
+      isPartOfXR: false,
       submitted: false,
       isSubmitting: false,
       errors: [],
@@ -265,6 +270,8 @@ export default {
         contactByPhone: this.wantContactByPhone ? this.contactByPhone : '',
         canShareWithXRPress: this.canShareWithXRPress,
         canShareWithLocalXRGroup: this.canShareWithLocalXRGroup,
+        isHS2Action: this.isHS2Action,
+        isPartOfXR: this.isPartOfXR,
         submitted: this.submitted,
       }
       this.isSubmitting = true

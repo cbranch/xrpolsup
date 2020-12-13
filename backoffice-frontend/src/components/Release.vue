@@ -2,14 +2,13 @@
   <b-container fluid>
     <h2>Post-release report list</h2>
     <b-form-group
-      label="Filter"
       label-cols-sm="2"
       label-align-sm="right"
       label-size="sm"
       label-for="filterInput"
       class="mb-2"
     >
-      <b-input-group size="sm">
+      <b-input-group size="sm" prepend="Filter">
         <b-form-input
           v-model="filter"
           type="search"
@@ -18,7 +17,12 @@
         ></b-form-input>
         <b-input-group-append>
           <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
-          <b-form-checkbox class="mx-4" v-model="showHidden">Show deleted</b-form-checkbox>
+          <b-form-checkbox v-model="showHidden" button>Show&nbsp;deleted</b-form-checkbox>
+          <b-form-select v-model="showHS2">
+            <b-form-select-option :value="null">Filter HS2?</b-form-select-option>
+            <b-form-select-option :value="true">Show HS2</b-form-select-option>
+            <b-form-select-option :value="false">Hide HS2</b-form-select-option>
+          </b-form-select>
         </b-input-group-append>
       </b-input-group>
     </b-form-group>
@@ -48,6 +52,12 @@
         <b-button v-if="data.item.comment" v-b-popover.hover.top="data.item.comment" title="Comment" size="sm">
           Show
         </b-button>
+      </template>
+      <template v-slot:cell(isHS2Action)="data">
+        {{ data.value ? '🚄' : '' }}
+      </template>
+      <template v-slot:cell(isPartOfXR)="data">
+        {{ data.value ? '⌛️' : '' }}
       </template>
       <template v-slot:cell(actions)="data">
         <b-button size="sm" @click="editRelease(data.item, $event.target)">Edit</b-button>
@@ -136,6 +146,8 @@
             <b-form-group label="Comment" label-for="input-comment" label-cols-md="3">
               <b-form-textarea id="input-comment" v-model="editReleaseModal.comment" rows="3" max-rows="10"></b-form-textarea>
             </b-form-group>
+            <b-form-checkbox v-model="editReleaseModal.isHS2Action">Is this part of an HS2 action?</b-form-checkbox>
+            <b-form-checkbox v-model="editReleaseModal.isPartOfXR">Do you consider yourself a member of XR?</b-form-checkbox>
           </b-col>
         </b-row>
       </b-container>
@@ -152,6 +164,7 @@ export default {
       currentPage: 1,
       filter: null,
       showHidden: false,
+      showHS2: null,
       editReleaseModal: {
         id: null,
         name: null,
@@ -179,6 +192,8 @@ export default {
         canShareWithXRPress: null,
         comment: null,
         isHidden: null,
+        isHS2Action: null,
+        isPartOfXR: null,
       }
     }
   },
@@ -194,11 +209,17 @@ export default {
         { key: 'numberRebels', label: 'With # Rebels', sortable: true },
         { key: 'rebelsStillHeld', labels: '# still held', sortable: true },
         { key: 'comment' },
+        { key: 'isHS2Action', label: 'HS2' },
+        { key: 'isPartOfXR', label: 'XR' },
         { key: 'actions', label: '' },
       ]
     },
     reportList () {
-      return this.$store.getters.filteredReleases.filter((x) => x.isHidden == this.showHidden)
+      var reports = this.$store.getters.filteredReleases.filter((x) => x.isHidden == this.showHidden)
+      if (this.showHS2 != null) {
+        reports = reports.filter((x) => x.isHS2Action == this.showHS2)
+      }
+      return reports
     },
     rows () {
       return this.reportList.length

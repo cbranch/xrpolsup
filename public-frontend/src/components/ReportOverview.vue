@@ -33,6 +33,9 @@
           <b-form-group label="Where did this arrest take place?" label-for="input-location" :invalid-feedback="isValidLocation.reason" :state="isValidLocation.valid">
             <b-form-input id="input-location" v-model="location" :state="isValidLocation.valid" placeholder="Place name"></b-form-input>
           </b-form-group>
+          <b-form-group label="Is this part of an HS2 action?">
+            <YesNo v-model="isHS2Action" />
+          </b-form-group>
           <b-form-group label="Please leave your email address if you wish to be contacted." description="By completing this field you give your consent to Extinction Rebellion to hold your details securely.">
             <b-form-input v-model="witnessEmail" type="email"></b-form-input>
           </b-form-group>
@@ -70,6 +73,7 @@ export default {
         arrestCount: null,
         datetime: null,
         location: null,
+        isHS2Action: null,
       }
     },
     stationName: {
@@ -150,6 +154,14 @@ export default {
       } else {
         return { valid: true }
       }
+    },
+    isHS2Action: {
+      get() {
+        return this.localValue.isHS2Action
+      },
+      set(value) {
+        this.$emit('input', { ...this.localValue, isHS2Action: value })
+      },
     },
     valid () {
       return this.isValidArrestCount.valid && this.isValidDatetime.valid && this.isValidLocation.valid
