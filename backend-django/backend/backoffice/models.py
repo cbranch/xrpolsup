@@ -1,6 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from softdelete.models import SoftDeleteObject
+
+class User(AbstractUser):
+    pass
 
 class Identity(SoftDeleteObject, models.Model):
     pass

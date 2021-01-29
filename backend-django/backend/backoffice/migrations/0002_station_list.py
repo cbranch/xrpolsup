@@ -308,7 +308,7 @@ def create_station_list(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('backoffice', '0004_station_stationregion'),
+        ('backoffice', '0001_initial'),
     ]
 
     operations = [
