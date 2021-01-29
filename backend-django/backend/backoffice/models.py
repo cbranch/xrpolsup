@@ -1,13 +1,12 @@
 from django.db import models
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
+from django.contrib.auth.models import User
+from softdelete.models import SoftDeleteObject
 
-class Identity(models.Model):
+class Identity(SoftDeleteObject, models.Model):
     pass
 
-class Observation(models.Model):
+class Observation(SoftDeleteObject, models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
-    validTo = models.DateTimeField(null=True)
     identity = models.ForeignKey(Identity, on_delete=models.CASCADE)
     court = models.TextField()
     date = models.DateTimeField()
@@ -24,24 +23,8 @@ class Observation(models.Model):
     costs = models.TextField()
     notes = models.TextField()
 
-    def save(self, *args, **kwargs):
-        id = self.id
-        super().save(*args, **kwargs)
-        channel_layer = get_channel_layer()
-        if id:
-            async_to_sync(channel_layer.group_send)('observation', {'type': 'observation_updated', 'id': id})
-        else:
-            async_to_sync(channel_layer.group_send)('observation', {'type': 'observation_added', 'id': self.id})
-
-    def delete(self, *args, **kwargs):
-        id = self.id
-        super().delete(*args, **kwargs)
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)('observation', {'type': 'observation_deleted', 'id': id})
-
-class PleaHearing(models.Model):
+class PleaHearing(SoftDeleteObject, models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
-    validTo = models.DateTimeField(null=True)
     identity = models.ForeignKey(Identity, on_delete=models.CASCADE)
     name = models.TextField()
     email = models.TextField()
@@ -54,13 +37,13 @@ class PleaHearing(models.Model):
     consentToRecord = models.BooleanField()
     consentToPress = models.BooleanField()
 
-class StationRegion(models.Model):
+class StationRegion(SoftDeleteObject, models.Model):
     name = models.TextField()
 
     def __str__(self):
         return self.name
 
-class Station(models.Model):
+class Station(SoftDeleteObject, models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
     name = models.TextField()
     region = models.ForeignKey(StationRegion, on_delete=models.SET_NULL, null=True)
@@ -74,3 +57,64 @@ class Station(models.Model):
         if self.rejected:
             descriptor += " (rejected)"
         return "{}{}".format(self.name, descriptor)
+
+class CallLog(SoftDeleteObject, models.Model):
+    createdAt = models.DateTimeField(auto_now_add=True)
+    comment = models.TextField()
+    createdBy = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+class LegalObserverLog(SoftDeleteObject, models.Model):
+    createdAt = models.DateTimeField(auto_now_add=True)
+    comment = models.TextField()
+    createdBy = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+class Report(SoftDeleteObject, models.Model):
+    createdAt = models.DateTimeField(auto_now_add=True)
+    station = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True)
+    arrestTime = models.DateTimeField()
+    location = models.TextField()
+    name = models.TextField()
+    arrestingOfficerId = models.TextField()
+    consentToContact = models.BooleanField()
+    concernMentalDistress = models.BooleanField()
+    concernPhysicalDistress = models.BooleanField()
+    concernMinor = models.BooleanField()
+    concernPoliceBehaviour = models.BooleanField()
+    concernPolicePrejudice = models.BooleanField()
+    concernMedicationNeed = models.BooleanField()
+    medicationName = models.TextField()
+    concernHandcuffs = models.BooleanField()
+    observations = models.TextField()
+    comment = models.TextField()
+    witness = models.ForeignKey(Identity, on_delete=models.CASCADE)
+    isHS2Action = models.BooleanField()
+
+class Release(SoftDeleteObject, models.Model):
+    createdAt = models.DateTimeField(auto_now_add=True)
+    name = models.TextField()
+    arrestTime = models.DateTimeField()
+    location = models.TextField()
+    offence = models.TextField()
+    termsOfRelease = models.TextField()
+    charges = models.TextField()
+    bailConditions = models.TextField()
+    courtDate = models.TextField()
+    courtLocation = models.TextField()
+    policeStation = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True)
+    localXRGroup = models.TextField()
+    nearestCity = models.TextField()
+    injuries = models.TextField()
+    adverseEvents = models.TextField()
+    heldMoreThan24Hours = models.BooleanField()
+    helpNeeded = models.TextField()
+    specialRequest = models.TextField()
+    numberRebels = models.IntegerField()
+    rebelsStillHeld = models.IntegerField()
+    email = models.TextField()
+    phone = models.TextField()
+    canShareWithLocalXRGroup = models.BooleanField()
+    canShareWithXRPress = models.BooleanField()
+    comment = models.TextField()
+    isHS2Action = models.BooleanField()
+    isPartOfXR = models.BooleanField()
+    identity = models.ForeignKey(Identity, on_delete=models.CASCADE, null=True)
