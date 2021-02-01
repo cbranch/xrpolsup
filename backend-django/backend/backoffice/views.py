@@ -1,10 +1,14 @@
 import json
+from django.contrib.auth.models import Group
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseNotAllowed
 from django.views.decorators.csrf import csrf_exempt
 import django.utils.timezone
+from rest_framework import viewsets
+from rest_framework import permissions
 
-from .models import Observation, Identity, PleaHearing, Station
+from .models import User, Observation, Identity, PleaHearing, Station, CallLog, LegalObserverLog, Report, Release
+from . import serializers
 
 def index(request):
     return render(request, 'backoffice/index.html', {})
@@ -77,3 +81,51 @@ def plea_hearing(request):
     ph.save()
 
     return JsonResponse({})
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = serializers.UserSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = serializers.GroupSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+class CallLogViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = CallLog.objects.all()
+    serializer_class = serializers.CallLogSerializer
+    permission_classes = [permissions.DjangoModelPermissions]
+
+class LegalObserverLogViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = LegalObserverLog.objects.all()
+    serializer_class = serializers.LegalObserverLogSerializer
+    permission_classes = [permissions.DjangoModelPermissions]
+
+class ReportViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Report.objects.all()
+    serializer_class = serializers.ReportSerializer
+    permission_classes = [permissions.DjangoModelPermissions]
+
+class ReleaseViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Release.objects.all()
+    serializer_class = serializers.ReleaseSerializer
+    permission_classes = [permissions.DjangoModelPermissions]
