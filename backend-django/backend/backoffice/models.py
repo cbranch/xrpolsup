@@ -68,6 +68,10 @@ class CallLog(SoftDeleteObject, models.Model):
 
 class LegalObserverLog(SoftDeleteObject, models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
+    name = models.TextField()
+    phone = models.TextField()
+    onShift = models.BooleanField()
+    location = models.TextField()
     comment = models.TextField()
     createdBy = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
