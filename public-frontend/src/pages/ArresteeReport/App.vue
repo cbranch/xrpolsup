@@ -275,7 +275,7 @@ export default {
         submitted: this.submitted,
       }
       this.isSubmitting = true
-      this.axios.post('/api/v1/arrestee_report', report).then(() => {
+      this.axios.post('/api/v2/arrestee_report', report).then(() => {
         this.isSubmitting = false
         this.submitted = true
       }, error => {

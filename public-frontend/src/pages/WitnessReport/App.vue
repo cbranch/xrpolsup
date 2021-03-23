@@ -135,7 +135,7 @@ export default {
         }),
       }
       this.isSubmitting = true
-      this.axios.post('/api/v1/station_report', report).then(() => {
+      this.axios.post('/api/v2/station_report', report).then(() => {
         this.isSubmitting = false
         this.submitted = true
       }, error => {

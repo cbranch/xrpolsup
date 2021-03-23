@@ -16,4 +16,6 @@ urlpatterns = [
     path('station_regions', views.station_regions, name='station_regions'),
     path('trial_observation', views.observation, name='observation'),
     path('plea_hearing', views.plea_hearing, name='plea_hearing'),
+    path('arrestee_report', views.arrestee_report, name='arrestee_report'),
+    path('station_report', views.station_report, name='station_report'),
 ]
