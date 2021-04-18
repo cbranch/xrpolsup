@@ -1,8 +1,8 @@
 - hosts: all
   become: yes
   roles:
-    - common
     - geerlingguy.nodejs
+    - geerlingguy.certbot
     - postgresql
     - nginx
     - redis

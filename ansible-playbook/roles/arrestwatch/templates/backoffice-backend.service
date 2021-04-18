@@ -1,0 +1,21 @@
+[Unit]
+Description=backoffice backend gunicorn daemon
+After=network.target
+
+[Service]
+User=arrestwatch
+Group=arrestwatch
+WorkingDirectory=/srv/arrestwatch/checkout/backend-django/backend
+ExecStartPre=/usr/bin/pipenv run ./manage.py migrate
+ExecStart=/usr/bin/pipenv run gunicorn --access-logfile - --workers 3 --bind unix:/srv/arrestwatch/server.sock backend.wsgi:application
+Environment=BACKOFFICE_SECRET_KEY={{ backoffice_secret }}
+Environment=BACKOFFICE_DB_ENGINE=django.db.backends.postgresql_psycopg2
+Environment=BACKOFFICE_DB_NAME={{ aw_db_name }}
+Environment=BACKOFFICE_DB_USER={{ aw_db_user }}
+Environment=BACKOFFICE_DB_PASSWORD={{ aw_db_pass }}
+Environment=BACKOFFICE_DB_HOST=localhost
+Environment=BACKOFFICE_DB_PORT=5432
+Environment=BASE_HOSTNAME={{ frontend_hostname }}
+
+[Install]
+WantedBy=multi-user.target

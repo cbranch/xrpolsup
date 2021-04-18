@@ -8,7 +8,9 @@
 - name: Install required packages
   apt:
     pkg:
+      - make
       - git
+      - pipenv
       - python-setuptools
       - python-psycopg2
 
@@ -33,6 +35,7 @@
   git:
     repo: 'https://{{ gitlab_user | urlencode }}:{{ gitlab_pass | urlencode }}@code.organise.earth/otterchaos/arrestwatch.git'
     dest: /srv/arrestwatch/checkout/
+    force: true
 
 - name: Make arrestwatch
   become: true
@@ -47,8 +50,12 @@
     cmd: node_modules/.bin/knex migrate:latest --env production
     chdir: /srv/arrestwatch/checkout/backend/
   environment:
-    DATABASE_URL: "postgresql://{{ aw_db_user }}:{{ aw_db_pass }}@localhost:5432/{{ aw_db_name }}"
+    DATABASE_URL: "postgresql://{{ aw_db_user }}:{{ aw_db_pass | urlencode }}@localhost:5432/{{ aw_db_name }}"
 
 - name: Create arrestwatch backend systemd service
   template: src=arrestwatch-backend.service dest=/etc/systemd/system/arrestwatch-backend.service
   notify: restart arrestwatch-backend
+
+- name: Create arrestwatch python backend systemd service
+  template: src=backoffice-backend.service dest=/etc/systemd/system/backoffice-backend.service
+  notify: restart backoffice-backend

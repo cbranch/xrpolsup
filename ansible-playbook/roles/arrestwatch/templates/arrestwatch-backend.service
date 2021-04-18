@@ -7,6 +7,7 @@ Environment=NODE_ENV=production
 Environment=sails_datastores__default__adapter=sails-postgresql
 Environment=sails_datastores__default__url=postgresql://{{ aw_db_user }}:{{ aw_db_pass }}@localhost:5432/{{ aw_db_name }}
 Environment=sails_custom__killSwitchToken=DefaultKillSwitch
+Environment=sails_custom__baseHostname={{ frontend_hostname }}
 Type=simple
 User=arrestwatch
 Group=arrestwatch

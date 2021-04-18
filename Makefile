@@ -16,6 +16,7 @@ public-frontend:
 
 backend:
 	cd backend && npm install
+	cd backend-django && pipenv install
 
 deploy:
 	sudo ./deploy.sh
