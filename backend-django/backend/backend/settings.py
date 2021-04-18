@@ -22,7 +22,8 @@ ALLOWED_HOSTS = []
 if 'BACKOFFICE_SECRET_KEY' in os.environ:
     SECRET_KEY = os.environ['BACKOFFICE_SECRET_KEY']
     DEBUG = False
-    ALLOWED_HOSTS = ['arrestwatch.info', 'backoffice.arrestwatch.info']
+    BASE_HOSTNAME = os.environ.get('BASE_HOSTNAME', 'arrestwatch.info')
+    ALLOWED_HOSTS = [BASE_HOSTNAME, 'backoffice.%s' % BASE_HOSTNAME]
 
 
 # Application definition

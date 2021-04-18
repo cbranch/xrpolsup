@@ -18,6 +18,7 @@
  * For more best practices and tips, see:
  * https://sailsjs.com/docs/concepts/deployment
  */
+const BASE_HOSTNAME = process.env.BASE_HOSTNAME || "arrestwatch.info"
 
 module.exports = {
 
@@ -253,10 +254,10 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     onlyAllowOrigins: [
-      'https://arrestwatch.info',
-      'https://backoffice.arrestwatch.info',
-      'http://arrestwatch.info',
-      'http://backoffice.arrestwatch.info',
+      'https://' + BASE_HOSTNAME,
+      'https://backoffice.' + BASE_HOSTNAME,
+      'http://' + BASE_HOSTNAME,
+      'http://backoffice.' + BASE_HOSTNAME,
     ],
 
 

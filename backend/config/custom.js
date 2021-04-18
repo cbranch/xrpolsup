@@ -19,5 +19,6 @@ module.exports.custom = {
   defaultLoginCookieMaxAge: 12*60*60*1000, // 12 hours
   rememberMeCookieMaxAge: 30*24*60*60*1000, // 30 days
   killSwitchToken: "ZZZ",
+  baseHostname: "arrestwatch.info",
 
 };

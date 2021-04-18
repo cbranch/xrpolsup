@@ -34,9 +34,9 @@ module.exports.http = {
       var backofficeMiddleware = serveStatic('.tmp/public/backoffice', { maxAge });
 
       return function (req,res,next) {
-        if (req.hostname == 'arrestwatch.info' || req.hostname == 'staging.arrestwatch.info') {
+        if (req.hostname == sails.config.custom.baseHostname) {
           return publicMiddleware(req, res, next);
-        } else if (req.hostname == 'backoffice.arrestwatch.info' || req.hostname == 'backoffice.staging.arrestwatch.info') {
+        } else if (req.hostname == 'backoffice.' + sails.config.custom.baseHostname) {
           return backofficeMiddleware(req, res, next);
         } else {
           return next();
