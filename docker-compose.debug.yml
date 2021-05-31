@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  backend:
+    image: backend
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: "production"
+      sails_datastores__default__adapter: "sails-postgresql"
+      sails_datastores__default__url: "postgresql://postgres:hunter12@db:5432/postgres"
+      sails_session__url: "redis://redis:6379/0"
+      sails_custom__killSwitchToken: "SomeRandomToken"
+    ports:
+      - 8080:8080
+      - 9229:9229
+    command: ["node", "--inspect=0.0.0.0:9229", "app.js"]
+    depends_on:
+      - "db"
+      - "redis"
+  db:
+    build:
+      context: backend
+      dockerfile: ./Dockerfile.db
+    environment:
+      POSTGRES_PASSWORD: hunter12
+  redis:
+    image: "redis:6"

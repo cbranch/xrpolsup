@@ -1,6 +1,10 @@
+const BASE_HOSTNAME = process.env.BASE_HOSTNAME || "arrestwatch.info"
+
 module.exports = {
   datastores: {
     default: {
+      adapter: "sails-postgresql",
+      url: "postgresql://postgres:hunter12@db:5432/postgres",
     },
   },
   models: {
@@ -15,16 +19,18 @@ module.exports = {
   },
   session: {
     adapter: '@sailshq/connect-redis',
-    url: 'redis://localhost:6379/0',
+    url: 'redis://redis:6379/0',
     cookie: {
-      secure: true,
+      secure: false,
       maxAge: 14 * 24 * 60 * 60 * 1000,  // 2 weeks
     },
   },
   sockets: {
     onlyAllowOrigins: [
-      'https://arrestwatch.chrisbranch.co.uk',
-      'https://backoffice-arrestwatch.chrisbranch.co.uk',
+      'https://' + BASE_HOSTNAME,
+      'https://backoffice.' + BASE_HOSTNAME,
+      'http://' + BASE_HOSTNAME,
+      'http://backoffice.' + BASE_HOSTNAME,
     ],
   },
   log: {
