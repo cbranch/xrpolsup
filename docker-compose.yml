@@ -8,11 +8,13 @@ services:
             - "9229:9229"
         environment:
             NODE_ENV: "production"
-            BASE_HOSTNAME: "arrestwatch.info:8088"
+            BASE_HOSTNAME: "${BASE_HOSTNAME}"
             sails_datastores__default__adapter: "sails-postgresql"
-            sails_datastores__default__url: "postgresql://postgres:hunter12@db:5432/postgres"
+            sails_datastores__default__url: "postgresql://postgres:${POSTGRES_PASSWORD}@db:5432/postgres"
+            sails_sockets__onlyAllowOrigins: '["http://backoffice.arrestwatch.test:8088", "https://backoffice.arrestwatch.test:8083"]'
             sails_session__url: "redis://redis:6379/0"
             sails_custom__killSwitchToken: "SomeRandomToken"
+            sails_custom__baseHostname: "${BASE_HOSTNAME}"
         depends_on:
             - "db"
             - "redis"
@@ -21,11 +23,12 @@ services:
         ports:
             - "8082:8080"
         environment:
-            BACKOFFICE_SECRET_KEY: "fD3W^R6T*U$r3KnCaiW7"
+            BASE_HOSTNAME: "${BASE_HOSTNAME}"
+            BACKOFFICE_SECRET_KEY: "${BACKOFFICE_SECRET_KEY}"
             BACKOFFICE_DB_ENGINE: django.db.backends.postgresql_psycopg2
             BACKOFFICE_DB_NAME: postgres
             BACKOFFICE_DB_USER: postgres
-            BACKOFFICE_DB_PASSWORD: hunter12
+            BACKOFFICE_DB_PASSWORD: ${POSTGRES_PASSWORD}
             BACKOFFICE_DB_HOST: db
             BACKOFFICE_DB_PORT: 5432
         depends_on:
@@ -33,6 +36,8 @@ services:
             - "redis"
     nginx:
         build: nginx
+        environment:
+            BASE_HOSTNAME: "${BASE_HOSTNAME}"
         ports:
             - "8088:80"
             - "8083:443"
@@ -44,6 +49,6 @@ services:
             context: backend
             dockerfile: Dockerfile.db
         environment:
-            POSTGRES_PASSWORD: hunter12
+            POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     redis:
         image: "redis:6"

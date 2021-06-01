@@ -24,4 +24,4 @@ The services can be built using the makefile - which is nothing more complicated
 
 The whole system can be brought up with the docker-compose file in the root of the repository. The default hostnames for this environment are arrestwatch.info and backoffice.arrestwatch.info and are exposed on port 8088.
 
-In production, this should be placed behind a proxy on port 443 that performs SSL termination, with the passwords/secrets in the docker-compose file changed.
+In production, this should be placed behind a proxy on port 443 that performs SSL termination, with the passwords/secrets in the .env file changed.
