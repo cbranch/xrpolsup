@@ -224,7 +224,9 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     cookie: {
-      secure: true,
+      /* NOTE: You shouldn't serve this site over HTTP. But the docker-compose
+       * environment doesn't know about this. */
+      secure: false,
       maxAge: 14 * 24 * 60 * 60 * 1000,  // 2 weeks
     },
 
