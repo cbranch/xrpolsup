@@ -17,11 +17,6 @@
         <b-input-group-append>
           <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
           <b-form-checkbox v-model="showHidden" button>Show&nbsp;deleted</b-form-checkbox>
-          <b-form-select v-model="showHS2">
-            <b-form-select-option :value="null">Filter HS2?</b-form-select-option>
-            <b-form-select-option :value="true">Show HS2</b-form-select-option>
-            <b-form-select-option :value="false">Hide HS2</b-form-select-option>
-          </b-form-select>
         </b-input-group-append>
       </b-input-group>
       <b-input-group size="sm">
@@ -68,6 +63,7 @@
         <div v-if="data.item.concernMentalDistress">Mental distress</div>
         <div v-if="data.item.concernPhysicalDistress">Physical distress</div>
         <div v-if="data.item.concernMinor">Minor</div>
+        <div v-if="data.item.concernMinorUnderSixteen">Minor under 16</div>
         <div v-if="data.item.concernPoliceBehaviour">Police behaviour</div>
         <div v-if="data.item.concernPolicePrejudice">Police prejudice</div>
         <div v-if="data.item.concernMedicationNeed">Medication need: {{ data.item.medicationName }}</div>
@@ -77,8 +73,8 @@
           Show
         </b-button>
       </template>
-      <template v-slot:cell(isHS2Action)="data">
-        {{ data.value ? '🚄' : '' }}
+      <template v-slot:cell(actionGroup)="data">
+        {{ data.value }}
       </template>
       <template v-slot:cell(actions)="data">
         <b-button size="sm" @click="editReport(data.item, $event.target)">Edit</b-button>
@@ -139,7 +135,9 @@
             <b-form-group label="Comment" label-for="input-comment" label-cols-md="3">
               <b-form-textarea id="input-comment" v-model="editReportModal.comment" rows="3" max-rows="10"></b-form-textarea>
             </b-form-group>
-            <b-form-checkbox v-model="editReportModal.isHS2Action">Is this part of an HS2 action?</b-form-checkbox>
+            <b-form-group label="Action Group" label-for="input-action-group" label-cols-md="3">
+              <b-form-input id="input-action-group" v-model="editReportModal.actionGroup"></b-form-input>
+            </b-form-group>
           </b-col>
         </b-row>
       </b-container>
@@ -165,7 +163,6 @@ export default {
       currentPage: 1,
       filter: null,
       showHidden: false,
-      showHS2: null,
       selectedStations: null,
       editReportModal: {
         id: null,
@@ -185,7 +182,7 @@ export default {
         observations: null,
         witness: null,
         comment: null,
-        isHS2Action: false,
+        actionGroup: false,
         isHidden: null,
       }
     }
@@ -203,15 +200,12 @@ export default {
         { key: 'concerns', sortable: true },
         { key: 'observations' },
         { key: 'comment' },
-        { key: 'isHS2Action', label: 'HS2' },
+        { key: 'actionGroup', label: 'Group' },
         { key: 'actions', label: '' },
       ]
     },
     reportList () {
       var reports = this.$store.getters.filteredReports.filter((x) => x.isHidden == this.showHidden)
-      if (this.showHS2 != null) {
-        reports = reports.filter((x) => x.isHS2Action == this.showHS2)
-      }
       return reports
     },
     rows () {

@@ -16,12 +16,12 @@
         <b-form-group v-if="stationKnown === false" label="Can you find out?">
           <YesNo v-model="stationToBeFoundOut" />
         </b-form-group>
-        <p v-if="stationKnown === false && stationToBeFoundOut === true"><strong>Please stop this process and try again later.</strong></p>
-        <div v-if="stationKnown === true || stationToBeFoundOut === false">
+        <p v-if="stationKnown === false && stationToBeFoundOut === true">If you find out later please ring us with that information or fill out the form again, but continue for now with the info you have.</p>
+        <div v-if="stationKnown === true || stationToBeFoundOut != null">
           <b-form-group label="How many arrests are you reporting?">
             <b-form-radio-group v-model="isMassArrest" :invalid-feedback="isValidArrestCount.reason" :state="isValidArrestCount.valid">
               <b-form-radio name="arrests-reported" value="1">Single arrest</b-form-radio>
-              <b-form-radio name="arrests-reported" value="2">Mass arrest</b-form-radio>
+              <b-form-radio name="arrests-reported" value="2">More than one</b-form-radio>
             </b-form-radio-group>
           </b-form-group>
           <b-form-group v-if="isMassArrest == '2'" label="How many?" :invalid-feedback="isValidArrestCount.reason" :state="isValidArrestCount.valid">
@@ -33,10 +33,14 @@
           <b-form-group label="Where did this arrest take place?" label-for="input-location" :invalid-feedback="isValidLocation.reason" :state="isValidLocation.valid">
             <b-form-input id="input-location" v-model="location" :state="isValidLocation.valid" placeholder="Place name"></b-form-input>
           </b-form-group>
-          <b-form-group label="Is this part of an HS2 action?">
-            <YesNo v-model="isHS2Action" />
+          <b-form-group label="Is this an action with:">
+            <b-form-radio-group v-model="actionGroupChoice" :invalid-feedback="isValidActionGroup.reason" :state="isValidActionGroup.valid">
+              <b-form-radio name="action-group" value="XR">XR</b-form-radio>
+              <b-form-radio name="action-group" value="Other">Other Group</b-form-radio>
+            </b-form-radio-group>
+            <b-form-input placeholder="Which group?" v-model="actionGroupOther" v-if="actionGroupChoice == 'Other'"></b-form-input>
           </b-form-group>
-          <b-form-group label="Please leave your email address if you wish to be contacted." description="By completing this field you give your consent to Extinction Rebellion to hold your details securely.">
+          <b-form-group label="Please leave your email address if you wish to be contacted." description="By completing this field you give your consent to the Scottish Community & Activist Legal Project holding your details securely.">
             <b-form-input v-model="witnessEmail" type="email"></b-form-input>
           </b-form-group>
           <b-form-group>
@@ -63,6 +67,8 @@ export default {
       ownArrest: null,
       stationKnown: null,
       stationToBeFoundOut: null,
+      actionGroupChoice: null,
+      actionGroupOther: null,
     }
   },
   computed: {
@@ -73,7 +79,7 @@ export default {
         arrestCount: null,
         datetime: null,
         location: null,
-        isHS2Action: null,
+        actionGroup: null,
       }
     },
     stationName: {
@@ -155,16 +161,34 @@ export default {
         return { valid: true }
       }
     },
-    isHS2Action: {
+    actionGroup: {
       get() {
-        return this.localValue.isHS2Action
+        if (this.actionGroupChoice == 'Other') {
+          return this.actionGroupOther
+        } else {
+          return this.actionGroupChoice
+        }
       },
-      set(value) {
-        this.$emit('input', { ...this.localValue, isHS2Action: value })
-      },
+    },
+    isValidActionGroup () {
+      if (this.actionGroupChoice == null) {
+        return { valid: null }
+      } else if (this.actionGroupChoice == '') {
+        return { valid: false, reason: 'Please pick the group' }
+      } else {
+        return { valid: true }
+      }
     },
     valid () {
       return this.isValidArrestCount.valid && this.isValidDatetime.valid && this.isValidLocation.valid
+    }
+  },
+  watch: {
+    actionGroupChoice: function () {
+      this.$emit('input', { ...this.localValue, actionGroup: this.actionGroup })
+    },
+    actionGroupOther: function () {
+      this.$emit('input', { ...this.localValue, actionGroup: this.actionGroup })
     }
   },
   methods: {

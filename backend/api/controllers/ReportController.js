@@ -21,7 +21,7 @@ module.exports = {
 
     // A simplified report creation endpoint for public use
     post: async (req, res) => {
-      let {stationName, witnessEmail, arrestees, isHS2Action} = req.allParams();
+      let {stationName, witnessEmail, arrestees, actionGroup} = req.allParams();
 
       if (stationName == null) {
         stationName = ""
@@ -51,6 +51,7 @@ module.exports = {
           concernMentalDistress: concerns.includes("mentalDistress"),
           concernPhysicalDistress: concerns.includes("physicalDistress"),
           concernMinor: concerns.includes("minor"),
+          concernMinorUnderSixteen: concerns.includes("minorUnderSixteen"),
           concernPoliceBehaviour: concerns.includes("policeBehaviour"),
           concernPolicePrejudice: concerns.includes("policePrejudice"),
           concernMedicationNeed: concerns.includes("medicationNeed"),
@@ -58,7 +59,7 @@ module.exports = {
           concernHandcuffs: concerns.includes("handcuffs"),
           observations: observations || "",
           comment: comment || "",
-          isHS2Action: isHS2Action || false,
+          actionGroup: actionGroup || "",
           witness: witness.id,
         }
       })

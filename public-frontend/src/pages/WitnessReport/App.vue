@@ -13,6 +13,8 @@
     </b-row>
     </div>
     <div v-else>
+    <p>This is for reporting protest arrests in Scotland. Alternatively you can phone our Back Office on 0131 322 5322</p>
+    <p>For arrests in England/Wales ring GBC on 07946 541 511</p>
     <b-row class="mb-2">
       <b-col>
         <b-card no-body header="Report details">
@@ -117,7 +119,7 @@ export default {
       let report = {
         stationName: this.reportOverview.stationName,
         witnessEmail: this.reportOverview.witnessEmail,
-        isHS2Action: this.reportOverview.isHS2Action,
+        actionGroup: this.reportOverview.actionGroup,
         arrestees: this.populatedArrestees.map(x => {
           var arrestee = x.details != null ? x.details : {}
           const dateParts = /([\d-]*)T(\d+:\d+):.*Z/.exec(this.reportOverview.datetime)

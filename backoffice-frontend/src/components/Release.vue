@@ -18,11 +18,6 @@
         <b-input-group-append>
           <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
           <b-form-checkbox v-model="showHidden" button>Show&nbsp;deleted</b-form-checkbox>
-          <b-form-select v-model="showHS2">
-            <b-form-select-option :value="null">Filter HS2?</b-form-select-option>
-            <b-form-select-option :value="true">Show HS2</b-form-select-option>
-            <b-form-select-option :value="false">Hide HS2</b-form-select-option>
-          </b-form-select>
         </b-input-group-append>
       </b-input-group>
     </b-form-group>
@@ -53,11 +48,8 @@
           Show
         </b-button>
       </template>
-      <template v-slot:cell(isHS2Action)="data">
-        {{ data.value ? '🚄' : '' }}
-      </template>
-      <template v-slot:cell(isPartOfXR)="data">
-        {{ data.value ? '⌛️' : '' }}
+      <template v-slot:cell(actionGroup)="data">
+        {{ data.value }}
       </template>
       <template v-slot:cell(actions)="data">
         <b-button size="sm" @click="editRelease(data.item, $event.target)">Edit</b-button>
@@ -85,33 +77,50 @@
             <b-form-group label="Named offence at time of arrest" label-for="input-offence" label-cols-md="3">
               <b-form-input id="input-offence" v-model="editReleaseModal.offence"></b-form-input>
             </b-form-group>
-            <b-form-group label="Terms of release" label-cols-md="3">
-              <b-form-radio-group v-model="editReleaseModal.termsOfRelease" stacked>
-                <b-form-radio value="rui">Released under investigation (RUI)</b-form-radio>
-                <b-form-radio value="charge">Charge</b-form-radio>
-                <b-form-group v-if="editReleaseModal.termsOfRelease == 'charge'" label="Name charges:" label-for="input-charges">
-                  <b-form-input id="input-charges" v-model="editReleaseModal.charges"></b-form-input>
-                </b-form-group>
-                <b-form-radio value="noFurtherAction">No further action</b-form-radio>  
-              </b-form-radio-group>
-            </b-form-group>
-            <b-form-group label="Bail conditions" label-for="input-bail-conditions" label-cols-md="3">
-              <b-form-input id="input-bail-conditions" v-model="editReleaseModal.bailConditions"></b-form-input>
-            </b-form-group>
-            <b-form-group label="Court date" label-for="input-court-date" label-cols-md="3">
-              <b-form-input id="input-court-date" v-model="editReleaseModal.courtDate"></b-form-input>
-            </b-form-group>
-            <b-form-group label="Court location" label-for="input-court-location" label-cols-md="3">
-              <b-form-input id="input-court-location" v-model="editReleaseModal.courtLocation"></b-form-input>
-            </b-form-group>
-            <b-form-group label="Police Station" label-for="input-police-station" label-cols-md="3">
+            <b-form-group label="Police Station" label-for="input-police-station">
               <b-form-input id="input-police-station" v-model="editReleaseModal.policeStation"></b-form-input>
             </b-form-group>
-            <b-form-group label="Local XR group" label-for="input-local-xr-group" label-cols-md="3">
-              <b-form-input id="input-local-xr-group" v-model="editReleaseModal.localXRGroup"></b-form-input>
+            <b-form-checkbox v-model="editReleaseModal.formallyCharged">Formally charged?</b-form-checkbox>  
+            <b-form-group label="Name of charge" label-for="input-name-of-charge" v-if="formallyCharged">
+              <b-form-input id="input-name-of-charge" v-model="editReleaseModal.charges"></b-form-input>
             </b-form-group>
-            <b-form-group label="Nearest City or Region" label-for="input-nearest-city" label-cols-md="3">
-              <b-form-input id="input-nearest-city" v-model="editReleaseModal.nearestCity"></b-form-input>
+            <b-form-radio-group v-model="editReleaseModal.termsOfRelease" stacked>
+              <b-form-radio value="released">Just released</b-form-radio>
+              <b-form-radio value="report">Released and told a report would be sent to the Procurator Fiscal</b-form-radio>
+              <b-form-radio value="undertaking">Released on an Undertaking (sometimes called police bail)</b-form-radio>
+              <b-form-radio value="custody">Held in custody to appear at court</b-form-radio>  
+            </b-form-radio-group>
+            <!-- These are undertaking conditions -->
+            <b-form-group label="Date to appear at court" label-for="input-court-date" v-if="editReleaseModal.termsOfRelease == 'undertaking'" label-cols-md="3">
+              <b-form-input id="input-court-date" v-model="editReleaseModal.courtDate"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Name of court" label-for="input-court-location" v-if="editReleaseModal.termsOfRelease == 'undertaking'" label-cols-md="3">
+              <b-form-input id="input-court-location" v-model="editReleaseModal.courtLocation"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Any conditions?" label-for="input-bail-conditions" v-if="editReleaseModal.termsOfRelease == 'undertaking'" label-cols-md="3">
+              <b-form-input id="input-bail-conditions" v-model="editReleaseModal.bailConditions"></b-form-input>
+            </b-form-group>
+            <!-- These are custody outcomes -->
+            <b-form-group label="Date you appeared in court" label-for="input-court-date" v-if="editReleaseModal.termsOfRelease == 'custody'" label-cols-md="3">
+              <b-form-input id="input-court-date" v-model="editReleaseModal.courtDate"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Which court was it?" label-for="input-court-location" v-if="editReleaseModal.termsOfRelease == 'custody'" label-cols-md="3">
+              <b-form-input id="input-court-location" v-model="editReleaseModal.courtLocation"></b-form-input>
+            </b-form-group>
+            <b-form-group label="What are you accused of?" label-for="input-accused-of" v-if="editReleaseModal.termsOfRelease == 'custody'" label-cols-md="3">
+              <b-form-input id="input-accused-of" v-model="editReleaseModal.accusedOf"></b-form-input>
+            </b-form-group>
+            <b-form-group label="How did you plead?" label-for="input-plea" v-if="editReleaseModal.termsOfRelease == 'custody'" label-cols-md="3">
+              <b-form-input id="input-plea" v-model="editReleaseModal.plea"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Dates set for further hearings (called diets in Scotland)" label-for="input-further-hearings" v-if="editReleaseModal.termsOfRelease == 'custody'" label-cols-md="3">
+              <b-form-input id="input-further-hearings" v-model="editReleaseModal.furtherHearings"></b-form-input>
+            </b-form-group>
+            <b-form-group label="If you were represented by a solicitor which one?" label-for="input-solicitor" v-if="editReleaseModal.termsOfRelease == 'custody'" label-cols-md="3">
+              <b-form-input id="input-solicitor" v-model="editReleaseModal.solicitor"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Any bail conditions?" label-for="input-bail-conditions" v-if="editReleaseModal.termsOfRelease == 'custody'" label-cols-md="3">
+              <b-form-input id="input-bail-conditions" v-model="editReleaseModal.bailConditions"></b-form-input>
             </b-form-group>
             <b-form-group label="Injuries:" label-for="input-anyInjuries" label-cols-md="3">
               <b-form-input id="input-anyInjuries" v-model="editReleaseModal.injuries"></b-form-input>
@@ -127,12 +136,15 @@
               <b-form-input id="input-specialRequest" v-model="editReleaseModal.specialRequest"></b-form-input>
             </b-form-group>
     
-            <b-form-group label="How many rebels were you brought to this station with?" label-for="input-number-rebels" label-cols-md="3">
+            <b-form-group label="How many protesters were you brought to this station with?" label-for="input-number-rebels" label-cols-md="3">
               <b-form-input type="number" id="input-number-rebels" v-model="editReleaseModal.numberRebels"></b-form-input>
             </b-form-group>
-    
-            <b-form-group label="Roughly how many rebels are still held in this station?" label-for="input-rebels-still-held" label-cols-md="3">
-              <b-form-input type="number" id="input-rebels-still-held" v-model="editReleaseModal.rebelsStillHeld"></b-form-input>
+
+            <b-form-group label="Action Group" label-for="input-action-group" label-cols-md="3">
+              <b-form-input id="input-action-group" v-model="editReleaseModal.actionGroup"></b-form-input>
+            </b-form-group>
+            <b-form-group label="XR Region (if XR)" label-for="input-xr-region" label-cols-md="3">
+              <b-form-input id="input-xr-region" v-model="editReleaseModal.xrRegion"></b-form-input>
             </b-form-group>
     
             <b-form-group label="E-Mail:" label-for="input-by-email" label-cols-md="3">
@@ -141,13 +153,9 @@
             <b-form-group label="Phone:" label-for="input-by-phone" label-cols-md="3">
               <b-form-input id="input-by-phone" v-model="editReleaseModal.phone"></b-form-input>
             </b-form-group>
-            <b-form-checkbox v-model="editReleaseModal.canShareWithLocalXRGroup">Consent to share with local XR group</b-form-checkbox>
-            <b-form-checkbox v-model="editReleaseModal.canShareWithXRPress">Consent to share with XR press</b-form-checkbox>
             <b-form-group label="Comment" label-for="input-comment" label-cols-md="3">
               <b-form-textarea id="input-comment" v-model="editReleaseModal.comment" rows="3" max-rows="10"></b-form-textarea>
             </b-form-group>
-            <b-form-checkbox v-model="editReleaseModal.isHS2Action">Is this part of an HS2 action?</b-form-checkbox>
-            <b-form-checkbox v-model="editReleaseModal.isPartOfXR">Do you consider yourself a member of XR?</b-form-checkbox>
           </b-col>
         </b-row>
       </b-container>
@@ -164,7 +172,6 @@ export default {
       currentPage: 1,
       filter: null,
       showHidden: false,
-      showHS2: null,
       editReleaseModal: {
         id: null,
         name: null,
@@ -173,11 +180,14 @@ export default {
         offence: null,
         termsOfRelease: null,
         charges: null,
+        accusedOf: null,
+        plea: null,
+        furtherHearings: null,
+        solicitor: null,
         bailConditions: null,
         courtDate: null,
         courtLocation: null,
         policeStation: null,
-        localXRGroup: null,
         nearestCity: null,
         injuries: null,
         adverseEvents: null,
@@ -188,12 +198,10 @@ export default {
         rebelsStillHeld: null,
         email: null,
         phone: null,
-        canShareWithLocalXRGroup: null,
-        canShareWithXRPress: null,
         comment: null,
         isHidden: null,
-        isHS2Action: null,
-        isPartOfXR: null,
+        xrRegion: null,
+        actionGroup: null,
       }
     }
   },
@@ -205,20 +213,15 @@ export default {
         { key: 'name', sortable: true },
         { key: 'policeStation', sortable: true },
         { key: 'location', sortable: true },
-        { key: 'localXRGroup', label: 'Local XR group', sortable: true },
         { key: 'numberRebels', label: 'With # Rebels', sortable: true },
         { key: 'rebelsStillHeld', labels: '# still held', sortable: true },
         { key: 'comment' },
-        { key: 'isHS2Action', label: 'HS2' },
-        { key: 'isPartOfXR', label: 'XR' },
+        { key: 'actionGroup', label: 'Group' },
         { key: 'actions', label: '' },
       ]
     },
     reportList () {
       var reports = this.$store.getters.filteredReleases.filter((x) => x.isHidden == this.showHidden)
-      if (this.showHS2 != null) {
-        reports = reports.filter((x) => x.isHS2Action == this.showHS2)
-      }
       return reports
     },
     rows () {

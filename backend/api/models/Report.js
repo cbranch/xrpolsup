@@ -12,6 +12,7 @@ module.exports = {
       concernMentalDistress: { type: 'boolean', defaultsTo: false },
       concernPhysicalDistress: { type: 'boolean', defaultsTo: false },
       concernMinor: { type: 'boolean', defaultsTo: false },
+      concernMinorUnderSixteen: { type: 'boolean', defaultsTo: false },
       concernPoliceBehaviour: { type: 'boolean', defaultsTo: false },
       concernPolicePrejudice: { type: 'boolean', defaultsTo: false },
       concernMedicationNeed: { type: 'boolean', defaultsTo: false },
@@ -21,6 +22,6 @@ module.exports = {
       comment: { type: 'string' },
       witness: { model: 'witness' },
       isHidden: { type: 'boolean', defaultsTo: false },
-      isHS2Action: { type: 'boolean', defaultsTo: false },
+      actionGroup: { type: 'string' },
     },
   };

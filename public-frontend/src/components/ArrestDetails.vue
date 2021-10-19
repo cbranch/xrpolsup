@@ -13,7 +13,8 @@
             <b-form-checkbox value="handcuffs">Handcuffs?</b-form-checkbox>
             <b-form-checkbox value="mentalDistress">Mental distress?</b-form-checkbox>
             <b-form-checkbox value="physicalDistress">Physical distress?</b-form-checkbox>
-            <b-form-checkbox value="minor">Minor</b-form-checkbox>
+            <b-form-checkbox value="minorUnderSixteen">Minor under 16</b-form-checkbox>
+            <b-form-checkbox value="minor">Minor 16 or 17</b-form-checkbox>
             <b-form-checkbox value="policeBehaviour">Police behaviour?</b-form-checkbox>
             <b-form-checkbox value="policePrejudice">Police prejudice?</b-form-checkbox>
             <b-form-checkbox value="medicationNeed">Medication need stated by arrestee?</b-form-checkbox>

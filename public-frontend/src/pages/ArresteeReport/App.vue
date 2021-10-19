@@ -27,34 +27,57 @@
         <b-form-group label="Named offence at time of arrest" label-for="input-offence">
           <b-form-input id="input-offence" v-model="offence"></b-form-input>
         </b-form-group>
-        <b-form-group label="Terms of release">
-          <b-form-radio-group v-model="termsOfRelease" stacked>
-            <b-form-radio value="rui">Released under investigation (RUI)</b-form-radio>
-            <b-form-radio value="charge">Charge</b-form-radio>
-            <b-form-group v-if="hasCharges" label="Name charges:" label-for="input-charges">
-              <b-form-input id="input-charges" v-model="charges"></b-form-input>
-            </b-form-group>
-            <b-form-radio value="noFurtherAction">No further action</b-form-radio>  
-          </b-form-radio-group>
-        </b-form-group>
-        <b-form-group label="Bail conditions" label-for="input-bail-conditions">
-          <b-form-input id="input-bail-conditions" v-model="bailConditions"></b-form-input>
-        </b-form-group>
-        <b-form-group label="Court date" label-for="input-court-date">
-          <b-form-input id="input-court-date" v-model="courtDate"></b-form-input>
-        </b-form-group>
-        <b-form-group label="Court location" label-for="input-court-location">
-          <b-form-input id="input-court-location" v-model="courtLocation"></b-form-input>
-        </b-form-group>
         <b-form-group label="Police Station" label-for="input-police-station">
           <StationSearch id="input-police-station" v-model="policeStation"></StationSearch>
         </b-form-group>
-        <b-form-group label="Local XR group" label-for="input-local-xr-group">
-          <b-form-input id="input-local-xr-group" v-model="localXrGroup"></b-form-input>
-        </b-form-group>
-        <b-form-group label="Nearest City or Region" label-for="input-nearest-city">
-          <b-form-input id="input-nearest-city" v-model="nearestCity"></b-form-input>
-        </b-form-group>
+        <b-card header="Terms of release">
+          <b-form-group label="Were you formally charged?">
+            <YesNo v-model="formallyCharged" />
+          </b-form-group>
+          <b-form-group label="Name of charge" label-for="input-name-of-charge" v-if="formallyCharged">
+            <b-form-input id="input-name-of-charge" v-model="charges"></b-form-input>
+          </b-form-group>
+          <b-form-group label="Were you:">
+            <b-form-radio-group v-model="termsOfRelease" stacked>
+              <b-form-radio value="released">Just released</b-form-radio>
+              <b-form-radio value="report">Released and told a report would be sent to the Procurator Fiscal</b-form-radio>
+              <b-form-radio value="undertaking">Released on an Undertaking (sometimes called police bail)</b-form-radio>
+              <b-form-radio value="custody">Held in custody to appear at court</b-form-radio>  
+            </b-form-radio-group>
+          </b-form-group>
+          <!-- These are undertaking conditions -->
+          <b-form-group label="Date to appear at court" label-for="input-court-date" v-if="termsOfRelease == 'undertaking'">
+            <b-form-input id="input-court-date" v-model="courtDate"></b-form-input>
+          </b-form-group>
+          <b-form-group label="Name of court" label-for="input-court-location" v-if="termsOfRelease == 'undertaking'">
+            <b-form-input id="input-court-location" v-model="courtLocation"></b-form-input>
+          </b-form-group>
+          <b-form-group label="Any conditions?" label-for="input-bail-conditions" v-if="termsOfRelease == 'undertaking'">
+            <b-form-input id="input-bail-conditions" v-model="bailConditions"></b-form-input>
+          </b-form-group>
+          <!-- These are custody outcomes -->
+          <b-form-group label="Date you appeared in court" label-for="input-court-date" v-if="termsOfRelease == 'custody'">
+            <b-form-input id="input-court-date" v-model="courtDate"></b-form-input>
+          </b-form-group>
+          <b-form-group label="Which court was it?" label-for="input-court-location" v-if="termsOfRelease == 'custody'">
+            <b-form-input id="input-court-location" v-model="courtLocation"></b-form-input>
+          </b-form-group>
+          <b-form-group label="What are you accused of?" label-for="input-accused-of" v-if="termsOfRelease == 'custody'">
+            <b-form-input id="input-accused-of" v-model="accusedOf"></b-form-input>
+          </b-form-group>
+          <b-form-group label="How did you plead?" label-for="input-plea" v-if="termsOfRelease == 'custody'">
+            <b-form-input id="input-plea" v-model="plea"></b-form-input>
+          </b-form-group>
+          <b-form-group label="Dates set for further hearings (called diets in Scotland)" label-for="input-further-hearings" v-if="termsOfRelease == 'custody'">
+            <b-form-input id="input-further-hearings" v-model="furtherHearings"></b-form-input>
+          </b-form-group>
+          <b-form-group label="If you were represented by a solicitor which one?" label-for="input-solicitor" v-if="termsOfRelease == 'custody'">
+            <b-form-input id="input-solicitor" v-model="solicitor"></b-form-input>
+          </b-form-group>
+          <b-form-group label="Any bail conditions?" label-for="input-bail-conditions" v-if="termsOfRelease == 'custody'">
+            <b-form-input id="input-bail-conditions" v-model="bailConditions"></b-form-input>
+          </b-form-group>
+        </b-card>
         <b-form-checkbox v-model="hasAnyInjuries">Any injuries?</b-form-checkbox>  
         <b-form-group v-if="hasAnyInjuries" label="Name injuries:" label-for="input-anyInjuries">
           <b-form-input id="input-anyInjuries" v-model="anyInjuries"></b-form-input>
@@ -74,25 +97,40 @@
           <b-form-input id="input-specialRequest" v-model="specialRequest"></b-form-input>
         </b-form-group>
 
-        <b-form-group label="How many rebels were you brought to this station with?" label-for="input-number-rebels">
+        <b-form-group label="How many protesters were you brought to this station with?" label-for="input-number-rebels">
           <b-form-input type="number" id="input-number-rebels" v-model="numberRebels"></b-form-input>
         </b-form-group>
-
-        <b-form-group label="Roughly how many rebels are still held in this station?" label-for="input-rebels-still-held">
-          <b-form-input type="number" id="input-rebels-still-held" v-model="rebelsStillHeld"></b-form-input>
+      </b-col>
+    </b-row>
+    <b-row class="my-4">
+      <b-col>
+        <b-form-group label="Are you a member of XR?">
+          <YesNo v-model="isXRMember" />
         </b-form-group>
 
-        <b-form-group id="label-contact">
-          <label>We request your contact details so that we can contact you regarding post arrest support such as trial support, PALS, and access to crowd justice funds.
-            By providing this data, you consent to be contacted by:
-          </label>
-          <b-form-checkbox v-model="wantContactByEmail">E-mail</b-form-checkbox>
-          <b-form-group v-if="wantContactByEmail" label="Please enter your email address:" label-for="input-by-email">
+        <b-form-group id="label-contact" v-if="isXRMember">
+          <label>If you would like XR to contact you with regards to providing post-arrest support, such as trial and ongoing court support then please provide us with your name and email (or phone number) By providing this info you consent to XR securely storing your contact info and contacting you in accordance with their privacy policy - <a href="https://extinctionrebellion.uk/privacy-policy/">https://extinctionrebellion.uk/privacy-policy/</a></label>
+          <b-form-group label="Email" label-for="input-by-email">
             <b-form-input id="input-by-email" v-model="contactByEmail"></b-form-input>
           </b-form-group>
+          <b-form-group label="Phone" label-for="input-by-phone">
+            <b-form-input id="input-by-phone" v-model="contactByPhone"></b-form-input>
+          </b-form-group>
+          <b-form-group label="XR Region" label-for="input-xr-region">
+            <b-form-input id="input-xr-region" v-model="xrRegion"></b-form-input>
+          </b-form-group>
+        </b-form-group>
 
-          <b-form-checkbox v-model="wantContactByPhone">Phone</b-form-checkbox>
-          <b-form-group v-if="wantContactByPhone" label="Please enter your phone number:" label-for="input-by-phone">
+        <b-form-group id="label-contact" v-if="isXRMember === false">
+          <label>We may have information about ongoing post arrest support from other groups who have organised actions.
+If you want us to pass this on to you then:</label>
+          <b-form-group label="Which group organised the action you took part in?" label-for="input-action-group">
+            <b-form-input id="input-action-group" v-model="actionGroup"></b-form-input>
+          </b-form-group>
+          <b-form-group label="Email" label-for="input-by-email">
+            <b-form-input id="input-by-email" v-model="contactByEmail"></b-form-input>
+          </b-form-group>
+          <b-form-group label="Phone" label-for="input-by-phone">
             <b-form-input id="input-by-phone" v-model="contactByPhone"></b-form-input>
           </b-form-group>
         </b-form-group>
@@ -100,23 +138,7 @@
     </b-row>
     <b-row class="my-4">
       <b-col>
-        <h4>Further XR Support</h4>
-
-        <p><b-form-checkbox id="canShareWithXRPress" v-model="canShareWithXRPress">If you would be happy for members of the XR-Press team to contact you in the future to discuss your options around press engagement then please tick here.</b-form-checkbox></p>
-
-        <b-form-group label="In order to help us provide ongoing arrest support, can we share your contact details with your local XR group?" label-for="input-canShareWithLocalXRGroup">
-          <b-form-checkbox id="canShareWithLocalXRGroup" v-model="canShareWithLocalXRGroup">I consent to sharing with my local XR group</b-form-checkbox>
-        </b-form-group>
-
-        <p>Contact us at xr-legal@riseup.net &amp; XR-ArrestWelfare@protonmail.com for further support.</p>
-
-        <p><b-form-checkbox id="isHS2Action" v-model="isHS2Action">Is this part of an HS2 action?</b-form-checkbox></p>
-        <p><b-form-checkbox id="isPartOfXR" v-model="isPartOfXR">Do you consider yourself a member of XR?</b-form-checkbox></p>
-      </b-col>
-    </b-row>
-    <b-row class="my-4">
-      <b-col>
-        <p>We value and respect your personal data and privacy. By submitting this form, you agree that we may process your information in accordance with <a href="https://rebellion.earth/privacy-policy/" target="_blank">our privacy policy</a>.</p>
+        <p>We value and respect your personal data and privacy. By submitting this form, you agree that we may process your information in accordance with <a href="https://www.scottishactivistlegalproject.co.uk/contact/privacy-notice/" target="_blank">our privacy policy</a>.</p>
         <b-button block variant="primary" v-on:click="submitReport" :disabled="isSubmitting">Submit post-arrest report <b-spinner v-if="isSubmitting" label="Spinning"></b-spinner></b-button>
       </b-col>
     </b-row>
@@ -136,10 +158,12 @@
 
 <script>
 import StationSearch from '../../components/StationSearch.vue'
+import YesNo from '../../components/YesNo.vue'
 
 export default {
   name: 'ArresteeReport',
   components: {
+    YesNo,
     StationSearch,
   },
   data () {
@@ -148,14 +172,17 @@ export default {
       datetime: null,
       location: null,
       offence: null,
+      policeStation: null,
+      formallyCharged: null,
       termsOfRelease: null,
       charges: null,
       bailConditions: null,
       courtDate: null,
       courtLocation: null,
-      policeStation: null,
-      localXrGroup: null,
-      nearestCity: null,
+      accusedOf: null,
+      plea: null,
+      furtherHearings: null,
+      solicitor: null,
       hasAdverseEvents: false,
       adverseEvents: null,
       hasAnyInjuries: false,
@@ -167,14 +194,11 @@ export default {
       specialRequest: null,
       numberRebels: null,
       rebelsStillHeld: null,
-      wantContactByEmail: false,
       contactByEmail: null,
-      wantContactByPhone: false,
       contactByPhone: null,
-      canShareWithLocalXRGroup: false,
-      canShareWithXRPress: false,
-      isHS2Action: false,
-      isPartOfXR: false,
+      actionGroup: null,
+      isXRMember: null,
+      xrRegion: null,
       submitted: false,
       isSubmitting: false,
       errors: [],
@@ -265,13 +289,8 @@ export default {
         hasSpecialRequest: this.hasSpecialRequest,
         specialRequest: this.specialRequest,
         numberRebels: this.numberRebels,
-        rebelsStillHeld: this.rebelsStillHeld,
         contactByEmail: this.wantContactByEmail ? this.contactByEmail : '',
         contactByPhone: this.wantContactByPhone ? this.contactByPhone : '',
-        canShareWithXRPress: this.canShareWithXRPress,
-        canShareWithLocalXRGroup: this.canShareWithLocalXRGroup,
-        isHS2Action: this.isHS2Action,
-        isPartOfXR: this.isPartOfXR,
         submitted: this.submitted,
       }
       this.isSubmitting = true
