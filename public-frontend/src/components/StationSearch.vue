@@ -1,5 +1,5 @@
 <template>
-  <autocomplete placeholder="Station name" :search="searchStations" @submit="selectStation"></autocomplete>
+  <autocomplete placeholder="Station name" :search="searchStations" v-bind:value="value" v-on:input="$emit('input', $event.target.value)"></autocomplete>
 </template>
 <script>
 import FuzzySearch from 'fuzzy-search'
@@ -19,9 +19,6 @@ export default {
         this.stationSearcher = new FuzzySearch(stationList.data.stations, [], { sort: true })
       }
       return this.stationSearcher.search(input)
-    },
-    selectStation(station) {
-      this.$emit('input', station)
     }
   }
 }
