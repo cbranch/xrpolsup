@@ -80,10 +80,10 @@
         <b-button size="sm" @click="editReport(data.item, $event.target)">Edit</b-button>
       </template>
       <template v-slot:cell(policeCallTime)="data">
-        {{ new Date(data.value).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }) }}
+        {{ data.value ? new Date(data.value).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }) : '' }}
       </template>
       <template v-slot:cell(releasedTime)="data">
-        {{ new Date(data.value).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }) }}
+        {{ data.value ? new Date(data.value).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }) : '' }}
       </template>
     </b-table>
     <b-modal id="editReportModal" title="Edit report" size="lg" @ok="commitEditReport" @hide="hideEditReport" scrollable>
