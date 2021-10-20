@@ -39,7 +39,7 @@
       aria-controls="report-table"
       align="center"
     ></b-pagination>
-    <b-table striped hover
+    <b-table striped hover responsive
       id="report-table"
       :items="reportList"
       :fields="reportFields"
@@ -78,6 +78,12 @@
       </template>
       <template v-slot:cell(actions)="data">
         <b-button size="sm" @click="editReport(data.item, $event.target)">Edit</b-button>
+      </template>
+      <template v-slot:cell(policeCallTime)="data">
+        {{ new Date(data.value).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }) }}
+      </template>
+      <template v-slot:cell(releasedTime)="data">
+        {{ new Date(data.value).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }) }}
       </template>
     </b-table>
     <b-modal id="editReportModal" title="Edit report" size="lg" @ok="commitEditReport" @hide="hideEditReport" scrollable>
@@ -210,9 +216,9 @@ export default {
   computed: {
     reportFields () {
       return [
-        { key: 'index', label: '' },
+        { key: 'index', label: '', stickyColumn: true },
         { key: 'createdAt', label: 'Reported at', sortable: true },
-        { key: 'arrestTime', label: 'Arrest time', sortable: true },
+        { key: 'arrestTime', sortable: true },
         { key: 'station', sortable: true },
         { key: 'location', sortable: true },
         { key: 'name', sortable: true },
@@ -222,6 +228,8 @@ export default {
         { key: 'comment' },
         { key: 'actionGroup', label: 'Group' },
         { key: 'actions', label: '' },
+        { key: 'policeCallTime', sortable: true  },
+        { key: 'releasedTime', sortable: true  },
       ]
     },
     reportList () {
@@ -316,3 +324,8 @@ export default {
 }
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style>
+#report-table th {
+  white-space: nowrap;
+}
+</style>
