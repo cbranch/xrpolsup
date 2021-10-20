@@ -229,6 +229,8 @@ export default {
         { key: 'actionGroup', label: 'Group' },
         { key: 'actions', label: '' },
         { key: 'policeCallTime', sortable: true  },
+        { key: 'court' },
+        { key: 'custodyNumber' },
         { key: 'releasedTime', sortable: true  },
       ]
     },
