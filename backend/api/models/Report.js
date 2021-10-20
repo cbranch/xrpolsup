@@ -23,5 +23,15 @@ module.exports = {
       witness: { model: 'witness' },
       isHidden: { type: 'boolean', defaultsTo: false },
       actionGroup: { type: 'string' },
+      policeCallTime: {
+        type: 'ref',
+        columnType: 'timestamp',
+      },
+      custodyNumber: { type: 'string' },
+      court: { type: 'string' },
+      releasedTime: {
+        type: 'ref',
+        columnType: 'timestamp',
+      },
     },
   };

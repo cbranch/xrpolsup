@@ -90,6 +90,22 @@
       <b-container fluid>
         <b-row>
           <b-col>
+            <b-form-group label="Time of call from police" label-for="input-policeCallTime" label-cols-md="3">
+              <datetime type="datetime" id="input-policeCallTime" input-class="form-control" v-model="editReportModal.policeCallTime"></datetime>
+            </b-form-group>
+            <b-form-group label="Custody number" label-for="input-custodyNumber" label-cols-md="3">
+              <b-form-input id="input-custodyNumber" v-model="editReportModal.custodyNumber"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Court" label-for="input-court" label-cols-md="3">
+              <b-form-input id="input-court" v-model="editReportModal.court"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Released time" label-for="input-releasedTime" label-cols-md="3">
+              <datetime type="datetime" id="input-releasedTime" input-class="form-control" v-model="editReportModal.releasedTime"></datetime>
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
             <b-form-group label="Station" label-for="input-station" label-cols-md="3">
               <b-form-input id="input-station" v-model="editReportModal.station"></b-form-input>
             </b-form-group>
@@ -166,6 +182,10 @@ export default {
       selectedStations: null,
       editReportModal: {
         id: null,
+        policeCallTime: null,
+        custodyNumber: null,
+        court: null,
+        releasedTime: null,
         station: null,
         arrestTime: null,
         location: null,
