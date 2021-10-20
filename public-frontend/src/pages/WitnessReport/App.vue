@@ -15,6 +15,7 @@
     <div v-else>
     <p>This is for reporting protest arrests in Scotland. Alternatively you can phone our Back Office on 0131 322 5322</p>
     <p>For arrests in England/Wales ring GBC on 07946 541 511</p>
+    <p>For XR arrests in England/Wales ring XR Back Office on 07749 335 574</p>
     <b-row class="mb-2">
       <b-col>
         <b-card no-body header="Report details">
