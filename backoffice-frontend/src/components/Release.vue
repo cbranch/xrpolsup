@@ -214,7 +214,7 @@ export default {
         { key: 'policeStation', sortable: true },
         { key: 'location', sortable: true },
         { key: 'numberRebels', label: 'With # Rebels', sortable: true },
-        { key: 'rebelsStillHeld', labels: '# still held', sortable: true },
+        { key: 'rebelsStillHeld', label: '# still held', sortable: true },
         { key: 'comment' },
         { key: 'actionGroup', label: 'Group' },
         { key: 'actions', label: '' },
