@@ -8,7 +8,7 @@ module.exports = {
         return res.notFound()
       }
 
-      if (report.updatedAt < (Date.now() - (1000*60*60*30))) {
+      if (report.updatedAt < (Date.now() - (1000*60*60*96))) {
         return res.notFound()
       }
 
