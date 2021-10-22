@@ -280,6 +280,12 @@ export default {
     commitEditReport () {
       var postData = Object.assign({}, this.editReportModal)
       delete postData.witness
+      if (postData.policeCallTime == "") {
+        postData.policeCallTime = null
+      }
+      if (postData.releasedTime == "") {
+        postData.releasedTime = null
+      }
       this.$io.socket.put('/api/v1/report/' + this.editReportModal.id, postData, (resData, jwRes) => {
         if (jwRes.statusCode == 200) {
           this.$store.commit('setReport', resData)
