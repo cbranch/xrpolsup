@@ -2,7 +2,7 @@
   <b-container>
     <b-row class="mb-2">
       <b-col>
-        <h2 class="my-3">Arrestee reporting</h2>
+        <h2 class="my-3">Scottish Community &amp; Activist Legal Project (SCALP)</h2>
       </b-col>
     </b-row>
     <div v-if="submitted">
@@ -13,7 +13,8 @@
     </b-row>
     </div>
     <div v-else>
-    <p>This is for reporting protest arrests in Scotland. Alternatively you can phone our Back Office on 0131 322 5322</p>
+    <p>This form is for reporting protest arrests in Scotland. Alternatively you can phone SCALP's Back Office on 0131 322 5322</p>
+    <p><small>(For arrests in England/Wales ring: GBC on 07946 541 511 or XR on 07749 335 574)</small></p>
     <b-row class="mb-2">
       <b-col>
         <b-card no-body header="Report details">

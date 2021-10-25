@@ -104,6 +104,7 @@
     </b-row>
     <b-row class="my-4">
       <b-col>
+        <p>We may share your data with a relevant group in order for them to follow up with future support - this does not include sharing data with XR unless you have specifically consented and asked us to.</p>
         <b-form-group label="Are you a member of XR?">
           <YesNo v-model="isXRMember" />
         </b-form-group>
@@ -122,9 +123,7 @@
         </b-form-group>
 
         <b-form-group id="label-contact" v-if="isXRMember === false">
-          <label>We may have information about ongoing post arrest support from other groups who have organised actions.
-If you want us to pass this on to you then:</label>
-          <b-form-group label="Which group organised the action you took part in?" label-for="input-action-group">
+          <b-form-group label="If you would like us to share your data with the group who organised the protest where you were arrested tell us who they are:" label-for="input-action-group">
             <b-form-input id="input-action-group" v-model="actionGroup"></b-form-input>
           </b-form-group>
           <b-form-group label="Email" label-for="input-by-email">

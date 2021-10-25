@@ -33,7 +33,7 @@
           <b-form-group label="Where did this arrest take place?" label-for="input-location" :invalid-feedback="isValidLocation.reason" :state="isValidLocation.valid">
             <b-form-input id="input-location" v-model="location" :state="isValidLocation.valid" placeholder="Place name"></b-form-input>
           </b-form-group>
-          <b-form-group label="Is this an action with:">
+          <b-form-group label="So that we can co-ordinate support for arrested people it is helpful to know what group called the protest where the arrest took place.">
             <b-form-radio-group v-model="actionGroupChoice" :invalid-feedback="isValidActionGroup.reason" :state="isValidActionGroup.valid">
               <b-form-radio name="action-group" value="XR">XR</b-form-radio>
               <b-form-radio name="action-group" value="Other">Other Group</b-form-radio>
