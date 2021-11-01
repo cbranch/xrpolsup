@@ -125,6 +125,10 @@
             <b-form-group label="Injuries:" label-for="input-anyInjuries" label-cols-md="3">
               <b-form-input id="input-anyInjuries" v-model="editReleaseModal.injuries"></b-form-input>
             </b-form-group>
+            <b-form-checkbox v-model="editReleaseModal.interviewedByPolice">Interviewed by police?</b-form-checkbox>
+            <b-form-group label="Speak to a solicitor?" label-for="input-spokeToSolicitor" label-cols-md="3">
+              <b-form-input id="input-spokeToSolicitor" v-model="editReleaseModal.spokeToSolicitor"></b-form-input>
+            </b-form-group>
             <b-form-group label="Adverse events:" label-for="input-adverseEvents" label-cols-md="3">
               <b-form-input id="input-adverseEvents" v-model="editReleaseModal.adverseEvents"></b-form-input>
             </b-form-group>
@@ -190,6 +194,8 @@ export default {
         policeStation: null,
         nearestCity: null,
         injuries: null,
+        interviewedByPolice: null,
+        spokeToSolicitor: null,
         adverseEvents: null,
         heldMoreThan24Hours: null,
         helpNeeded: null,

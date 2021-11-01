@@ -17,6 +17,8 @@ module.exports = {
       nearestCity: { type: 'string' },
       injuries: { type: 'string' },
       adverseEvents: { type: 'string' },
+      interviewedByPolice: { type: 'boolean', defaultsTo: false },
+      spokeToSolicitor: { type: 'string' },
       heldMoreThan24Hours: { type: 'boolean', defaultsTo: false },
       helpNeeded: { type: 'string' },
       specialRequest: { type: 'string' },

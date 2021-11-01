@@ -82,6 +82,11 @@
         <b-form-group v-if="hasAnyInjuries" label="Name injuries:" label-for="input-anyInjuries">
           <b-form-input id="input-anyInjuries" v-model="anyInjuries"></b-form-input>
         </b-form-group>
+        <b-form-checkbox v-model="interviewedByPolice">Interviewed by police?</b-form-checkbox>
+        <b-form-checkbox v-model="hasSolicitor">Speak to a solicitor?</b-form-checkbox>
+        <b-form-group v-if="hasSolicitor" label="Name of solicitor? Did you speak to them on the phone or did they visit you?" label-for="input-spokeToSolicitor">
+          <b-form-input id="input-spokeToSolicitor" v-model="spokeToSolicitor"></b-form-input>
+        </b-form-group>
         <b-form-checkbox v-model="hasAdverseEvents">Adverse events?</b-form-checkbox>  
         <b-form-group v-if="hasAdverseEvents" label="Name adverse events:" label-for="input-adverseEvents">
           <b-form-input id="input-adverseEvents" v-model="adverseEvents"></b-form-input>
@@ -186,6 +191,9 @@ export default {
       adverseEvents: null,
       hasAnyInjuries: false,
       anyInjuries: null,
+      interviewedByPolice: false,
+      hasSolicitor: false,
+      spokeToSolicitor: null,
       heldMoreThan24Hours: false,
       hasHelpNeeded: false,
       helpNeeded: null,
@@ -285,6 +293,9 @@ export default {
         adverseEvents: this.adverseEvents,
         hasAnyInjuries: this.hasAnyInjuries,
         anyInjuries: this.anyInjuries,
+        interviewedByPolice: this.interviewedByPolice,
+        hasSolicitor: this.hasSolicitor,
+        spokeToSolicitor: this.spokeToSolicitor,
         heldMoreThan24Hours: this.heldMoreThan24Hours,
         hasHelpNeeded: this.hasHelpNeeded,
         helpNeeded: this.helpNeeded,
