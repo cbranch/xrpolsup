@@ -2,6 +2,7 @@
   <b-container>
     <b-row class="mb-2">
       <b-col>
+        <p>Scottish Community &amp; Activist Legal Project<p>
         <h2 class="my-3">Please let us know about your arrest and release</h2>
       </b-col>
     </b-row>
