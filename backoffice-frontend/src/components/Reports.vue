@@ -18,6 +18,7 @@
         </b-table>
       </b-tab>
     </b-tabs>
+    <b-form-checkbox v-model="showHidden">Show deleted</b-form-checkbox>
   </b-container>
 </template>
 
@@ -40,6 +41,7 @@ export default {
   data () {
     return {
       isConnected: null,
+      showHidden: false,
     }
   },
   computed: {
@@ -50,7 +52,7 @@ export default {
       ]
     },
     stationList () {
-      let stations = groupBy(this.$store.getters.filteredReports, report => report.station == "" ? report.station : report.station.toString().toLowerCase().trim())
+      let stations = groupBy(this.$store.getters.filteredReports.filter((x) => x.isHidden == this.showHidden), report => report.station == "" ? report.station : report.station.toString().toLowerCase().trim())
       return [...stations.entries()].map(x => ({station: x[1][0].station, count: x[1].length}))
     },
     releaseStationFields () {
@@ -60,7 +62,7 @@ export default {
       ]
     },
     releaseStationList () {
-      let stations = groupBy(this.$store.getters.filteredReleases, release => release.policeStation == "" ? release.policeStation : release.policeStation.toString().toLowerCase().trim())
+      let stations = groupBy(this.$store.getters.filteredReleases.filter((x) => x.isHidden == this.showHidden), release => release.policeStation == "" ? release.policeStation : release.policeStation.toString().toLowerCase().trim())
       return [...stations.entries()].map(x => ({station: x[1][0].policeStation, count: x[1].length}))
     }
   }
