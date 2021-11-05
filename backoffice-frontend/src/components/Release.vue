@@ -80,8 +80,7 @@
             <b-form-group label="Police Station" label-for="input-police-station">
               <b-form-input id="input-police-station" v-model="editReleaseModal.policeStation"></b-form-input>
             </b-form-group>
-            <b-form-checkbox v-model="editReleaseModal.formallyCharged">Formally charged?</b-form-checkbox>  
-            <b-form-group label="Name of charge" label-for="input-name-of-charge" v-if="formallyCharged">
+            <b-form-group label="Name of charge" label-for="input-name-of-charge">
               <b-form-input id="input-name-of-charge" v-model="editReleaseModal.charges"></b-form-input>
             </b-form-group>
             <b-form-radio-group v-model="editReleaseModal.termsOfRelease" stacked>

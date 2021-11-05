@@ -98,7 +98,7 @@
           <b-form-input id="input-helpNeeded" v-model="helpNeeded"></b-form-input>
         </b-form-group>
 
-        <b-form-checkbox value="specialRequest">Special request?</b-form-checkbox>  
+        <b-form-checkbox v-model="hasSpecialRequest">Special request?</b-form-checkbox>
         <b-form-group v-if="hasSpecialRequest" label="Special request needed:" label-for="input-specialRequest">
           <b-form-input id="input-specialRequest" v-model="specialRequest"></b-form-input>
         </b-form-group>
@@ -280,7 +280,7 @@ export default {
         location: this.location,
         offence: this.offence,
         termsOfRelease: this.termsOfRelease,
-        charges: this.hasCharges ? this.charges : '',
+        charges: this.formallyCharged ? this.charges : '',
         bailConditions: this.bailConditions,
         courtDate: this.courtDate,
         courtLocation: this.courtLocation,
@@ -305,9 +305,9 @@ export default {
         numberRebels: this.numberRebels,
         contactByEmail: this.contactByEmail,
         contactByPhone: this.contactByPhone,
-        actionGroup: null,
+        actionGroup: this.isXRMember ? 'xr' : this.actionGroup,
         isXRMember: null,
-        xrRegion: null,
+        xrRegion: this.xrRegion,
         submitted: this.submitted,
       }
       this.isSubmitting = true
