@@ -91,12 +91,12 @@ queries = {
         NULL AS "_",
         NULL AS "_",
         NULL AS "_",
-        "canShareWithXRPress" AS "XR Media",
         NULL AS "_",
         NULL AS "_",
-        "canShareWithLocalXRGroup" AS "Local Group",
         NULL AS "_",
-        "nearestCity" AS "Region",
+        NULL AS "_",
+        NULL AS "_",
+        "xrRegion" AS "Region",
         NULL AS "_",
         NULL AS "_",
         NULL AS "_",
@@ -106,15 +106,16 @@ queries = {
         "email" AS "E-mail",
         NULL AS "_",
         NULL AS "_",
-        "localXRGroup" AS "Local XR Group",
+        "actionGroup" AS "Action Group",
         NULL AS "_",
         "bailConditions" AS "Bail Conditions",
         NULL AS "_",
         "comment" AS "COMMENTS",
-        "isHS2Action" AS "Is HS2 Action",
-        "isPartOfXR" AS "Is Part of XR"
+        NULL AS "_",
+        NULL AS "_"
         FROM "release"
         WHERE to_timestamp("release"."updatedAt"/1000) > (NOW() - interval '7 days')
+        AND "actionGroup" = 'xr'
         """,
 }
 
