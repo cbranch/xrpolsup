@@ -87,6 +87,7 @@
               <b-form-radio value="released">Just released</b-form-radio>
               <b-form-radio value="report">Released and told a report would be sent to the Procurator Fiscal</b-form-radio>
               <b-form-radio value="undertaking">Released on an Undertaking (sometimes called police bail)</b-form-radio>
+              <b-form-radio value="recordedWarning">Released with a Recorded Police Warning</b-form-radio>
               <b-form-radio value="custody">Held in custody to appear at court</b-form-radio>  
             </b-form-radio-group>
             <!-- These are undertaking conditions -->
