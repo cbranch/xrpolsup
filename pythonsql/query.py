@@ -8,11 +8,11 @@ Created on Mon Nov 18 19:16:23 2019
 
 import psycopg2
 from config import config
-from urlparse import urljoin
+from urllib.parse import urljoin
 import pandas as pd
 import requests
 import os
-import StringIO
+from io import BytesIO
 
 def connect(query):
     """ Connect to the PostgreSQL database server """
@@ -48,7 +48,7 @@ def connect(query):
 
 def savetofile(df, url, sep=',', auth=None):
     """ Save the data to a .xlsx """
-    csv = StringIO.StringIO()
+    csv = BytesIO()
     try:
         df.to_excel(csv, index=False, engine='openpyxl')
     except Exception as error:

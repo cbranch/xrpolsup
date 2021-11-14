@@ -1,0 +1,4 @@
+psycopg2 == 2.8.4
+pandas
+openpyxl == 2.6.4
+requests ~= 2.21
