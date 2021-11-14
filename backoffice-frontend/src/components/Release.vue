@@ -144,6 +144,14 @@
               <b-form-input type="number" id="input-number-rebels" v-model="editReleaseModal.numberRebels"></b-form-input>
             </b-form-group>
 
+            <b-form-checkbox v-model="editReleaseModal.askedToContactSCALP">Asked the police to contact SCALP</b-form-checkbox>
+            <b-form-group label="If police refused, reason given:" label-for="input-refusal-reason" label-cols-md="3">
+              <b-form-input id="input-refusal-reason" v-model="editReleaseModal.contactRefusalReason"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Arrestee comments" label-for="input-arrestee-comments" label-cols-md="3">
+              <b-form-textarea id="input-arrestee-comments" v-model="editReleaseModal.otherComments" rows="3" max-rows="10"></b-form-textarea>
+            </b-form-group>
+
             <b-form-group label="Action Group" label-for="input-action-group" label-cols-md="3">
               <b-form-input id="input-action-group" v-model="editReleaseModal.actionGroup"></b-form-input>
             </b-form-group>
@@ -202,6 +210,9 @@ export default {
         specialRequest: null,
         numberRebels: null,
         rebelsStillHeld: null,
+        askedToContactSCALP: null,
+        contactRefusalReason: null,
+        otherComments: null,
         email: null,
         phone: null,
         comment: null,

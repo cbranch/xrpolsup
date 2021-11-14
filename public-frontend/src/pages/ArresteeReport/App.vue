@@ -107,6 +107,18 @@
         <b-form-group label="How many protesters were you brought to this station with?" label-for="input-number-rebels">
           <b-form-input type="number" id="input-number-rebels" v-model="numberRebels"></b-form-input>
         </b-form-group>
+
+        <b-form-group label="Did you ask the Police to contact SCALP?">
+          <YesNo v-model="askedToContactSCALP" />
+        </b-form-group>
+
+        <b-form-group v-if="askedToContactSCALP" label="If they refused what did they say?">
+          <b-form-input v-model="contactRefusalReason"></b-form-input>
+        </b-form-group>
+
+        <b-form-group label="Anything else you'd like to add about your arrest, how you were treated in custody or your release?">
+          <b-form-input v-model="otherComments"></b-form-input>
+        </b-form-group>
       </b-col>
     </b-row>
     <b-row class="my-4">
@@ -202,6 +214,9 @@ export default {
       hasSpecialRequest: false,
       specialRequest: null,
       numberRebels: null,
+      askedToContactSCALP: null,
+      contactRefusalReason: null,
+      otherComments: null,
       rebelsStillHeld: null,
       contactByEmail: null,
       contactByPhone: null,
@@ -304,6 +319,9 @@ export default {
         hasSpecialRequest: this.hasSpecialRequest,
         specialRequest: this.specialRequest,
         numberRebels: this.numberRebels,
+        askedToContactSCALP: this.askedToContactSCALP,
+        contactRefusalReason: this.contactRefusalReason,
+        otherComments: this.otherComments,
         contactByEmail: this.contactByEmail,
         contactByPhone: this.contactByPhone,
         actionGroup: this.isXRMember ? 'xr' : this.actionGroup,
