@@ -34,11 +34,7 @@
             <b-form-input id="input-location" v-model="location" :state="isValidLocation.valid" placeholder="Place name"></b-form-input>
           </b-form-group>
           <b-form-group label="So that we can co-ordinate support for arrested people it is helpful to know what group called the protest where the arrest took place.">
-            <b-form-radio-group v-model="actionGroupChoice" :invalid-feedback="isValidActionGroup.reason" :state="isValidActionGroup.valid">
-              <b-form-radio name="action-group" value="XR">XR</b-form-radio>
-              <b-form-radio name="action-group" value="Other">Other Group</b-form-radio>
-            </b-form-radio-group>
-            <b-form-input placeholder="Which group?" v-model="actionGroupOther" v-if="actionGroupChoice == 'Other'"></b-form-input>
+            <b-form-input placeholder="Name of group (optional)" v-model="actionGroup"></b-form-input>
           </b-form-group>
           <b-form-group label="Please leave your email address if you wish to be contacted." description="By completing this field you give your consent to the Scottish Community & Activist Legal Project holding your details securely.">
             <b-form-input v-model="witnessEmail" type="email"></b-form-input>
@@ -67,8 +63,6 @@ export default {
       ownArrest: null,
       stationKnown: null,
       stationToBeFoundOut: null,
-      actionGroupChoice: null,
-      actionGroupOther: null,
     }
   },
   computed: {
@@ -163,32 +157,14 @@ export default {
     },
     actionGroup: {
       get() {
-        if (this.actionGroupChoice == 'Other') {
-          return this.actionGroupOther
-        } else {
-          return this.actionGroupChoice
-        }
+        return this.localValue.actionGroup
       },
-    },
-    isValidActionGroup () {
-      if (this.actionGroupChoice == null) {
-        return { valid: null }
-      } else if (this.actionGroupChoice == '') {
-        return { valid: false, reason: 'Please pick the group' }
-      } else {
-        return { valid: true }
-      }
+      set(value) {
+        this.$emit('input', { ...this.localValue, actionGroup: value })
+      },
     },
     valid () {
       return this.isValidArrestCount.valid && this.isValidDatetime.valid && this.isValidLocation.valid
-    }
-  },
-  watch: {
-    actionGroupChoice: function () {
-      this.$emit('input', { ...this.localValue, actionGroup: this.actionGroup })
-    },
-    actionGroupOther: function () {
-      this.$emit('input', { ...this.localValue, actionGroup: this.actionGroup })
     }
   },
   methods: {
@@ -202,6 +178,9 @@ export default {
       }
       if (this.location == null) {
         setDefaults.location = ''
+      }
+      if (this.actionGroup == null) {
+        setDefaults.actionGroup = ''
       }
       if (Object.keys(setDefaults).length > 0) {
         this.$emit('input', { ...this.localValue, ...setDefaults })
