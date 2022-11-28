@@ -122,6 +122,11 @@
             <b-form-group label="Any bail conditions?" label-for="input-bail-conditions" v-if="editReleaseModal.termsOfRelease == 'custody'" label-cols-md="3">
               <b-form-input id="input-bail-conditions" v-model="editReleaseModal.bailConditions"></b-form-input>
             </b-form-group>
+            <!-- These are fixed penalty fine outcomes -->
+            <b-form-group v-if="termsOfRelease == 'fine'" label="How much?" label-for="input-fixed-penalty-fine">
+              <b-form-input id="input-fixed-penalty-fine" v-model="editReleaseModal.fixedPenaltyFine"></b-form-input>
+            </b-form-group>
+            <!-- End of release-specific outcomes -->
             <b-form-group label="Injuries:" label-for="input-anyInjuries" label-cols-md="3">
               <b-form-input id="input-anyInjuries" v-model="editReleaseModal.injuries"></b-form-input>
             </b-form-group>
@@ -139,6 +144,10 @@
             <b-form-group label="Special request needed:" label-for="input-specialRequest" label-cols-md="3">
               <b-form-input id="input-specialRequest" v-model="editReleaseModal.specialRequest"></b-form-input>
             </b-form-group>
+            <b-form-checkbox v-model="editReleaseModal.askedForDoctor">Asked for doctor?</b-form-checkbox>
+            <b-form-checkbox v-model="editReleaseModal.seenByDoctor" v-if="editReleaseModal.askedForDoctor">Seen by doctor?</b-form-checkbox>
+            <b-form-checkbox v-model="editReleaseModal.askedForMedication">Asked for medication?</b-form-checkbox>
+            <b-form-checkbox v-model="editReleaseModal.givenMedication" v-if="editReleaseModal.askedForMedication">Given medication?</b-form-checkbox>
     
             <b-form-group label="How many protesters were you brought to this station with?" label-for="input-number-rebels" label-cols-md="3">
               <b-form-input type="number" id="input-number-rebels" v-model="editReleaseModal.numberRebels"></b-form-input>
@@ -191,6 +200,7 @@ export default {
         location: null,
         offence: null,
         termsOfRelease: null,
+        fixedPenaltyFine: null,
         charges: null,
         accusedOf: null,
         plea: null,
@@ -208,6 +218,10 @@ export default {
         heldMoreThan24Hours: null,
         helpNeeded: null,
         specialRequest: null,
+        askedForDoctor: false,
+        seenByDoctor: false,
+        askedForMedication: false,
+        givenMedication: false,
         numberRebels: null,
         rebelsStillHeld: null,
         askedToContactSCALP: null,

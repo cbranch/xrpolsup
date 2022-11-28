@@ -44,8 +44,12 @@
               <b-form-radio value="report">Released and told a report would be sent to the Procurator Fiscal</b-form-radio>
               <b-form-radio value="undertaking">Released on an Undertaking (sometimes called police bail)</b-form-radio>
               <b-form-radio value="recordedWarning">Released with a Recorded Police Warning</b-form-radio>
-              <b-form-radio value="custody">Held in custody to appear at court</b-form-radio>  
+              <b-form-radio value="fine">Released with a Fixed Penalty Fine</b-form-radio>
+              <b-form-radio value="custody">Held in custody to appear at court</b-form-radio>
             </b-form-radio-group>
+          </b-form-group>
+          <b-form-group v-if="termsOfRelease == 'fine'" label="How much?" label-for="input-fixed-penalty-fine">
+            <b-form-input id="input-fixed-penalty-fine" v-model="fixedPenaltyFine"></b-form-input>
           </b-form-group>
           <!-- These are undertaking conditions -->
           <b-form-group label="Date to appear at court" label-for="input-court-date" v-if="termsOfRelease == 'undertaking'">
@@ -94,14 +98,27 @@
           <b-form-input id="input-adverseEvents" v-model="adverseEvents"></b-form-input>
         </b-form-group>
         <b-form-checkbox v-model="heldMoreThan24Hours">Held more than 24hr?</b-form-checkbox>  
-        <b-form-checkbox v-model="hasHelpNeeded">Help needed?</b-form-checkbox>  
+        <b-form-checkbox v-model="hasHelpNeeded">Any help needed?</b-form-checkbox>
         <b-form-group v-if="hasHelpNeeded" label="Describe help needed:" label-for="input-helpNeeded">
           <b-form-input id="input-helpNeeded" v-model="helpNeeded"></b-form-input>
         </b-form-group>
 
-        <b-form-checkbox v-model="hasSpecialRequest">Special request?</b-form-checkbox>
-        <b-form-group v-if="hasSpecialRequest" label="Special request needed:" label-for="input-specialRequest">
-          <b-form-input id="input-specialRequest" v-model="specialRequest"></b-form-input>
+        <b-form-checkbox v-model="askedForDoctor">Did you ask for a Dr?</b-form-checkbox>
+        <b-form-group v-if="askedForDoctor" label="If so, were you seen by a Dr?" label-for="input-askedForDoctor">
+          <b-form-select id="input-askedForDoctor" v-model="seenByDoctor">
+            <b-form-select-option :value="null">Please select an option</b-form-select-option>
+            <b-form-select-option value="true">Yes</b-form-select-option>
+            <b-form-select-option value="false">No</b-form-select-option>
+          </b-form-select>
+        </b-form-group>
+
+        <b-form-checkbox v-model="askedForMedication">Did you ask for prescribed medication?</b-form-checkbox>
+        <b-form-group v-if="askedForMedication" label="Were you given your prescribed medication when it was due?" label-for="input-askedForMedication">
+          <b-form-select id="input-askedForMedication" v-model="givenMedication">
+            <b-form-select-option :value="null">Please select an option</b-form-select-option>
+            <b-form-select-option value="true">Yes</b-form-select-option>
+            <b-form-select-option value="false">No</b-form-select-option>
+          </b-form-select>
         </b-form-group>
 
         <b-form-group label="How many protesters were you brought to this station with?" label-for="input-number-rebels">
@@ -123,26 +140,10 @@
     </b-row>
     <b-row class="my-4">
       <b-col>
-        <p>We may share your data with a relevant group in order for them to follow up with future support - this does not include sharing data with XR unless you have specifically consented and asked us to.</p>
-        <b-form-group label="Are you a member of XR?">
-          <YesNo v-model="isXRMember" />
-        </b-form-group>
+        <p>We may be able to send you info if there is a relevant group organising follow-up support for those arrested. If you would like this info, then name the protest or group where you were arrested. We will only contact you, and will not share your data with any other group.</p>
 
-        <b-form-group id="label-contact" v-if="isXRMember">
-          <label>If you would like XR to contact you with regards to providing post-arrest support, such as trial and ongoing court support then please provide us with your name and email (or phone number) By providing this info you consent to XR securely storing your contact info and contacting you in accordance with their privacy policy - <a href="https://extinctionrebellion.uk/privacy-policy/">https://extinctionrebellion.uk/privacy-policy/</a></label>
-          <b-form-group label="Email" label-for="input-by-email">
-            <b-form-input id="input-by-email" v-model="contactByEmail"></b-form-input>
-          </b-form-group>
-          <b-form-group label="Phone" label-for="input-by-phone">
-            <b-form-input id="input-by-phone" v-model="contactByPhone"></b-form-input>
-          </b-form-group>
-          <b-form-group label="XR Region" label-for="input-xr-region">
-            <b-form-input id="input-xr-region" v-model="xrRegion"></b-form-input>
-          </b-form-group>
-        </b-form-group>
-
-        <b-form-group id="label-contact" v-if="isXRMember === false">
-          <b-form-group label="If you would like us to share your data with the group who organised the protest where you were arrested tell us who they are:" label-for="input-action-group">
+        <b-form-group id="label-contact">
+          <b-form-group label="Name of group" label-for="input-action-group">
             <b-form-input id="input-action-group" v-model="actionGroup"></b-form-input>
           </b-form-group>
           <b-form-group label="Email" label-for="input-by-email">
@@ -193,6 +194,7 @@ export default {
       policeStation: null,
       formallyCharged: null,
       termsOfRelease: null,
+      fixedPenaltyFine: null,
       charges: null,
       bailConditions: null,
       courtDate: null,
@@ -213,6 +215,10 @@ export default {
       helpNeeded: null,
       hasSpecialRequest: false,
       specialRequest: null,
+      askedForDoctor: false,
+      seenByDoctor: null,
+      askedForMedication: false,
+      givenMedication: null,
       numberRebels: null,
       askedToContactSCALP: null,
       contactRefusalReason: null,
@@ -221,8 +227,6 @@ export default {
       contactByEmail: null,
       contactByPhone: null,
       actionGroup: null,
-      isXRMember: null,
-      xrRegion: null,
       submitted: false,
       isSubmitting: false,
       errors: [],
@@ -296,6 +300,7 @@ export default {
         location: this.location,
         offence: this.offence,
         termsOfRelease: this.termsOfRelease,
+        fixedPenaltyFine: this.termsOfRelease == 'fine' ? this.fixedPenaltyFine : '',
         charges: this.formallyCharged ? this.charges : '',
         bailConditions: this.bailConditions,
         courtDate: this.courtDate,
@@ -318,15 +323,17 @@ export default {
         helpNeeded: this.helpNeeded,
         hasSpecialRequest: this.hasSpecialRequest,
         specialRequest: this.specialRequest,
+        askedForDoctor: this.askedForDoctor,
+        seenByDoctor: this.seenByDoctor,
+        askedForMedication: this.askedForMedication,
+        givenMedication: this.givenMedication,
         numberRebels: this.numberRebels,
         askedToContactSCALP: this.askedToContactSCALP,
         contactRefusalReason: this.contactRefusalReason,
         otherComments: this.otherComments,
         contactByEmail: this.contactByEmail,
         contactByPhone: this.contactByPhone,
-        actionGroup: this.isXRMember ? 'xr' : this.actionGroup,
-        isXRMember: null,
-        xrRegion: this.xrRegion,
+        actionGroup: this.actionGroup,
         submitted: this.submitted,
       }
       this.isSubmitting = true
