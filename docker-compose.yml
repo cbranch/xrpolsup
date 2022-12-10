@@ -7,7 +7,7 @@ services:
             - "8080:8080"
             - "9229:9229"
         environment:
-            NODE_ENV: "production"
+            NODE_ENV: "${NODE_ENV}"
             BASE_HOSTNAME: "${BASE_HOSTNAME}"
             sails_datastores__default__adapter: "sails-postgresql"
             sails_datastores__default__url: "postgresql://postgres:${POSTGRES_PASSWORD}@db:5432/postgres"
