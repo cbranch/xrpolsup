@@ -12,7 +12,6 @@
           <b-nav-item :to="{ name: 'Home' }">Home</b-nav-item>
           <b-nav-item :to="{ name: 'Reports' }">Reports</b-nav-item>
           <b-nav-item :to="{ name: 'Release' }">Post-release</b-nav-item>
-          <b-nav-item :to="{ name: 'LegalObserverLog' }">Legal observers</b-nav-item>
           <b-nav-item :to="{ name: 'CallLog' }">Call log</b-nav-item>
           <b-nav-item :to="{ name: 'Users' }">Users</b-nav-item>
           <b-nav-form>
