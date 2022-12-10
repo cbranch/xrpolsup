@@ -34,6 +34,10 @@ module.exports = {
       type: 'boolean',
       description: 'Whether this user is an admin that can change other users.',
     },
+    isSuperuser: {
+      type: 'boolean',
+      description: 'Whether this user is an admin that can change other admins.',
+    },
     canViewRelease: {
       type: 'boolean',
       description: 'Whether this user can view post-release reports.',

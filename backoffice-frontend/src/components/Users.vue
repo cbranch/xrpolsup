@@ -139,6 +139,7 @@ export default {
         { key: 'username', sortable: true },
         { key: 'nickname', sortable: true },
         { key: 'isAdmin', sortable: true },
+        { key: 'isSuperuser', sortable: true },
         { key: 'canViewRelease', label: 'Post-release', sortable: true },
         { key: 'lastSeenAt', sortable: true },
         { key: 'actions' },

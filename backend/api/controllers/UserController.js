@@ -8,7 +8,7 @@ module.exports = {
             return res.notFound('unknown user ID');
         }
 
-        if (user.isAdmin) {
+        if (user.isAdmin && !req.me.isSuperuser) {
             return res.forbidden('not allowed to delete that user');
         }
 
