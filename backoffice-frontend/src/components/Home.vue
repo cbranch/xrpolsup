@@ -218,10 +218,10 @@ export default {
       return [
         { key: 'index', label: '', stickyColumn: true },
         { key: 'createdAt', label: 'Reported at', sortable: true },
-        { key: 'arrestTime', sortable: true },
-        { key: 'station', sortable: true },
-        { key: 'location', sortable: true },
         { key: 'name', sortable: true },
+        { key: 'station', sortable: true },
+        { key: 'arrestTime', sortable: true },
+        { key: 'location', label: 'Arrest Location', sortable: true },
         { key: 'arrestingOfficerId', label: 'Officer ID', sortable: true },
         { key: 'concerns', sortable: true },
         { key: 'observations' },
@@ -229,9 +229,9 @@ export default {
         { key: 'actionGroup', label: 'Group' },
         { key: 'actions', label: '' },
         { key: 'policeCallTime', sortable: true  },
-        { key: 'court' },
         { key: 'custodyNumber' },
         { key: 'releasedTime', sortable: true  },
+        { key: 'court', label: 'Court (optional)' },
       ]
     },
     reportList () {
