@@ -57,6 +57,9 @@
       <b-container fluid>
         <b-row>
           <b-col>
+            <b-form-group label="Name" label-for="input-name" label-cols-md="3">
+              <b-form-input id="input-name" v-model="callLogModal.name"></b-form-input>
+            </b-form-group>
             <b-form-group label="Comment" label-for="input-comment" label-cols-md="3">
               <b-form-textarea id="input-comment" v-model="callLogModal.comment" rows="3" max-rows="10"></b-form-textarea>
             </b-form-group>
@@ -79,6 +82,7 @@ export default {
       callLogModal: {
         id: null,
         comment: null,
+        name: null,
         isHidden: null,
       }
     }
@@ -87,6 +91,7 @@ export default {
     reportFields () {
       return [
         { key: 'updatedAt', sortable: true },
+        { key: 'name', sortable: true },
         { key: 'comment', sortable: true },
         { key: 'actions', label: '' },
       ]
@@ -101,6 +106,7 @@ export default {
   methods: {
     addCallLog (target) {
       this.callLogModal.id = null
+      this.callLogModal.name = ""
       this.callLogModal.comment = ""
       this.callLogModal.isHidden = false
       this.$root.$emit('bv::show::modal', 'callLogModal', target)
