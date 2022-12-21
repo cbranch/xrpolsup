@@ -65,4 +65,7 @@ module.exports.routes = {
     parseBlueprintOptions: parseBlueprintOptionsWithDateRestriction,
   },
 
+  'GET /api/v1/setting/:name': 'SettingController.get',
+  'PUT /api/v1/setting/:name': 'SettingController.put',
+
 };

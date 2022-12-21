@@ -1,6 +1,11 @@
 <template>
   <b-container fluid>
-    <h2>Users</h2>
+    <h2>Admin</h2>
+    <p v-if="$store.state.isSuperuser">
+      <b-button :pressed="$store.state.suspended" variant="danger" @click="toggleSuspend">Suspend back office</b-button>
+      <span v-if="$store.state.suspended"><strong>The back office is suspended!</strong> Only superusers may view and resume operations.</span>
+      <span v-else>The back office is currently available to all users.</span>
+    </p>
     <b-alert :show="isAuthorized === false" variant="warning">You aren't authorized to view users</b-alert>
     <b-form-group
       label="Filter"
@@ -272,6 +277,26 @@ export default {
           })
         }
         this.getUsers()
+      })
+    },
+    toggleSuspend() {
+      const newState = !this.$store.state.suspended
+      const suspendState = newState ? "suspended" : "unsuspended";
+      this.$io.socket.put('/api/v1/setting/suspend', {value: newState}, (resData, jwRes) => {
+        if (jwRes.statusCode == 200) {
+          this.$bvToast.toast(`Back office ${suspendState}!`, {
+            title: 'Admin',
+            variant: 'primary',
+            solid: true
+          })
+        } else {
+          this.$bvToast.toast(`Failed to ${suspendState}: ${jwRes}`, {
+            title: 'Admin',
+            variant: 'warning',
+            solid: true
+          })
+        }
+        this.$store.commit('setSuspended', newState)
       })
     }
   }

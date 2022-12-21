@@ -18,6 +18,9 @@ module.exports.policies = {
   ***************************************************************************/
 
   '*': 'is-logged-in',
+  // Report view/management is disabled when suspended
+  'report/*': 'can-see-data',
+  'calllog/*': 'can-see-data',
   // Release report view/managerment needs special permission
   'release/*': 'can-see-release',
   // User management is for admins only
@@ -25,6 +28,13 @@ module.exports.policies = {
   // ...except for seeing the current user
   'user/current': 'is-logged-in',
   'user/change-password': 'is-logged-in',
+  // Setting management is for superusers only
+  'setting/*': 'is-superuser',
+  'SettingController': {
+    // Anyone can get the settings though (to check what is enabled)
+    'get': true,
+    'put': 'is-superuser',
+  },
 
   // No login required for the following:
   'ReportController': {

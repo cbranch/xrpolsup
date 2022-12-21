@@ -13,7 +13,7 @@
           <b-nav-item :to="{ name: 'Reports' }">Reports</b-nav-item>
           <b-nav-item :to="{ name: 'Release' }">Post-release</b-nav-item>
           <b-nav-item :to="{ name: 'CallLog' }">Call log</b-nav-item>
-          <b-nav-item :to="{ name: 'Users' }">Users</b-nav-item>
+          <b-nav-item :to="{ name: 'Users' }">Admin</b-nav-item>
           <b-nav-form>
             View data from:&nbsp;<datetime type="datetime" input-class="form-control" v-model="filterDateStart"></datetime>
           </b-nav-form>
@@ -26,6 +26,7 @@
     </b-navbar>
     <b-container fluid>
       <b-alert :show="isConnected === false" variant="warning">Connection lost with the server. Refresh to re-establish connection.</b-alert>
+      <b-alert :show="isSuspended" variant="danger">Back office is temporarily suspended.</b-alert>
       <router-view class="mt-4"></router-view>
     </b-container>
     <footer class="mt-3 text-center">
@@ -60,6 +61,11 @@ export default {
       },
       set (newValue) {
         this.$store.commit('setFilterDateStart', new Date(newValue))
+      }
+    },
+    isSuspended: {
+      get () {
+        return this.$store.state.suspended
       }
     }
   },
@@ -126,6 +132,12 @@ export default {
                 this.$store.commit('addCallLog', e.data)
               }
             })
+          })
+          this.$io.socket.get('/api/v1/setting/suspend', (resData, jwRes) => {
+            if (jwRes.statusCode != 200) {
+              return
+            }
+            this.$store.commit('setSuspended', resData.value == "true")
           })
         }
       })

@@ -29,11 +29,13 @@ const store = new Vuex.Store({
     userId: null,
     username: null,
     nickname: null,
+    isSuperuser: false,
     filterDateStart,
     reports: [],
     releases: [],
     legalObserverLogs: [],
-    callLogs: []
+    callLogs: [],
+    suspended: false,
   },
   mutations: {
     setReport(state, x) {
@@ -101,6 +103,7 @@ const store = new Vuex.Store({
       state.userId = user.id
       state.username = user.username
       state.nickname = user.nickname || user.username
+      state.isSuperuser = user.isSuperuser
     },
     logOut(state) {
       state.loggedIn = false
@@ -110,6 +113,9 @@ const store = new Vuex.Store({
     },
     setFilterDateStart(state, date) {
       state.filterDateStart = date
+    },
+    setSuspended(state, value) {
+      state.suspended = value
     }
   },
   getters: {
