@@ -8,7 +8,7 @@ module.exports = {
         return res.notFound()
       }
 
-      if (report.updatedAt < (Date.now() - (1000*60*60*96))) {
+      if (report.updatedAt < (Date.now() - sails.config.custom.maximumReportAge)) {
         return res.notFound()
       }
 

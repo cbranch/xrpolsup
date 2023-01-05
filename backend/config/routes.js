@@ -9,7 +9,7 @@
  */
 
 function setUpdatedAtMinimumTime(criteria) {
-  const threshold = Date.now() - (1000*60*60*96);
+  const threshold = Date.now() - sails.config.custom.maximumReportAge;
   const query = {'>=': threshold};
   if ('updatedAt' in criteria.where) {
     criteria.where.and = [

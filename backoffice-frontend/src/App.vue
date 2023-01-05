@@ -49,7 +49,7 @@ export default {
     isConnected: null,
   }),
   watch: {
-    '$store.state.loggedIn': 'connectState'
+    '$store.state.loggedIn': 'connectState',
   },
   created () {
     this.connectState()
@@ -87,7 +87,7 @@ export default {
         } else if (jwRes.statusCode == 200) {
           this.$store.commit('logIn', resData)
 
-          var threshold = Date.now() - (1000*60*60*96)
+          var threshold = Date.now() - (1000*60*60*24*28)
           this.$io.socket.get('/api/v1/report', {limit: 10000, where: {updatedAt: {">": threshold}}}, (resData, jwRes) => {
             if (jwRes.statusCode != 200) {
               return

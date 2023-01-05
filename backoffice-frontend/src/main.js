@@ -20,7 +20,7 @@ Vue.use(VueAxios, axios)
 Vue.use(Datetime)
 Vue.use(AsyncComputed)
 
-var filterDateStart = new Date(Date.now() - 1000*60*60*24)
+var filterDateStart = new Date(Date.now() - 1000*60*60*24*28)
 filterDateStart.setMinutes(0, 0, 0)
 
 const store = new Vuex.Store({
