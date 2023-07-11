@@ -1,5 +1,3 @@
-const Setting = require("../models/Setting");
-
 module.exports = {
     friendlyName: 'Format welcome message',
     description: 'Return a personalized greeting based on the provided name.',
