@@ -1,4 +1,4 @@
-FROM python:3.7-slim-buster
+FROM python:3.12-slim-bookworm
 RUN pip install pipenv
 WORKDIR /opt/backend-django
 # dep layer
