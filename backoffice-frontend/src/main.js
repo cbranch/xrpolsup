@@ -104,6 +104,10 @@ const store = new Vuex.Store({
       state.username = user.username
       state.nickname = user.nickname || user.username
       state.isSuperuser = user.isSuperuser
+      if (user.isSuperuser) {
+        // show up to a year lookback by default
+        state.filterDateStart = new Date(Date.now() - 1000*60*60*24*365)
+      }
     },
     logOut(state) {
       state.loggedIn = false

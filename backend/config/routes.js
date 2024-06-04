@@ -24,7 +24,9 @@ function setUpdatedAtMinimumTime(criteria) {
 
 function parseBlueprintOptionsWithDateRestriction(req) {
   var queryOptions = req._sails.hooks.blueprints.parseBlueprintOptions(req);
-  setUpdatedAtMinimumTime(queryOptions.criteria);
+  if (!req.me.isSuperuser) {
+    setUpdatedAtMinimumTime(queryOptions.criteria);
+  }
   return queryOptions;
 }
 

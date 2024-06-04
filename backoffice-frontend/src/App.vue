@@ -100,7 +100,7 @@ export default {
             })
           })
 
-          this.$io.socket.get('/api/v1/release', {limit: 10000, where: {updatedAt: {">": threshold}}}, (resData, jwRes) => {
+          this.$io.socket.get('/api/v1/release', {limit: 10000}, (resData, jwRes) => {
             if (jwRes.statusCode != 200) {
               return
             }
